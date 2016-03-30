@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfnets.workfocus.modules.act.dao.ActDao">
+    
+	<update id="updateProcInsIdByBusinessInfo" parameterType="com.mfnets.workfocus.modules.act.entity.ActBusiness">
+		UPDATE ${tableName} SET
+			${updateKeyName} = #{procInsId}
+		<where>
+			<if test="whereKeyName!=null and whereKeyName!='' and whereKeyValue!=null and whereKeyValue!=''">
+				and ${whereKeyName} = #{whereKeyValue}
+			</if>
+			<if test="whereSql!=null and whereSql!='' ">
+				and ${whereSql}
+			</if>
+		</where>
+	</update>
+
+	
+</mapper>
