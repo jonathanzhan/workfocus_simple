@@ -1,4 +1,4 @@
-package com.mfnets.workfocus.modules.demo;
+package com.mfnets.workfocus.modules.demo.controller;
 
 import com.mfnets.workfocus.common.web.BaseController;
 import org.springframework.stereotype.Controller;

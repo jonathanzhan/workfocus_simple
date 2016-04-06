@@ -19,7 +19,7 @@
 				if ((${fns:jsGetVal('row.parentId')}) == pid){
 					$(list).append(Mustache.render(tpl, {
 						dict: {
-							type: getDictLabel(${fns:toJson(fns:getDictList('sys_org_type'))}, row.type)
+							type: getDictLabel(${fns:toJson(fns:getDictList('org_type'))}, row.type)
 						}, pid: (root?0:pid), row: row
 					}));
 					addRow(list, tpl, data, row.id);
@@ -27,29 +27,33 @@
 			}
 		}
 		function refresh(){//刷新或者排序，页码不清零
-    		
-			window.location="${ctx}/sys/org/list";
-    	}
+			window.location="${ctx}/sys/org/list?id=${org.id}&parentIds=${org.oldParentIds}";
+		}
+
+		function doAlert(){
+			alert("orgList");
+		}
 	</script>
 </head>
 <body>
 	<div class="row m-b-xs">
 		<div class="col-sm-12">
 			<div class="pull-left">
-				<common:addBtn url="${ctx}/sys/office/form?parent.id=${office.id}" title="机构" width="800px" height="620px" target="officeContent"></common:addBtn><!-- 增加按钮 -->
-				<button class="btn btn-white btn-sm " data-toggle="tooltip" data-placement="left" onclick="refresh()" title="刷新"><i class="glyphicon glyphicon-repeat"></i> 刷新</button>
+				<common:addBtn url="${ctx}/sys/org/form?parent.id=${org.id}" btnClass="btn-primary btn-outline btn-sm" title="机构" width="800px" height="620px" target="orgContent"></common:addBtn><!-- 增加按钮 -->
+				<button class="btn btn-primary btn-outline btn-sm " data-toggle="tooltip" data-placement="left" onclick="refresh()" title="刷新">
+					<i class="glyphicon glyphicon-repeat"></i> 刷新
+				</button>
 			</div>
 		</div>
 	</div>
 	<sys:message content="${message}"/>
 	<table id="treeTable" class="table table-striped table-bordered table-hover table-condensed dataTables-example dataTable">
-		<thead><tr><th>机构名称</th><th>归属区域</th><th>机构编码</th><th>机构类型</th><th>备注</th><shiro:hasPermission name="sys:org:edit"><th>操作</th></shiro:hasPermission></tr></thead>
+		<thead><tr><th>机构名称</th><th>机构编码</th><th>机构类型</th><th>备注</th><shiro:hasPermission name="sys:org:edit"><th>操作</th></shiro:hasPermission></tr></thead>
 		<tbody id="treeTableList"></tbody>
 	</table>
 	<script type="text/template" id="treeTableTpl">
 		<tr id="{{row.id}}" pId="{{pid}}">
 			<td>{{row.name}}</td>
-			<td>{{row.area.name}}</td>
 			<td>{{row.code}}</td>
 			<td>{{dict.type}}</td>
 			<td>{{row.remarks}}</td>

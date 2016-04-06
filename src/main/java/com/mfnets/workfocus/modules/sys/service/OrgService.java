@@ -37,6 +37,7 @@ public class OrgService extends TreeService<OrgDao, Org> {
 	@Transactional(readOnly = true)
 	public List<Org> findList(Org org){
 		if(org != null){
+			org.setOldParentIds(org.getParentIds());
 			org.setParentIds(org.getParentIds()+"%");
 			return dao.findByParentIdsLike(org);
 		}

@@ -97,7 +97,7 @@
                             color:'rgba(0,0,0,0)'
                         }
                     },
-                    data:[2, 1, 2, 4, 5, 1]
+                    data:[5, 1, 2, 4, 5, 1]
                 },
                 {
                     name:'实际时长',
@@ -111,7 +111,7 @@
                             }
                         }
                     },
-                    data:[10, 3, 3, 8, 7, 10]
+                    data:[1, 3, 3, 8, 7, 10]
                 },
                 {
                     name:'预计开始',
@@ -252,7 +252,7 @@
                     <h5>甘特图</h5>
                 </div>
                 <div class="ibox-content">
-                    <div class="echarts" id="chart1">
+                    <div class="echarts" id="chart1" style="width: 500px;height: 500px;">
 
                     </div>
                 </div>

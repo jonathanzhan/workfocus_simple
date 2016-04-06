@@ -61,7 +61,7 @@
 									<input name="sorts" type="text" value="${menu.seq}" class="form-control input-sm" style="height:25px;width:50px;margin:0;padding:0;text-align:center;">
 								</shiro:hasPermission>
 								<shiro:lacksPermission name="sys:menu:edit">
-									${menu.sortNo}
+									${menu.seq}
 								</shiro:lacksPermission>
 							</td>
 							<td class="text-center">

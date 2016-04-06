@@ -33,6 +33,7 @@ public class TagController extends BaseController {
 		model.addAttribute("selectIds", request.getParameter("selectIds")); // 指定默认选中的ID
 		model.addAttribute("isAll", request.getParameter("isAll")); 	// 是否读取全部数据，不进行权限过滤
 		model.addAttribute("treeId",request.getParameter("treeId"));
+		model.addAttribute("index",request.getParameter("index"));
 		return "modules/sys/tagTreeSelect";
 	}
 	

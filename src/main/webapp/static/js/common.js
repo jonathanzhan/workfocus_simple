@@ -64,6 +64,7 @@ function openDialog(title,url,width,height,target){
         type: 2,
         area: [width, height],
         title: title,
+        id:"orgAdd",
         maxmin: true, //开启最大化最小化按钮
         content: url ,
         btn: ['确定', '关闭'],

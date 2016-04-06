@@ -31,6 +31,7 @@
 </div>
 
 <script type="text/javascript">
+	var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 	$("#${id}Button, #${id}Name").click(function(){
 		// 是否限制选择，如果限制，设置为disabled
 		if ($("#${id}Button").hasClass("disabled")){
@@ -38,21 +39,29 @@
 		}
 
 		//弹出layer层
-		layer.open({
+		top.layer.open({
 			type: 2
 			,fix: false
 			,title: '选择${title}'
 			,maxmin: true
+			,id:"treeAdd"
 			,shade: [0.1, 'grey']
 			,shadeClose: false
-			,content : "${ctx}/tag/treeSelect?url="+encodeURIComponent("${url}")+"&checked=${checked}&extId=${extId}&selectIds="+$("#${id}Id").val()+"&treeId=${id}"
+			,content : "${ctx}/tag/treeSelect?url="+encodeURIComponent("${url}")+"&checked=${checked}&extId=${extId}&selectIds="+$("#${id}Id").val()+"&treeId=${id}&index="+index
 			,area: ['300px' , '450px']
+			,btn: ['确定', '关闭']
+			,yes: function(index, layero){
+				var tree = layero.find("iframe")[0].contentWindow.tree;//h.find("iframe").contents();
+				doLayerChoose(tree,index);
+			},
+			cancel: function(index){ //或者使用btn2
 
+			}
 		});
 	});
 
 
-	function doLayerChoose${id}(tree,index){
+	function doLayerChoose(tree,index){
 		var ids = [], names = [], nodes = [];
 		if ("${checked}" == "true"){
 			nodes = tree.getCheckedNodes(true);
@@ -89,14 +98,14 @@
 		$("#${id}Id").attr("value",ids);
 		$("#${id}Name").attr("value",names);
 		${treeEvent}
-		layer.close(index);
+		top.layer.close(index);
 	}
 
 	function doReset${id}(index){
 		$("#${id}Id").attr("value","");
 		$("#${id}Name").attr("value","");
 		${treeEvent}
-		layer.close(index);
+		top.layer.close(index);
 	}
 
 </script>

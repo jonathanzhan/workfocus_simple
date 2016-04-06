@@ -6,6 +6,7 @@
     <meta charset="utf-8">
     <%@include file="/WEB-INF/views/include/head.jsp" %>
     <script src="${ctxStatic}/js/index.js"></script>
+    <script src="${ctxStatic}/js/contabs.js"></script>
     <title>${fns:getConfig('productName')} - 主页</title>
 
     <script type="text/javascript">
@@ -41,6 +42,10 @@
 
 
         })
+
+        function doAlert(){
+            alert("index");
+        }
 
 
 
@@ -154,7 +159,7 @@
                                 <li class="m-t-xs">
                                     <div class="dropdown-messages-box">
                                         <a href="profile.html" class="pull-left">
-                                            <img alt="image" class="img-circle" src="${ctxStatic}/img/a7.jpg">
+                                            <img alt="image" class="img-circle" src="${ctxStatic}/img/a1.jpg">
                                         </a>
 
                                         <div class="media-body">
@@ -169,7 +174,7 @@
                                 <li>
                                     <div class="dropdown-messages-box">
                                         <a href="profile.html" class="pull-left">
-                                            <img alt="image" class="img-circle" src="${ctxStatic}/img/a4.jpg">
+                                            <img alt="image" class="img-circle" src="${ctxStatic}/img/a1.jpg">
                                         </a>
 
                                         <div class="media-body ">
@@ -378,7 +383,7 @@
                         <div class="sidebar-message">
                             <a href="#">
                                 <div class="pull-left text-center">
-                                    <img alt="image" class="img-circle message-avatar" src="${ctxStatic}/img/a2.jpg">
+                                    <img alt="image" class="img-circle message-avatar" src="${ctxStatic}/img/a1.jpg">
                                 </div>
                                 <div class="media-body">
                                     HCY48之音乐大魔王会员专属皮肤已上线，快来一键换装拥有他，宣告你对华晨宇的爱吧！

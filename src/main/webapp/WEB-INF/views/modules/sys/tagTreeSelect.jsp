@@ -42,8 +42,35 @@
 					}
 					selectCheckNode();
 				},
-				onDblClick: function(){ 
-					parent.doLayerChoose${treeId}(tree,index);
+				onDblClick: function(){
+					var parentIndex = '${index}';
+					var top_iframe = top.getActiveTab().attr("name");
+					alert(top_iframe);
+					if(parentIndex=='undefined'){
+
+						parent.doLayerChoose(tree,index);
+					}else{
+						var iframeId = "#layui-layer-iframe"+${index};
+						alert(iframeId);
+						parent.$(iframeId)[0].contentWindow.doAlert();
+						parent.$(iframeId)[0].contentWindow.doLayerChoose(tree,index);
+					}
+
+//					top.$.layer.find("button[value='ok']").trigger("click");
+//					top.layer.close(index);
+					//.doLayerChoose(tree,index);
+
+//					console.info($(document.getElementById('layui-layer-iframe2').contentWindow.document.body).html());
+
+
+
+
+
+
+//					layer.find('iframe')[0].contentWindow.doAlert();
+//					var top_iframe = top.getActiveTab().attr("name");
+//					top.document.getElementById("top_iframe").contentWindow.doAlert();
+					top.layer.close(index);
 				}
 			}
 		};

@@ -12,8 +12,10 @@
 	</style>
 	<script type="text/javascript">
 		function refresh(){//刷新
-			
 			window.location="${ctx}/sys/org/";
+		}
+		function doAlert(){
+			alert("orgindex");
 		}
 	</script>
 </head>
@@ -61,7 +63,7 @@
 			var strs = getWindowSize().toString().split(",");
 			htmlObj.css({"overflow-x":"hidden", "overflow-y":"hidden"});
 			mainObj.css("width","auto");
-			frameObj.height(strs[0] - 120);
+			frameObj.height(strs[0] - 100);
 			var leftWidth = ($("#left").width() < 0 ? 0 : $("#left").width());
 			$("#right").width($("#content").width()- leftWidth - $("#openClose").width() -60);
 			$(".ztree").width(leftWidth - 10).height(frameObj.height() - 46);

@@ -14,3 +14,4 @@
 /target/
 /src/main/resources/rebel.xml
 /logs/**
+/catalina.home_IS_UNDEFINED/*

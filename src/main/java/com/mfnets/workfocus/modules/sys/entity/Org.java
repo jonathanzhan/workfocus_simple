@@ -24,8 +24,11 @@ public class Org extends TreeEntity<Org> {
 	private String address; // 联系地址
 	private String master; 	// 负责人
 	private String phone; 	// 电话
+	private String remarks;
 
-	
+	private String oldParentIds;
+
+
 	public Org(){
 		super();
 		this.type = "2";
@@ -115,5 +118,22 @@ public class Org extends TreeEntity<Org> {
 	@Override
 	public String toString() {
 		return name;
+	}
+
+	public String getRemarks() {
+		return remarks;
+	}
+
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
+	}
+
+	@JsonIgnore
+	public String getOldParentIds() {
+		return oldParentIds;
+	}
+
+	public void setOldParentIds(String oldParentIds) {
+		this.oldParentIds = oldParentIds;
 	}
 }
