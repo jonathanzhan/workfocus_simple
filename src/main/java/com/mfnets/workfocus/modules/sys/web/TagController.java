@@ -32,8 +32,8 @@ public class TagController extends BaseController {
 		model.addAttribute("checked", request.getParameter("checked")); // 是否可复选
 		model.addAttribute("selectIds", request.getParameter("selectIds")); // 指定默认选中的ID
 		model.addAttribute("isAll", request.getParameter("isAll")); 	// 是否读取全部数据，不进行权限过滤
-		model.addAttribute("treeId",request.getParameter("treeId"));
-		model.addAttribute("index",request.getParameter("index"));
+		model.addAttribute("treeId",request.getParameter("treeId"));//标签的ID
+		model.addAttribute("index",request.getParameter("index"));//父弹出层的index
 		return "modules/sys/tagTreeSelect";
 	}
 	

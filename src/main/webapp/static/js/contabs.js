@@ -286,9 +286,6 @@ $(function () {
         });
     }
 
-    function getActiveTab(){
-        return $(".J_iframe:visible");
-    }
 
 
     //打开选项卡菜单

@@ -52,16 +52,22 @@
 			,btn: ['确定', '关闭']
 			,yes: function(index, layero){
 				var tree = layero.find("iframe")[0].contentWindow.tree;//h.find("iframe").contents();
-				doLayerChoose(tree,index);
+				doLayerChoose${id}(tree,index);
 			},
 			cancel: function(index){ //或者使用btn2
-
+				<c:if test="${allowClear}">
+					$("#${id}Id").attr("value","");
+					$("#${id}Name").attr("value","");
+				}
+				</c:if>
+				${treeEvent}
+				top.layer.close(index);
 			}
 		});
 	});
 
 
-	function doLayerChoose(tree,index){
+	function doLayerChoose${id}(tree,index){
 		var ids = [], names = [], nodes = [];
 		if ("${checked}" == "true"){
 			nodes = tree.getCheckedNodes(true);

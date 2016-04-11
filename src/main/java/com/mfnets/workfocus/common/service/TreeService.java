@@ -21,15 +21,10 @@ public abstract class TreeService<D extends TreeDao<T>, T extends TreeEntity<T>>
 	
 	@Transactional(readOnly = false)
 	public void save(T entity) {
-		int level = 0;
 		
 		@SuppressWarnings("unchecked")
 		Class<T> entityClass = Reflections.getClassGenricType(getClass(), 1);
 
-		if(entity.getOldLevel()!=null){
-			level = entity.getLevel()-entity.getOldLevel();
-		}
-		
 		// 如果没有设置父节点，则代表为跟节点，有则获取父节点实体
 		if (entity.getParent() == null || StringUtils.isBlank(entity.getParentId()) 
 				|| "0".equals(entity.getParentId())){
@@ -46,6 +41,7 @@ public abstract class TreeService<D extends TreeDao<T>, T extends TreeEntity<T>>
 			}
 			entity.setParent(parentEntity);
 			entity.getParent().setParentIds(StringUtils.EMPTY);
+			entity.getParent().setLevel(0);
 		}
 		
 		// 获取修改前的parentIds，用于更新子节点的parentIds
@@ -53,7 +49,9 @@ public abstract class TreeService<D extends TreeDao<T>, T extends TreeEntity<T>>
 		
 		// 设置新的父节点串
 		entity.setParentIds(entity.getParent().getParentIds()+entity.getParent().getId()+",");
-		
+
+		//设置级别=parent.level+1
+		entity.setLevel(entity.getParent().getLevel()+1);
 		// 保存或更新实体
 		super.save(entity);
 		
@@ -69,7 +67,7 @@ public abstract class TreeService<D extends TreeDao<T>, T extends TreeEntity<T>>
 		for (T e : list){
 			if (e.getParentIds() != null && oldParentIds != null){
 				e.setParentIds(e.getParentIds().replace(oldParentIds, entity.getParentIds()));
-				e.setLevel(e.getLevel()+level);
+				e.setLevel(e.getLevel()+entity.getLevel());
 				preUpdateChild(entity, e);
 				dao.updateParentIds(e);
 			}

@@ -7,24 +7,23 @@ layer.config({
 });
 
 // 确认对话框
-function confirmx(mess, href) {
-    top.layer.confirm(mess, {icon: 3, title: '系统提示'}, function (index) {
+function confirmx(mess, href){
+    top.layer.confirm(mess, {icon: 3, title:'系统提示'}, function(index){
         if (typeof href == 'function') {
             href();
-        } else {
+        }else{
             location = href;
         }
-        layer.close(index);
+        top.layer.close(index);
     });
     return false;
 }
 
 
+
 $(document).ready(function () {
 
-
-
-    // Small todo handler
+    // Small
     $('.check-link').click(function () {
         var button = $(this).find('i');
         var label = $(this).next('span');
@@ -41,17 +40,9 @@ $(document).ready(function () {
 });
 
 
-
-
-
-//主题设置
-$(function () {
-
-
-
-
-
-});
+function getActiveTab(){
+    return top.$(".J_iframe:visible");
+}
 
 //判断浏览器是否支持html5本地存储
 function localStorageSupport() {
@@ -76,7 +67,7 @@ function openDialog(title,url,width,height,target){
             if(target){
                 top_iframe = target;//如果指定了iframe，则在改frame中跳转
             }else{
-                top_iframe = top.getActiveTab().attr("name");//获取当前active的tab的iframe
+                top_iframe = getActiveTab().attr("name");//获取当前active的tab的iframe
             }
             inputForm.attr("target",top_iframe);//表单提交成功后，从服务器返回的url在当前tab中展示
 

@@ -18,11 +18,9 @@
                 "timeOut":"5000"
             });
 
-
             $(".first-menu").click(function(){
                 // 显示二级菜单
                 var menuId = ".secondMenu-" + $(this).attr("data-id");
-
                 $(".secondMenu").hide();
                 $(menuId).show();
 
@@ -39,15 +37,7 @@
             //初始化点击第一个一级菜单
             $(".first-menu:first").click();
 
-
-
         })
-
-        function doAlert(){
-            alert("index");
-        }
-
-
 
     </script>
 </head>

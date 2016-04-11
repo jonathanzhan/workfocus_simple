@@ -31,7 +31,6 @@
 <script src="${ctxStatic}/plugins/slimscroll/jquery.slimscroll.min.js"></script>
 <script src="${ctxStatic}/plugins/layer/layer.js"></script>
 <script src="${ctxStatic}/js/common.js"></script>
-<script src="${ctxStatic}/js/contabs.js"></script>
 
 <!--进度条-->
 <script src="${ctxStatic}/plugins/pace/pace.min.js"></script>

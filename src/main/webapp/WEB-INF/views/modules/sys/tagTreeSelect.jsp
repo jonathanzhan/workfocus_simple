@@ -10,12 +10,11 @@
 
 		var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 
+		var key, lastValue = "", nodeList = [];
 
-		var key, lastValue = "", nodeList = [], type = getQueryString("type", "${url}");
 		var tree, setting = {
 			view:{selectedMulti:false,dblClickExpand:false},
 			check:{enable:"${checked}",nocheckInherit:true},
-			async:{enable:(type==3),url:"${ctx}/sys/user/treeData",autoParam:["id=officeId"]},
 			data:{simpleData:{enable:true}},
 			callback:{<%--
 				beforeClick: function(treeId, treeNode){
@@ -44,32 +43,12 @@
 				},
 				onDblClick: function(){
 					var parentIndex = '${index}';
-					var top_iframe = top.getActiveTab().attr("name");
-					alert(top_iframe);
 					if(parentIndex=='undefined'){
-
-						parent.doLayerChoose(tree,index);
+						top.$(".J_iframe:visible")[0].contentWindow.doLayerChoose${treeId}(tree,index);
 					}else{
-						var iframeId = "#layui-layer-iframe"+${index};
-						alert(iframeId);
-						parent.$(iframeId)[0].contentWindow.doAlert();
-						parent.$(iframeId)[0].contentWindow.doLayerChoose(tree,index);
+						var iframeId = "#layui-layer-iframe"+parentIndex;
+						parent.$(iframeId)[0].contentWindow.doLayerChoose${treeId}(tree,index);
 					}
-
-//					top.$.layer.find("button[value='ok']").trigger("click");
-//					top.layer.close(index);
-					//.doLayerChoose(tree,index);
-
-//					console.info($(document.getElementById('layui-layer-iframe2').contentWindow.document.body).html());
-
-
-
-
-
-
-//					layer.find('iframe')[0].contentWindow.doAlert();
-//					var top_iframe = top.getActiveTab().attr("name");
-//					top.document.getElementById("top_iframe").contentWindow.doAlert();
 					top.layer.close(index);
 				}
 			}
@@ -84,7 +63,7 @@
 			}
 		}
 		$(document).ready(function(){
-			$.get("${ctx}${url}${fn:indexOf(url,'?')==-1?'?':'&'}&extId=${extId}&t="
+			$.get("${ctx}${url}${fn:indexOf(url,'?')==-1?'?':'&'}extId=${extId}&t="
 					+ new Date().getTime(), function(zNodes){
 				// 初始化树结构
 				tree = $.fn.zTree.init($("#tree"), setting, zNodes);
@@ -92,7 +71,7 @@
 				// 默认展开一级节点
 				var nodes = tree.getNodesByParam("level", 2);
 				for(var i=0; i<nodes.length; i++) {
-					tree.expandNode(nodes[i], true, false, false);
+					tree.expandNode(nodes[i], true, true, false);
 				}
 				//异步加载子节点（加载用户）
 				var nodesOne = tree.getNodesByParam("isParent", true);
@@ -104,14 +83,14 @@
 			key = $("#key");
 			key.bind("focus", focusKey).bind("blur", blurKey).bind("change cut input propertychange", searchNode);
 			key.bind('keydown', function (e){if(e.which == 13){searchNode();}});
-			setTimeout("search();", "300");
+			$("#search").toggle();
 		});
 		
 		// 默认选择节点
 		function selectCheckNode(){
 			var ids = "${selectIds}".split(",");
 			for(var i=0; i<ids.length; i++) {
-				var node = tree.getNodeByParam("id", (type==3?"u_":"")+ids[i]);
+				var node = tree.getNodeByParam("id", ids[i]);
 				if("${checked}" == "true"){
 					try{tree.checkNode(node, true, true);}catch(e){}
 					tree.selectNode(node, false);
@@ -212,7 +191,6 @@
 		// 开始搜索
 		function search() {
 			$("#search").slideToggle(200);
-			$("#txt").toggle();
 			$("#key").focus();
 		}
 
@@ -228,28 +206,30 @@
 
 </head>
 <body class="gray-bg">
-<div class="wrapper wrapper-content">
+<div class="wrapper-content" style="padding-top: 5px;">
 
-	<div class="layerContent">
-		<div style="position:absolute;right:8px;top:5px;cursor:pointer;" onclick="search();">
-			<i class="icon-search"></i><label id="txt">搜索</label>
+	<div class="row">
+		<div class="col-xs-9" >
+			<div id="search">
+				<div class="input-group" >
+				<span class="input-group-btn">
+					 <button type="button" id="btn" onclick="searchNode()" class="btn btn-sm btn-primary">搜索</button>
+				</span>
+					<input type="text" id="key" name="key" placeholder="关键字" class="form-control input-sm">
+				</div>
+			</div>
+
 		</div>
-		<div id="search" class="form-search hide" style="padding:10px 0 0 13px;">
-			<label for="key" class="control-label" style="padding:5px 5px 3px 0;">关键字：</label>
-			<input type="text" class="empty" id="key" name="key" maxlength="50" style="width:110px;">
-			<button class="btn" id="btn" onclick="searchNode()">搜索</button>
-		</div>
-		<div id="tree" class="ztree" style="padding:15px 20px;"></div>
-	</div>
-
-
-
-	<div class="layerBottom">
-		<div class="col-md-offset-3 col-md-9 pull-right">
-			<input id="btnSubmit" class="btn btn-info btn-sm" type="button" value="选择" onclick="onChoose()"/>
-			<input id="btnReset" class="btn btn-sm" type="button" value="重置" onclick="doReset()"/>
+		<div class="col-xs-3" onclick="search();" style="cursor:pointer;">
+			<i class="fa fa-search"></i><label id="txt">搜索</label>
 		</div>
 	</div>
+	<div class="row">
+		<div class="col-xs-12" >
+			<div id="tree" class="ztree"></div>
+		</div>
+	</div>
+
 </div>
 </body>
 </html>
