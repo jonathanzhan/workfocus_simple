@@ -5,8 +5,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 文件上传的demo
- * @author Jonathan(whatlookingfor@gmail.com)
- * @date 2016/4/6 11:44
+ * @author Jonathan
+ * @time 2016/4/6 11:44
  * @since V1.0
  */
 public class FileUpload extends DataEntity<FileUpload>{
