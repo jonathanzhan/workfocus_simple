@@ -5,7 +5,6 @@
 <head>
 	<title>机构管理</title>
 	<%@include file="/WEB-INF/views/include/head.jsp" %>
-	<%@include file="/WEB-INF/views/include/treetable.jsp" %>
 	<%@include file="/WEB-INF/views/include/treeview.jsp" %>
 	<style type="text/css">
 		.ztree {overflow:auto;margin:0;_margin-top:10px;padding:10px 0 0 10px;}
@@ -14,37 +13,33 @@
 		function refresh(){//刷新
 			window.location="${ctx}/sys/org/";
 		}
-		function doAlert(){
-			alert("orgindex");
-		}
 	</script>
 </head>
 <body class="gray-bg">
-	
 	<div class="wrapper wrapper-content">
-	<div class="ibox" id="main">
-		<div class="ibox-content">
-			<sys:message content="${message}"/>
-			<div id="content" class="row">
-				<div id="left" style="background-color:#e7eaec">
-					<a onclick="refresh()" class="pull-right">
-						<i class="fa fa-refresh"></i>
-					</a>
-					<div id="ztree" class="ztree"></div>
-				</div>
-				<div id="openClose" class="close">&nbsp;</div>
-				<div id="right">
-					<iframe id="orgContent" name="orgContent" src="${ctx}/sys/org/list?id=&parentIds=" width="100%" height="91%" frameborder="0"></iframe>
+		<div class="ibox" id="main">
+			<div class="ibox-content">
+				<sys:message content="${message}"/>
+				<div id="content" class="row">
+					<div id="left" style="background-color:#e7eaec">
+						<a onclick="refresh()" class="pull-right">
+							<i class="fa fa-refresh"></i>
+						</a>
+						<div id="ztree" class="ztree"></div>
+					</div>
+					<div id="openClose" class="close">&nbsp;</div>
+					<div id="right">
+						<iframe id="orgContent" name="orgContent" src="${ctx}/sys/org/list?id=1" width="100%" height="91%" frameborder="0"></iframe>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-	</div>
 	<script type="text/javascript">
 		var setting = {data:{simpleData:{enable:true,idKey:"id",pIdKey:"pId",rootPId:'0'}},
 			callback:{onClick:function(event, treeId, treeNode){
-					var id = treeNode.pId == '0' ? '' :treeNode.pId;
-					$('#orgContent').attr("src","${ctx}/sys/org/list?id="+id+"&parentIds="+treeNode.pIds);
+					var id = treeNode.id == '0' ? '1' :treeNode.id;
+					$('#orgContent').attr("src","${ctx}/sys/org/list?id="+id);
 				}
 			}
 		};

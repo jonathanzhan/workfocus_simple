@@ -80,7 +80,7 @@ public class OrgController extends BaseController {
 					size++;
 				}
 			}
-			org.setCode(org.getParent().getCode() + StringUtils.leftPad(String.valueOf(size > 0 ? size+1 : 1), 3, "0"));
+			org.setCode(org.getParent().getCode() + StringUtils.leftPad(String.valueOf(size > 0 ? size+1 : 1), 1, "0"));
 		}
 		model.addAttribute("org", org);
 		return "modules/sys/orgForm";
@@ -97,9 +97,11 @@ public class OrgController extends BaseController {
 			return form(org, model);
 		}
 		orgService.save(org);
+		System.out.println(org.getParentIds());
 		addMessage(redirectAttributes, "保存机构'" + org.getName() + "'成功");
-		String id = "0".equals(org.getParentId()) ? "" : org.getParentId();
-		return "redirect:" + adminPath + "/sys/org/list?id="+id+"&parentIds="+org.getParentIds();
+//		return "redirect:" + adminPath + "/sys/org/list?id="+org.getId();
+		return "redirect:" + adminPath + "/sys/org/list?id=1";
+
 	}
 	
 	@RequiresPermissions("sys:org:edit")
@@ -115,7 +117,9 @@ public class OrgController extends BaseController {
 			orgService.delete(org);
 			addMessage(redirectAttributes, "删除机构成功");
 		}
-		return "redirect:" + adminPath + "/sys/org/list?id="+org.getParentId()+"&parentIds="+org.getParentIds();
+		return "redirect:" + adminPath + "/sys/org/list?id=1";
+
+//		return "redirect:" + adminPath + "/sys/org/list?id="+org.getParentId();
 	}
 
 	/**

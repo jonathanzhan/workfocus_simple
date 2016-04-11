@@ -5,17 +5,11 @@
 <head>
     <title>机构管理</title>
     <%@include file="/WEB-INF/views/include/head.jsp" %>
-    <%@include file="/WEB-INF/views/include/treetable.jsp" %>
     <script type="text/javascript">
-        function doAlert(){
-            alert("orgForm");
-        }
         var validateForm;
         function doSubmit() {//回调函数，在编辑和保存动作时，供openDialog调用提交表单。
             if (validateForm.form()) {
-                alert("before");
                 $("#inputForm").submit();
-                alert("dassda");
                 return true;
             }
             return false;
@@ -27,7 +21,6 @@
                 submitHandler: function (form) {
                     layer.load();
                     form.submit();
-                    alert("submit");
                 },
                 highlight: function (e) {
                     $(e).parent().removeClass('has-success').addClass('has-error');
@@ -60,10 +53,10 @@
                 <label class="pull-right">上级机构:</label>
             </td>
             <td class="col-xs-4">
-                <sys:treeselect id="parent" name="parent.id" value="${org.parent.id}" labelName="parent.name"
+                <sys:treeselect id="org" name="parent.id" value="${org.parent.id}" labelName="parent.name"
                                 labelValue="${org.parent.name}"
-                                title="机构" url="/sys/org/treeData" extId="${org.id}" cssClass="form-control required"
-                                allowClear="true" dataMsgRequired="请选择上级机构"/>
+                                title="机构" url="/sys/org/treeData" extId="${org.id}" cssClass="form-control"
+                                 dataMsgRequired="请选择上级机构"/>
             </td>
             <td class="active col-xs-2">
                 <label class="pull-right"><font color="red">*</font>机构名称:</label>
@@ -96,7 +89,7 @@
                 <label class="pull-right">排序:</label>
             </td>
             <td class="col-xs-4">
-                <form:input path="sort" htmlEscape="false" range="[1,100]" class="form-control inline required digits"/>
+                <form:input path="sort" htmlEscape="false" range="[0,100]" class="form-control inline required digits"/>
             </td>
             <td class="active col-xs-2">
                 <label class="pull-right">负责人:</label>
@@ -111,7 +104,7 @@
                 <label class="pull-right">联系电话:</label>
             </td>
             <td class="col-xs-4">
-                <form:input path="phone" htmlEscape="false" maxlength="20" class="form-control inline required"/>
+                <form:input path="phone" htmlEscape="false" maxlength="20" class="form-control"/>
             </td>
             <td class="active col-xs-2">
                 <label class="pull-right">地址:</label>
@@ -125,8 +118,7 @@
                 <label class="pull-right">备注:</label>
             </td>
             <td class="col-xs-10" colspan="3">
-                <button type="button" onclick="doSubmit()"> ssdsa</button>
-                <%--<form:textarea path="remarks" htmlEscape="false" rows="2" maxlength="200"  class="form-control" cssStyle="width: 98%"/>--%>
+                <form:textarea path="remarks" htmlEscape="false" rows="2" maxlength="200"  class="form-control" cssStyle="width: 98%"/>
             </td>
         </tr>
 
