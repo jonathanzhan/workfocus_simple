@@ -95,3 +95,8 @@
     cursor: pointer;
     z-index: 2000;
 }
+
+
+table thead tr th.check-all{
+    cursor: pointer;
+}
