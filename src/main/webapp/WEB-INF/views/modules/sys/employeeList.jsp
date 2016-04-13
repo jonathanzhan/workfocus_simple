@@ -12,7 +12,7 @@
 				,scrollX:true//显示横向滚动
 				,scrollCollapse:true//当显示更少的记录时，是否允许表格减少高度
 				,searching: false//是否允许Datatables开启本地搜索
-				,ordering:  false//是否显示排序
+				,ordering:  true//是否显示排序
 				,info:false//控制是否显示表格左下角的信息
 				,paging: false//是否开启本地分页
 				,fixedColumns:   {//固定列
