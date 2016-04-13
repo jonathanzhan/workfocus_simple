@@ -1,3 +1,10 @@
+@font-face {
+    font-family: 'FontAwesome';
+    src: url('../fonts/fontawesome-webfont.eot?v=4.4.0');
+    src: url('../fonts/fontawesome-webfont.eot?#iefix&v=4.4.0') format('embedded-opentype'), url('../fonts/fontawesome-webfont.woff2?v=4.4.0') format('woff2'), url('../fonts/fontawesome-webfont.woff?v=4.4.0') format('woff'), url('../fonts/fontawesome-webfont.ttf?v=4.4.0') format('truetype'), url('../fonts/fontawesome-webfont.svg?v=4.4.0#fontawesomeregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
 /*
  *
  *   H+ - 后台主题UI框架
@@ -1801,7 +1808,8 @@ a.list-group-item.active:focus {
 
 
 /* DATATABLES */
-
+/*控制页面table的自动宽度设定，并且不换行*/
+table.dataTable th, td { white-space: nowrap; }
 table.dataTable thead .sorting,
 table.dataTable thead .sorting_asc:after,
 table.dataTable thead .sorting_desc,
@@ -1815,12 +1823,16 @@ table.dataTable thead .sorting_asc:after {
     font-family: fontawesome;
 }
 
+table.dataTable thead .sorting_asc:after {
+    content: "\f0de";
+    /* sort-by-attributes */
+}
+
 table.dataTable thead .sorting_desc:after {
     content: "\f0dd";
     float: right;
     font-family: fontawesome;
 }
-
 table.dataTable thead .sorting:after {
     content: "\f0dc";
     float: right;
@@ -1829,7 +1841,7 @@ table.dataTable thead .sorting:after {
 }
 
 .dataTables_wrapper {
-    padding-bottom: 30px;
+    padding-bottom: 10px;
 }
 
 
@@ -7820,6 +7832,7 @@ body.skin-3 {
 
 ::-webkit-scrollbar {
     width: 6px;
+    height: 6px;
     background-color: #F5F5F5;
 }
 
