@@ -20,8 +20,7 @@
 <link rel="stylesheet" href="${ctxStatic}/plugins/bootstrap-table/bootstrap-table.min.css">
 <link href="${ctxStatic}/css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
 <link href="${ctxStatic}/css/animate.css" rel="stylesheet">
-<link href="${ctxStatic}/css/style.css?v=4.1.0" rel="stylesheet">
-<link href="${ctxStatic}/css/common.css" rel="stylesheet">
+
 
 <script src="${ctxStatic}/js/jquery-2.1.4.js"></script>
 <script src="${ctxStatic}/js/bootstrap.min.js?v=3.3.6"></script>
@@ -43,9 +42,21 @@
 <script src="${ctxStatic}/plugins/validate/additional-methods.min.js"></script>
 <script src="${ctxStatic}/plugins/validate/localization/messages_zh.min.js"></script>
 
-
+<%--js模板--%>
 <script src="${ctxStatic}/js/mustache.min.js"></script>
 
+<%--icheck--%>
+<script src="${ctxStatic}/plugins/iCheck/icheck.min.js"></script>
+<link href="${ctxStatic}/plugins/iCheck/skins/flat/green.css" rel="stylesheet">
+
+
+<%--dataTables--%>
+<link rel="stylesheet" type="text/css" href="${ctxStatic}/plugins/dataTables/datatables.min.css"/>
+<script type="text/javascript" src="${ctxStatic}/plugins/dataTables/datatables.js"></script>
+
+
+<link href="${ctxStatic}/css/style.css?v=4.1.0" rel="stylesheet">
+<link href="${ctxStatic}/css/common.css" rel="stylesheet">
 <script type="text/javascript">
     var ctx = '${ctx}', ctxStatic='${ctxStatic}';
 </script>
