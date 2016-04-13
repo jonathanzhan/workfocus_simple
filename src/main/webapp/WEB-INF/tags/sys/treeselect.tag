@@ -58,7 +58,6 @@
 				<c:if test="${allowClear}">
 					$("#${id}Id").attr("value","");
 					$("#${id}Name").attr("value","");
-				}
 				</c:if>
 				${treeEvent}
 				top.layer.close(index);

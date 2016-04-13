@@ -3,8 +3,8 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <title>机构管理</title>
     <%@include file="/WEB-INF/views/include/head.jsp" %>
+    <title>机构管理</title>
     <script type="text/javascript">
         var validateForm;
         function doSubmit() {//回调函数，在编辑和保存动作时，供openDialog调用提交表单。

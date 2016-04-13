@@ -48,7 +48,7 @@ public class OrgController extends BaseController {
 	}
 
 	@RequiresPermissions("sys:org:view")
-	@RequestMapping(value = {""})
+	@RequestMapping(value = {"","index"})
 	public String index() {
 		return "modules/sys/orgIndex";
 	}
