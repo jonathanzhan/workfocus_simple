@@ -70,22 +70,19 @@
 	  	a.lastloginat,
 	  	a.lastloginip,
 		a.employee_id as "employee.id",
-		b.employee_cd as "employee.employeeCd",
-		b.employee_cnm as "employee.employeeCnm",
-		b.employee_enm as "employee.employeeEnm",
+		b.code as "employee.code",
+		b.name as "employee.name",
+		b.ename as "employee.eName",
 		b.email as  "employee.email",
 		b.tel as  "employee.tel",
 		b.org_id as "employee.org.id",
 		d.code as "employee.org.code",
-		d.name as "employee.org.name",
-		b.job_id as "employee.job.id",
-		e.job_name as "employee.job.jobName"
+		d.name as "employee.org.name"
     </sql>
     
     <sql id="userJoins">
 		LEFT JOIN sys_employee b ON a.employee_id = b.id
 		LEFT JOIN sys_org d ON b.org_id = d.id
-		LEFT JOIN sys_job e ON b.job_id = e.id
 		<!--JOIN sys_office c ON c.id = a.company_id-->
 		<!--JOIN sys_area ca ON ca.id = c.area_id-->
 		<!--JOIN sys_office o ON o.id = a.office_id-->

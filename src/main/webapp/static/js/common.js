@@ -32,6 +32,8 @@ $(document).ready(function () {
         return false;
     });
 
+
+
     //ios浏览器兼容性处理
     if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
         $('#content-main').css('overflow-y', 'auto');
@@ -96,7 +98,35 @@ function openDialogView(title,url,width,height){
     });
 
 }
+//分页
+function page(n, s) {
+    $("#pageNo").val(n);
+    $("#pageSize").val(s);
+    $("#searchForm").submit();
+    return false;
+}
 
+//查询，页码清零
+function searchForm(){
+    $("#pageNo").val(0);
+    $("#searchForm").submit();
+    return false;
+}
+
+//重置
+function resetFrom(){//重置，页码清零
+    $("#pageNo").val(0);
+    $("#searchForm div.form-group input").val("");
+    $("#searchForm div.form-group select").val("");
+    $("#searchForm").submit();
+    return false;
+}
+
+//刷新或者排序，页码不清零
+function sortOrRefresh(){
+    $("#searchForm").submit();
+    return false;
+}
 
 /**
  * 显示通知内容

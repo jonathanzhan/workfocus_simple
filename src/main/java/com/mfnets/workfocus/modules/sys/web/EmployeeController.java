@@ -3,6 +3,7 @@
  */
 package com.mfnets.workfocus.modules.sys.web;
 
+import com.mfnets.workfocus.common.config.Global;
 import com.mfnets.workfocus.common.persistence.Page;
 import com.mfnets.workfocus.common.utils.StringUtils;
 import com.mfnets.workfocus.common.web.BaseController;
@@ -22,9 +23,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * 员工Controller
- * @author ThinkGem
- * @version 2014-05-16
+ *
+ * 员工的controller
+ * @author Jonathan(whatlookingfor@gmail.com)
+ * @date   2016/4/11 17:26
+ * @since  V1.0
+ *
  */
 @Controller
 @RequestMapping(value = "${adminPath}/sys/employee")
@@ -42,6 +46,13 @@ public class EmployeeController extends BaseController {
 		}
 	}
 
+
+	@RequiresPermissions("sys:employee:view")
+	@RequestMapping(value = {"","index"})
+	public String index(){
+		return "modules/sys/employeeIndex";
+	}
+
 	/**
 	 * 员工管理分页
 	 * @param employee
@@ -51,7 +62,7 @@ public class EmployeeController extends BaseController {
 	 * @return
 	 */
 	@RequiresPermissions("sys:employee:view")
-	@RequestMapping(value = {"list", ""})
+	@RequestMapping(value = "list")
 	public String list(Employee employee, HttpServletRequest request, HttpServletResponse response, Model model) {
         Page<Employee> page = employeeService.findPage(new Page<Employee>(request, response), employee);
         model.addAttribute("page", page);
@@ -67,12 +78,6 @@ public class EmployeeController extends BaseController {
 	@RequiresPermissions("sys:employee:view")
 	@RequestMapping(value = "form")
 	public String form(Employee employee, Model model) {
-		if(employee.getSex()==null){
-			employee.setSex(1);
-		}
-		if(employee.getIsOpenSys()==null){
-			employee.setIsOpenSys(1);
-		}
 		model.addAttribute("employee", employee);
 		return "modules/sys/employeeForm";
 	}
@@ -84,15 +89,14 @@ public class EmployeeController extends BaseController {
 	 * @param redirectAttributes
 	 * @return
 	 */
-	@RequiresPermissions("sys:employee:edit")
-	@RequestMapping(value = "save")//@Valid 
+	@RequestMapping(value = "save")
 	public String save(Employee employee, Model model, RedirectAttributes redirectAttributes) {
-		if (!beanValidator(model, employee)){
-			return form(employee, model);
+		if (!beanValidator(redirectAttributes, employee)){
+			return "redirect:" + adminPath + "/sys/employee/list?repage";
 		}
 		employeeService.save(employee);
-		addMessage(redirectAttributes, "保存员工'" + employee.getEmployeeCnm() + "'成功");
-		return "redirect:" + adminPath + "/sys/employee/?repage";
+		addMessage(redirectAttributes, "保存员工'" + employee.getName() + "'成功");
+		return "redirect:" + adminPath + "/sys/employee/list?repage";
 	}
 
 	/**
@@ -106,9 +110,31 @@ public class EmployeeController extends BaseController {
 	public String delete(Employee employee, RedirectAttributes redirectAttributes) {
 		employeeService.delete(employee);
 		addMessage(redirectAttributes, "删除员工成功");
-		return "redirect:" + adminPath + "/sys/employee/?repage";
+		return "redirect:" + adminPath + "/sys/employee/list?repage";
 	}
 
+	/**
+	 * 员工信息批量删除
+	 * @param ids
+	 * @param redirectAttributes
+	 * @return
+	 */
+	@RequiresPermissions("sys:employee:del")
+	@RequestMapping(value = "deleteAll")
+	public String deleteAll(String ids, RedirectAttributes redirectAttributes) {
+		String idArray[] =ids.split(",");
+		for(String id : idArray){
+			Employee employee = employeeService.get(id);
+			if(Global.isDemoMode()){
+				addMessage(redirectAttributes, "演示模式，不允许操作！");
+				return "redirect:" + adminPath + "/sys/employee/list?repage";
+			}
+
+			employeeService.delete(employee);
+			addMessage(redirectAttributes, "删除员工成功");
+		}
+		return "redirect:" + adminPath + "/sys/employee/list?repage";
+	}
 
 	/**
 	 * 员工编号是否重复检查

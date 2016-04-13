@@ -5,36 +5,32 @@
 	<sql id="employeeColumns">
 		a.id,
 		a.org_id AS "org.id",
-		a.job_id AS "job.id",
-		a.employee_cd,
-		a.employee_cnm,
-		a.employee_enm,
+		a.code,
+		a.name,
+		a.ename,
 		a.sex,
 		a.birthday,
 		a.address,
 		a.tel,
 		a.id_code,
 		a.education,
-		a.hobbies,
 		a.qq,
 		a.email,
-		a.isopensys,
+		a.is_open,
 		a.photo,
-		a.is_enabled,
-		a.creator,
+		a.create_by AS "createBy.id",
 		a.create_at,
-		a.modifier,
-		a.modify_at,
-		b.job_name AS "job.jobName",
-		d.org_nm AS "org.orgNm"
+		a.update_by AS "updateBy.id",
+		a.update_at,
+		a.del_flag,
+		d.name AS "org.name"
 	</sql>
 
 	<sql id="employeeJoins">
-		LEFT JOIN sys_job b ON a.job_id = b.id
-		LEFT JOIN sys_org d ON a.org_id = d.id
+		inner JOIN sys_org d ON a.org_id = d.id
 	</sql>
 
-	<select id="get" resultType="Employee">
+	<select id="get" resultType="com.mfnets.workfocus.modules.sys.entity.Employee">
 		SELECT 
 		<include refid="employeeColumns"/>
 		FROM sys_employee a
@@ -47,40 +43,37 @@
 		<include refid="employeeColumns"/>
 		FROM sys_employee a
 		<include refid="employeeJoins"/>
-		WHERE a.employee_cd = #{employeeCd}
-		 AND a.is_enabled = #{DEL_FLAG_NORMAL}
+		WHERE a.code = #{code}
+		 AND a.del_flag = #{DEL_FLAG_NORMAL}
 	</select>
 
 	
-	<select id="findList" resultType="Employee">
+	<select id="findList" resultType="com.mfnets.workfocus.modules.sys.entity.Employee">
 		SELECT
 		<include refid="employeeColumns"/>
 		FROM sys_employee a
 		<include refid="employeeJoins"/>
-		WHERE  a.is_enabled= #{DEL_FLAG_NORMAL}
-		<if test="employeeCd!=null and employeeCd!=''">
-			AND a.employee_cd LIKE
-			<if test="dbName == 'oracle'">'%'||#{employeeCd}||'%'</if>
-			<if test="dbName == 'mssql'">'%'+#{employeeCd}+'%'</if>
-			<if test="dbName == 'mysql'">CONCAT('%', #{employeeCd}, '%')</if>
+		WHERE  a.del_flag= #{DEL_FLAG_NORMAL}
+		<if test="code!=null and code!=''">
+			AND a.code LIKE
+			<if test="dbName == 'oracle'">'%'||#{code}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{code}+'%'</if>
+			<if test="dbName == 'mysql'">CONCAT('%', #{code}, '%')</if>
 		</if>
-		<if test="employeeCnm!=null and employeeCnm!=''">
-			AND a.employee_cnm LIKE
-			<if test="dbName == 'oracle'">'%'||#{employeeCnm}||'%'</if>
-			<if test="dbName == 'mssql'">'%'+#{employeeCnm}+'%'</if>
-			<if test="dbName == 'mysql'">CONCAT('%', #{employeeCnm}, '%')</if>
+		<if test="name!=null and name!=''">
+			AND a.name LIKE
+			<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+			<if test="dbName == 'mysql'">CONCAT('%', #{name}, '%')</if>
 		</if>
-		<if test="employeeEnm!=null and employeeEnm!=''">
-			AND a.employee_enm LIKE
-			<if test="dbName == 'oracle'">'%'||#{employeeEnm}||'%'</if>
-			<if test="dbName == 'mssql'">'%'+#{employeeEnm}+'%'</if>
-			<if test="dbName == 'mysql'">CONCAT('%', #{employeeEnm}, '%')</if>
+		<if test="eName!=null and eName!=''">
+			AND a.ename LIKE
+			<if test="dbName == 'oracle'">'%'||#{eName}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{eName}+'%'</if>
+			<if test="dbName == 'mysql'">CONCAT('%', #{eName}, '%')</if>
 		</if>
 		<if test="org!=null and org.id!=null and org.id!=''">
 			AND a.org_id = #{org.id}
-		</if>
-		<if test="job!=null and job.id!=null and job.id!=''">
-			AND a.job_id = #{job.id}
 		</if>
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
@@ -92,35 +85,32 @@
 		</choose>
 	</select>
 	
-	<select id="findAllList" resultType="Employee">
+	<select id="findAllList" resultType="com.mfnets.workfocus.modules.sys.entity.Employee">
 		SELECT
 		<include refid="employeeColumns"/>
 		FROM sys_employee a
 		<include refid="employeeJoins"/>
-		WHERE  a.is_enabled= #{DEL_FLAG_NORMAL}
-		<if test="employeeCd!=null and employeeCd!=''">
-			AND a.employee_cd LIKE
-			<if test="dbName == 'oracle'">'%'||#{employeeCd}||'%'</if>
-			<if test="dbName == 'mssql'">'%'+#{employeeCd}+'%'</if>
-			<if test="dbName == 'mysql'">CONCAT('%', #{employeeCd}, '%')</if>
+		WHERE  a.del_flag= #{DEL_FLAG_NORMAL}
+		<if test="code!=null and code!=''">
+			AND a.code LIKE
+			<if test="dbName == 'oracle'">'%'||#{code}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{code}+'%'</if>
+			<if test="dbName == 'mysql'">CONCAT('%', #{code}, '%')</if>
 		</if>
-		<if test="employeeCnm!=null and employeeCnm!=''">
-			AND a.employee_cnm LIKE
-			<if test="dbName == 'oracle'">'%'||#{employeeCnm}||'%'</if>
-			<if test="dbName == 'mssql'">'%'+#{employeeCnm}+'%'</if>
-			<if test="dbName == 'mysql'">CONCAT('%', #{employeeCnm}, '%')</if>
+		<if test="name!=null and name!=''">
+			AND a.name LIKE
+			<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+			<if test="dbName == 'mysql'">CONCAT('%', #{name}, '%')</if>
 		</if>
-		<if test="employeeEnm!=null and employeeEnm!=''">
-			AND a.employee_enm LIKE
-			<if test="dbName == 'oracle'">'%'||#{employeeEnm}||'%'</if>
-			<if test="dbName == 'mssql'">'%'+#{employeeEnm}+'%'</if>
-			<if test="dbName == 'mysql'">CONCAT('%', #{employeeEnm}, '%')</if>
+		<if test="eName!=null and eName!=''">
+			AND a.ename LIKE
+			<if test="dbName == 'oracle'">'%'||#{eName}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{eName}+'%'</if>
+			<if test="dbName == 'mysql'">CONCAT('%', #{eName}, '%')</if>
 		</if>
 		<if test="org!=null and org.id!=null and org.id!=''">
 			AND a.org_id = #{org.id}
-		</if>
-		<if test="job!=null and job.id!=null and job.id!=''">
-			AND a.job_id = #{job.id}
 		</if>
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
@@ -137,86 +127,80 @@
 		INSERT INTO sys_employee(
 			id,
 			org_id,
-			job_id,
-			employee_cd,
-			employee_cnm,
-			employee_enm,
+			code,
+			name,
+			ename,
 			sex,
 			birthday,
 			address,
 			tel,
 			id_code,
 			education,
-			hobbies,
 			qq,
 			email,
-			isopensys,
+			is_open,
 			photo,
-			creator,
+			create_by,
 			create_at,
-			modifier,
-			modify_at,
-			is_enabled
+			update_by,
+			update_at,
+			del_flag
 		) VALUES (
 			#{id},
 			#{org.id},
-			#{job.id},
-			#{employeeCd},
-			#{employeeCnm},
-			#{employeeEnm},
+			#{code},
+			#{name},
+			#{eName},
 			#{sex},
 			#{birthday},
 			#{address},
 			#{tel},
 			#{idCode},
 			#{education},
-			#{hobbies},
 			#{qq},
 			#{email},
-			#{isOpenSys},
+			#{isOpen},
 			#{photo},
-			#{creator.id},
+			#{createBy.id},
 			#{createAt},
-			#{modifier.id},
-			#{modifyAt},
-			#{isEnabled}
+			#{updateBy.id},
+			#{updateAt},
+			#{delFlag}
 		)
 	</insert>
 	
 	<update id="update">
 		UPDATE sys_employee SET
 			org_id = #{org.id},
-			job_id = #{job.id},
-			employee_cd = #{employeeCd},
-			employee_cnm = #{employeeCnm},
-			employee_enm = #{employeeEnm},
+			code = #{code},
+			name = #{name},
+			ename = #{eName},
 			sex = #{sex},
 			birthday = #{birthday},
 			address = #{address},
 			tel = #{tel},
 			id_code = #{idCode},
 			education = #{education},
-			hobbies = #{hobbies},
 			qq = #{qq},
 			email = #{email},
-			isopensys = #{isOpenSys},
+			is_open = #{isOpen},
 			photo = #{photo},
-			modifier = #{modifier.id},
-			modify_at = #{modifyAt}
+			update_by = #{updateBy.id},
+			update_at = #{updateAt}
 		WHERE id = #{id}
 	</update>
 	
 	<update id="delete">
 		UPDATE sys_employee SET
-			is_enabled = #{DEL_FLAG_DELETE}
+			del_flag = #{DEL_FLAG_DELETE}
 		WHERE id = #{id}
 	</update>
 
 	<!--更新员工信息(个人信息保存时调用)-->
 	<update id="updateEmployeeInfo">
 		UPDATE sys_employee SET
-			employee_cnm = #{employeeCnm},
-			employee_enm = #{employeeEnm},
+			name = #{name},
+			ename = #{eName},
 			tel = #{tel},
 			email = #{email}
 		WHERE id= #{id}

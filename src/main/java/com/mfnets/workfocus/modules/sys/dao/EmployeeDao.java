@@ -7,6 +7,8 @@ import com.mfnets.workfocus.common.persistence.CrudDao;
 import com.mfnets.workfocus.common.persistence.annotation.MyBatisDao;
 import com.mfnets.workfocus.modules.sys.entity.Employee;
 
+import java.util.List;
+
 /**
  * 员工DAO接口
  * @author ThinkGem
@@ -14,6 +16,24 @@ import com.mfnets.workfocus.modules.sys.entity.Employee;
  */
 @MyBatisDao
 public interface EmployeeDao extends CrudDao<Employee> {
+
+    @Override
+    Employee get(String id);
+
+    @Override
+    List<Employee> findAllList(Employee entity);
+
+    @Override
+    List<Employee> findList(Employee entity);
+
+    @Override
+    int insert(Employee entity);
+
+    @Override
+    int update(Employee entity);
+
+    @Override
+    int delete(Employee entity);
 
     /**
      * 根据员工编号查询员工信息
