@@ -37,7 +37,6 @@ public class UserUtils {
 	private static UserDao userDao = SpringContextHolder.getBean(UserDao.class);
 	private static RoleDao roleDao = SpringContextHolder.getBean(RoleDao.class);
 	private static MenuDao menuDao = SpringContextHolder.getBean(MenuDao.class);
-	private static JobDao jobDao = SpringContextHolder.getBean(JobDao.class);
 	private static OrgDao orgDao = SpringContextHolder.getBean(OrgDao.class);
 
 
@@ -133,19 +132,6 @@ public class UserUtils {
 		return new User();
 	}
 
-	/**
-	 * 获取系统的岗位列表
-	 * @return
-	 */
-	public static List<Job> getJobList(){
-		@SuppressWarnings("unchecked")
-		List<Job> jobList = (List<Job>)getCache(CACHE_JOB_LIST);
-		if (jobList == null){
-			jobList = jobDao.findList(new Job());
-			putCache(CACHE_JOB_LIST, jobList);
-		}
-		return jobList;
-	}
 
 	/**
 	 * 获取当前用户角色列表
