@@ -32,7 +32,10 @@ $(document).ready(function () {
         return false;
     });
 
-
+    $('.i-checks').iCheck({
+        checkboxClass: 'icheckbox_flat-green',
+        radioClass: 'iradio_flat-green'
+    });
 
     //ios浏览器兼容性处理
     if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
