@@ -7,7 +7,7 @@
 		var icon = type.indexOf('danger') ==-1?'fa fa-check-circle-o':'fa fa-exclamation-circle';
 		$("#messagesBox").removeClass();
 		$("#messagesBox").addClass('alert alert-dismissable '+type);
-		$("#messContent").text(content);
+		$("#messContent").html(content);
 		$("#icon-mess").removeClass();
 		$("#icon-mess").addClass('small-icon '+icon);
 
