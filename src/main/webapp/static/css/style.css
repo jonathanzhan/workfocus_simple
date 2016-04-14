@@ -1809,7 +1809,8 @@ a.list-group-item.active:focus {
 
 /* DATATABLES */
 /*控制页面table的自动宽度设定，并且不换行*/
-table.dataTable th, td { white-space: nowrap; }
+table.dataTable>tbody>tr>td { white-space: nowrap; }
+table.dataTable>thead>tr>th { white-space: nowrap; }
 table.dataTable thead .sorting,
 table.dataTable thead .sorting_asc:after,
 table.dataTable thead .sorting_desc,
