@@ -1,94 +1,96 @@
+<%@ taglib prefix="select" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ include file="/WEB-INF/views/include/taglib.jsp" %>
+<!DOCTYPE HTML>
 <html>
 <head>
     <title>用户管理</title>
-    <meta name="decorator" content="default"/>
+    <%@include file="/WEB-INF/views/include/head.jsp" %>
     <script type="text/javascript">
-        <%--$(document).ready(function() {--%>
-        <%--$("#btnExport").click(function(){--%>
-        <%--top.$.jBox.confirm("确认要导出用户数据吗？","系统提示",function(v,h,f){--%>
-        <%--if(v=="ok"){--%>
-        <%--$("#searchForm").attr("action","${ctx}/sys/user/export");--%>
-        <%--$("#searchForm").submit();--%>
-        <%--}--%>
-        <%--},{buttonsFocus:1});--%>
-        <%--top.$('.jbox-body .jbox-icon').css('top','55px');--%>
-        <%--});--%>
-        <%--$("#btnImport").click(function(){--%>
-        <%--$.jBox($("#importBox").html(), {title:"导入数据", buttons:{"关闭":true}, --%>
-        <%--bottomText:"导入文件不能超过5M，仅允许导入“xls”或“xlsx”格式文件！"});--%>
-        <%--});--%>
-        <%--});--%>
-        function page(n, s) {
-            if (n) $("#pageNo").val(n);
-            if (s) $("#pageSize").val(s);
-            $("#searchForm").attr("action", "${ctx}/sys/user/list");
-            $("#searchForm").submit();
-            return false;
-        }
+        $(function () {
+            $('#contentTable').DataTable({
+                scrollY:"500px"
+                ,scrollX:false//显示横向滚动
+                ,scrollCollapse:true//当显示更少的记录时，是否允许表格减少高度
+                ,searching: false//是否允许Datatables开启本地搜索
+                ,ordering:  false//是否显示排序
+                ,info:false//控制是否显示表格左下角的信息
+                ,paging: false//是否开启本地分页
+                ,fixedHeader: {//固定表头
+                    header: true
+                }
+            } );
+        });
     </script>
 </head>
-<body>
-<%--<div id="importBox" class="hide">--%>
-    <%--<form id="importForm" action="${ctx}/sys/user/import" method="post" enctype="multipart/form-data"--%>
-          <%--class="form-search" style="padding-left:20px;text-align:center;" onsubmit="loading('正在导入，请稍等...');"><br/>--%>
-        <%--<input id="uploadFile" name="file" type="file" style="width:330px"/><br/><br/>　　--%>
-        <%--<input id="btnImportSubmit" class="btn btn-primary" type="submit" value="   导    入   "/>--%>
-        <%--<a href="${ctx}/sys/user/import/template">下载模板</a>--%>
-    <%--</form>--%>
-<%--</div>--%>
-<div class="panel" id="mainPanel">
-    <div class="panel-heading">
-        <ul class="nav nav-tabs">
-            <li class="active"><a href="${ctx}/sys/user/list">用户列表</a></li>
-            <shiro:hasPermission name="sys:user:edit">
-                <li><a href="${ctx}/sys/user/form">用户添加</a></li>
-            </shiro:hasPermission>
-        </ul>
-    </div>
-    <div class="panel-body">
-        <div class="tab-content col-md-12">
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content">
+    <div class="ibox">
+        <div class="ibox-content">
             <form:form id="searchForm" modelAttribute="user" action="${ctx}/sys/user/list" method="post"
                        cssClass="form-horizontal">
-                <input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
-                <input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
-                <sys:tableSort id="orderBy" name="orderBy" value="${page.orderBy}" callback="page();"/>
-                  <div class="form-group">
-                      <label class="col-md-1 control-label">登录名：</label>
-                      <div class="col-md-2">
-                        <form:input path="userName" class="form-control"/>
-                      </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <common:tableSort id="orderBy" name="orderBy" value="${page.orderBy}" callback="sortOrRefresh();"/>
+                            <label class="col-sm-1 control-label">用户名</label>
+                            <div class="col-sm-2">
+                                <form:input path="name" class="form-control"/>
+                            </div>
 
-                      <label class="col-md-1 control-label">用户名称：</label>
-                      <div class="col-md-2">
-                        <form:input path="name" class="form-control"/>
-                      </div>
-                        <%--<li>--%>
-                        <%--<label>用户类型：</label>--%>
-                        <%--<form:select path="userType" class="input-large">--%>
-                        <%--<form:option value="" label="请选择"/>--%>
-                        <%--<form:options items="${fns:getDictList('sys_user_type')}" itemLabel="label" itemValue="value" htmlEscape="false"/>--%>
-                        <%--</form:select>--%>
-                        <%--</li>--%>
-                    <input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"
-                                            onclick="return page();"/>
-                            <%--<input id="btnExport" class="btn btn-primary" type="button" value="导出"/>--%>
-                            <%--<input id="btnImport" class="btn btn-primary" type="button" value="导入"/></li>--%>
-                  </div>
+                            <label class="col-sm-1 control-label">员工编号</label>
+                            <div class="col-sm-2">
+                                <form:input path="employee.code" class="form-control"/>
+                            </div>
+
+                            <label class="col-sm-1 control-label">用户类型</label>
+                            <div class="col-sm-2">
+                                <form:select path="userType"  cssClass="form-control">
+                                    <select:option value="" label="请选择"/>
+                                    <form:options items="${fns:getDictList('sys_user_type')}" itemLabel="label" itemValue="value" />
+                                </form:select>
+                            </div>
+                        </div>
+                        <input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
+                        <input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <%--<div class="pull-left">--%>
+                            <%----%>
+                            <%--<shiro:hasPermission name="sys:user:del">--%>
+                                <%--<common:delBtn url="${ctx}/sys/user/deleteAll"></common:delBtn><!-- 删除按钮 -->--%>
+                            <%--</shiro:hasPermission>--%>
+                            <%--<button class="btn btn-white btn-sm " data-toggle="tooltip" data-placement="left" onclick="sortOrRefresh()"  title="刷新"><i class="glyphicon glyphicon-repeat"></i> 刷新</button>--%>
+                        <%--</div>--%>
+                        <div class="pull-left">
+                            <shiro:hasPermission name="sys:user:add">
+                                <common:addBtn url="${ctx}/sys/user/form" title="用户" width="800px" height="620px" btnClass="btn-primary btn-rounded btn-outline btn-sm"></common:addBtn><!-- 增加按钮 -->
+                            </shiro:hasPermission>
+                            <button  class="btn btn-primary btn-rounded btn-outline btn-sm " type="submit" onclick="searchForm()"><i class="fa fa-search"></i> 查询</button>
+                            <button  class="btn btn-primary btn-rounded btn-outline btn-sm " type="button" onclick="resetFrom()" ><i class="fa fa-refresh"></i> 重置</button>
+                        </div>
+                    </div>
+                </div>
             </form:form>
-            <table id="contentTable" class="table table-striped table-bordered table-condensed">
+
+            <sys:message content="${message}"/>
+            <common:tableAllCheck checkBoxClass="i-checks" checkAllId="check-all"/>
+            <input type="hidden" id="check-all" value="0">
+            <table id="contentTable" class="table table-striped table-bordered table-hover table-condensed dataTable">
                 <thead>
                 <tr>
+                    <th class="check-all">选择</th>
                     <th>编号</th>
-                    <th class="sort-column user_name">登录名</th>
-                    <th class="sort-column name">用户名称</th>
-                    <%--<th>员工编号</th>--%>
-                    <%--<th>中文名称</th>--%>
-                    <%--<th>英文名称</th>--%>
-                    <%--<th>部门</th>--%>
-                    <%--<th>岗位</th>--%>
-                    <th>用户类型</th>
+                    <th class="sort-column sorting" data-sort="login_name">登录名</th>
+                    <th class="sort-column sorting" data-sort="name">用户名称</th>
+                    <th class="sort-column sorting" data-sort="user_type">用户类型</th>
+                    <th class="sort-column sorting" data-sort="b.code">员工编号</th>
+                    <th class="sort-column sorting">员工姓名</th>
+                    <th>所属机构</th>
+                    <th>最近登录时间</th>
                     <shiro:hasPermission name="sys:user:edit">
                         <th>操作</th>
                     </shiro:hasPermission></tr>
@@ -96,29 +98,38 @@
                 <tbody>
                 <c:forEach items="${page.list}" var="user" varStatus="st">
                     <tr>
+                        <td> <input type="checkbox" class="i-checks" id="${user.id}"></td>
                         <td>${st.count}</td>
-                        <td><a href="${ctx}/sys/user/form?id=${user.id}">${user.userName}</a></td>
+                        <td><a href="${ctx}/sys/user/form?id=${user.id}">${user.loginName}</a></td>
                         <td>${user.name}</td>
-                            <%--<td>${user.employee.employeeCd}</td>--%>
-                            <%--<td>${user.employee.employeeCnm}</td>--%>
-                            <%--<td>${user.employee.employeeEnm}</td>--%>
-                            <%--<td>${user.employee.org.orgNm}</td>--%>
-                            <%--<td>${user.employee.job.jobName}</td>--%>
                         <td>${fns:getDictLabel(user.userType,"sys_user_type" , "")} </td>
-                        <shiro:hasPermission name="sys:user:edit">
-                            <td>
-                                <a href="${ctx}/sys/user/form?id=${user.id}">修改</a>
-                                <a href="${ctx}/sys/user/delete?id=${user.id}"
-                                   onclick="return confirmx('确认要删除该用户吗？', this.href)">删除</a>
-                            </td>
-                        </shiro:hasPermission>
+                        <td>${user.employee.code}</td>
+                        <td>${user.employee.name}</td>
+                        <td>${user.employee.org.name}</td>
+                        <td><fmt:formatDate value="${user.thisLoginAt}" type="both"/></td>
+                        <td>
+                            <shiro:hasPermission name="sys:user:view">
+                                <a href="#" onclick="openDialogView('查看用户', '${ctx}/sys/user/form?id=${user.id}','800px', '620px')" class="btn btn-info btn-xs" ><i class="fa fa-search-plus"></i> 查看</a>
+                            </shiro:hasPermission>
+                            <shiro:hasPermission name="sys:user:edit">
+                                <a href="#" onclick="openDialog('修改用户', '${ctx}/sys/user/form?id=${user.id}','800px', '620px')" class="btn btn-success btn-xs" ><i class="fa fa-edit"></i> 修改</a>
+                            </shiro:hasPermission>
+                            <shiro:hasPermission name="sys:user:del">
+                                <a href="${ctx}/sys/user/delete?id=${user.id}" onclick="return confirmx('要删除该员工吗？', this.href)" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> 删除</a>
+                            </shiro:hasPermission>
+                        </td>
                     </tr>
                 </c:forEach>
                 </tbody>
             </table>
-            <div class="pagination">${page}</div>
+            <div>
+                ${page.html}
+            </div>
+
 
         </div>
     </div>
+
+</div>
 </body>
 </html>
