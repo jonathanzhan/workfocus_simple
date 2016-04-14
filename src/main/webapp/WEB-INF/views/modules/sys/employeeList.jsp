@@ -16,12 +16,16 @@
 				,info:false//控制是否显示表格左下角的信息
 				,paging: false//是否开启本地分页
 				,fixedColumns:   {//固定列
-					leftColumns: 1,//左边固定几行
+					leftColumns: 4,//左边固定几行
 					rightColumns:2 //右边固定几行
 				}
 				,fixedHeader: {//固定表头
 					header: true
 				}
+				,columnDefs:[{
+					orderable:false,//禁用排序
+					targets:[0,1]   //指定的列
+				}]
 			} );
 
 		});

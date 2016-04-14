@@ -12,7 +12,7 @@
 			radioClass: 'iradio_flat-green'
 		});
 
-
+		$('table thead tr th.'+'${checkAllId}').removeClass("sorting_asc");
 		//表头全选的点击事件
 		$('table thead tr th.'+'${checkAllId}').click(function(){
 			if($("#"+'${checkAllId}').val()==0){
