@@ -7,6 +7,8 @@ import com.mfnets.workfocus.common.persistence.CrudDao;
 import com.mfnets.workfocus.common.persistence.annotation.MyBatisDao;
 import com.mfnets.workfocus.modules.sys.entity.User;
 
+import java.util.List;
+
 /**
  * 用户DAO接口
  * @author ThinkGem
@@ -14,7 +16,25 @@ import com.mfnets.workfocus.modules.sys.entity.User;
  */
 @MyBatisDao
 public interface UserDao extends CrudDao<User> {
-	
+
+	@Override
+	User get(String id);
+
+	@Override
+	List<User> findList(User entity);
+
+	@Override
+	List<User> findAllList(User entity);
+
+	@Override
+	int insert(User entity);
+
+	@Override
+	int update(User entity);
+
+	@Override
+	int delete(User entity);
+
 	/**
 	 * 根据登录名称查询用户
 	 * @param user

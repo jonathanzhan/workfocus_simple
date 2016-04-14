@@ -170,7 +170,7 @@ public class RoleController extends BaseController {
 			Map<String, Object> map = Maps.newHashMap();
 			map.put("id", e.getId());
 			map.put("pId", 0);
-			map.put("name", e.getUserName());
+			map.put("name", e.getName());
 			mapList.add(map);			
 		}
 		return mapList;
@@ -193,16 +193,16 @@ public class RoleController extends BaseController {
 		Role role = systemService.getRole(roleId);
 		User user = systemService.getUser(userId);
 		if (UserUtils.getUser().getId().equals(userId)) {
-			addMessage(redirectAttributes, "无法从角色【" + role.getName() + "】中移除用户【" + user.getUserName() + "】自己！");
+			addMessage(redirectAttributes, "无法从角色【" + role.getName() + "】中移除用户【" + user.getName() + "】自己！");
 		}else {
 			if (user.getRoleList().size() <= 1){
-				addMessage(redirectAttributes, "用户【" + user.getUserName() + "】从角色【" + role.getName() + "】中移除失败！这已经是该用户的唯一角色，不能移除。");
+				addMessage(redirectAttributes, "用户【" + user.getName() + "】从角色【" + role.getName() + "】中移除失败！这已经是该用户的唯一角色，不能移除。");
 			}else{
 				Boolean flag = systemService.outUserInRole(role, user);
 				if (!flag) {
-					addMessage(redirectAttributes, "用户【" + user.getUserName() + "】从角色【" + role.getName() + "】中移除失败！");
+					addMessage(redirectAttributes, "用户【" + user.getName() + "】从角色【" + role.getName() + "】中移除失败！");
 				}else {
-					addMessage(redirectAttributes, "用户【" + user.getUserName() + "】从角色【" + role.getName() + "】中移除成功！");
+					addMessage(redirectAttributes, "用户【" + user.getName() + "】从角色【" + role.getName() + "】中移除成功！");
 				}
 			}		
 		}
@@ -228,7 +228,7 @@ public class RoleController extends BaseController {
 		for (int i = 0; i < idsArr.length; i++) {
 			User user = systemService.assignUserToRole(role, systemService.getUser(idsArr[i]));
 			if (null != user) {
-				msg.append("<br/>新增用户【" + user.getUserName() + "】到角色【" + role.getName() + "】！");
+				msg.append("<br/>新增用户【" + user.getName() + "】到角色【" + role.getName() + "】！");
 				newNum++;
 			}
 		}

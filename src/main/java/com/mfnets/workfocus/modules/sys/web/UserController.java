@@ -89,7 +89,7 @@ public class UserController extends BaseController {
 
 	@RequiresPermissions("sys:user:edit")
 	@RequestMapping(value = "save")
-	public String save(User user, HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
+	public String save(User user, RedirectAttributes redirectAttributes) {
 		if(Global.isDemoMode()){
 			addMessage(redirectAttributes, "演示模式，不允许操作！");
 			return "redirect:" + adminPath + "/sys/user/list?repage";
@@ -98,12 +98,12 @@ public class UserController extends BaseController {
 		if (StringUtils.isNotBlank(user.getNewPassword())) {
 			user.setPassword(SystemService.entryptPassword(user.getNewPassword()));
 		}
-		if (!beanValidator(model, user)){
-			return form(user, model);
+		if (!beanValidator(redirectAttributes, user)){
+			return "redirect:" + adminPath + "/sys/user/list?repage";
 		}
-		if (!"true".equals(checkLoginName(user.getOldLoginName(), user.getUserName()))){
-			addMessage(model, "保存用户'" + user.getUserName() + "'失败，登录名已存在");
-			return form(user, model);
+		if (!"true".equals(checkLoginName(user.getOldLoginName(), user.getLoginName()))){
+			addMessage(redirectAttributes, "保存用户'" + user.getName() + "'失败，登录名已存在");
+			return "redirect:" + adminPath + "/sys/user/list?repage";
 		}
 		// 角色数据有效性验证，过滤不在授权内的角色
 		List<Role> roleList = Lists.newArrayList();
@@ -117,11 +117,11 @@ public class UserController extends BaseController {
 		// 保存用户信息
 		systemService.saveUser(user);
 		// 清除当前用户缓存
-		if (user.getUserName().equals(UserUtils.getUser().getUserName())){
+		if (user.getName().equals(UserUtils.getUser().getName())){
 			UserUtils.clearCache();
 			//UserUtils.getCacheMap().clear();
 		}
-		addMessage(redirectAttributes, "保存用户'" + user.getUserName() + "'成功");
+		addMessage(redirectAttributes, "保存用户'" + user.getName() + "'成功");
 		return "redirect:" + adminPath + "/sys/user/list?repage";
 	}
 	
@@ -150,16 +150,16 @@ public class UserController extends BaseController {
 	/**
 	 * 验证登录名是否有效
 	 * @param oldLoginName
-	 * @param userName
+	 * @param loginName
 	 * @return
 	 */
 	@ResponseBody
 	@RequiresPermissions("sys:user:edit")
 	@RequestMapping(value = "checkLoginName")
-	public String checkLoginName(String oldLoginName, String userName) {
-		if (userName !=null && userName.equals(oldLoginName)) {
+	public String checkLoginName(String oldLoginName, String loginName) {
+		if (loginName !=null && loginName.equals(oldLoginName)) {
 			return "true";
-		} else if (userName !=null && systemService.getUserByLoginName(userName) == null) {
+		} else if (loginName !=null && systemService.getUserByLoginName(loginName) == null) {
 			return "true";
 		}
 		return "false";
@@ -218,7 +218,7 @@ public class UserController extends BaseController {
 				return "modules/sys/userModifyPwd";
 			}
 			if (SystemService.validatePassword(oldPassword, user.getPassword())){
-				systemService.updatePasswordById(user.getId(), user.getUserName(), newPassword);
+				systemService.updatePasswordById(user.getId(), user.getLoginName(), newPassword);
 				model.addAttribute("message", "修改密码成功");
 			}else{
 				model.addAttribute("message", "修改密码失败，旧密码错误");

@@ -1,211 +1,174 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-<%@ include file="/WEB-INF/views/include/taglib.jsp"%>
+<%@ include file="/WEB-INF/views/include/taglib.jsp" %>
+<!DOCTYPE HTML>
 <html>
 <head>
-	<title>用户管理</title>
-	<meta name="decorator" content="default"/>
+	<title>员工管理</title>
+	<%@include file="/WEB-INF/views/include/head.jsp" %>
 	<script type="text/javascript">
-		$(document).ready(function() {
-			$("#no").workfocus();
-			$("#inputForm").validate({
+		var validateForm;
+		function doSubmit() {//回调函数，在编辑和保存动作时，供openDialog调用提交表单。
+			if (validateForm.form()) {
+				$("#inputForm").submit();
+				return true;
+			}
+			return false;
+		}
+
+		function setEmployeeRequired(){
+			if($("#userType").val()=='1'){
+				$("#employeeName").removeClass("required");
+				$("#employeeName").parent().removeClass('has-error').addClass('has-success');
+				$("#employeeName-error").remove();
+
+			}else{
+				$("#employeeName").addClass("required");
+				$("#employeeName").parent().removeClass('has-success').addClass('has-error');
+			}
+		}
+		$(document).ready(function () {
+			$("#name").focus();
+
+			$("#userType").on("change",function(){
+				setEmployeeRequired();
+			});
+			validateForm = $("#inputForm").validate({
 				rules: {
-					userName: {remote: "${ctx}/sys/user/checkLoginName?oldLoginName=" + encodeURIComponent('${user.userName}')}
+					loginName: {remote: "${ctx}/sys/user/checkLoginName?oldLoginName=" + encodeURIComponent('${user.loginName}')}
 				},
 				messages: {
-					userName: {remote: "用户登录名已存在"},
+					loginName: {remote: "用户登录名已存在"},
 					confirmNewPassword: {equalTo: "输入与上面相同的密码"}
 				},
-				submitHandler: function(form){
-					loading('正在提交，请稍等...');
+				submitHandler: function (form) {
+					layer.load();
 					form.submit();
 				},
+				highlight: function (e) {
+					$(e).parent().removeClass('has-success').addClass('has-error');
+				},
+				unhighlight: function(e) {
+					$(e).parent().removeClass('has-error').addClass('has-success');
+				},
 				errorContainer: "#messageBox",
-				errorPlacement: function(error, element) {
+				errorPlacement: function (error, element) {
 					$("#messageBox").text("输入有误，请先更正。");
-					if (element.is(":checkbox")||element.is(":radio")||element.parent().is(".input-append")){
+					if (element.is(":checkbox") || element.is(":radio") || element.parent().is(".input-group")) {
 						error.appendTo(element.parent().parent());
 					} else {
-						error.insertAfter(element);
+						error.appendTo(element.parent());
 					}
 				}
 			});
+
+			//在ready函数中预先调用一次远程校验函数，是一个无奈的回避案
+			//否则打开修改对话框，不做任何更改直接submit,这时再触发远程校验，耗时较长，
+			//submit函数在等待远程校验结果然后再提交，而layer对话框不会阻塞会直接关闭同时会销毁表单，因此submit没有提交就被销毁了导致提交表单失败。
+			$("#inputForm").validate().element($("#loginName"));
 		});
 	</script>
 </head>
 <body>
-<div class="panel" id="mainPanel">
-	<div class="panel-heading">
-		<ul class="nav nav-tabs">
-			<li><a href="${ctx}/sys/user/list">用户列表</a></li>
-			<li class="active"><a href="${ctx}/sys/user/form?id=${user.id}">用户<shiro:hasPermission name="sys:user:edit">${not empty user.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="sys:user:edit">查看</shiro:lacksPermission></a></li>
-		</ul><br/>
-	</div>
-	<div class="panel-body">
-		<div class="tab-content col-md-12">
-			<form:form id="inputForm" modelAttribute="user" action="${ctx}/sys/user/save" method="post" class="form-horizontal">
-				<form:hidden path="id"/>
-				<sys:message content="${message}"/>
-				<div class="form-group">
-					<div class="row-group">
-						<label class="col-md-1 control-label">头像:</label>
-						<div class="col-md-3">
-							<form:hidden id="nameImage" path="img" htmlEscape="false" maxlength="255" cssClass="form-control"/>
-							<sys:ckfinder input="nameImage" type="images" uploadPath="/photo" selectMultiple="false" maxWidth="100" maxHeight="100"/>
-						</div>
-					</div>
+<form:form id="inputForm" modelAttribute="user" action="${ctx}/sys/user/save" method="post" class="form-horizontal">
+	<form:hidden path="id"/>
+	<sys:message content="${message}"/>
+	<table class="table table-bordered table-condensed">
+		<tbody>
+		<tr class="form-group">
+			<td class="active col-xs-2">
+				<label class="pull-right">登录名:</label>
+			</td>
+			<td class="col-xs-4">
+				<input id="oldLoginName" name="oldLoginName" type="hidden" value="${user.loginName}">
+				<form:input path="loginName" htmlEscape="false" maxlength="8" class="form-control inline required"/>
+				<span class="required-wrapper">*</span>
+			</td>
+			<td class="active col-xs-2">
+				<label class="pull-right">用户名:</label>
+			</td>
+			<td class="col-xs-4">
+				<form:input path="name" htmlEscape="false" maxlength="8" class="form-control inline required"/>
+				<span class="required-wrapper">*</span>
 
-				</div>
-				<%--<div class="control-group">--%>
-				<%--<label class="control-label">归属公司:</label>--%>
-				<%--<div class="controls">--%>
-				<%--<sys:treeselect id="company" name="company.id" value="${user.company.id}" labelName="company.name" labelValue="${user.company.name}"--%>
-				<%--title="公司" url="/sys/office/treeData?type=1" cssClass="required"/>--%>
-				<%--</div>--%>
-				<%--</div>--%>
-				<%--<div class="control-group">--%>
-				<%--<label class="control-label">归属部门:</label>--%>
-				<%--<div class="controls">--%>
-				<%--<sys:treeselect id="office" name="office.id" value="${user.office.id}" labelName="office.name" labelValue="${user.office.name}"--%>
-				<%--title="部门" url="/sys/office/treeData?type=2" cssClass="required" notAllowSelectParent="true"/>--%>
-				<%--</div>--%>
-				<%--</div>--%>
-				<%--<div class="control-group">--%>
-				<%--<label class="control-label">工号:</label>--%>
-				<%--<div class="controls">--%>
-				<%--<form:input path="no" htmlEscape="false" maxlength="50" class="required"/>--%>
-				<%--<span class="help-inline"><font color="red">*</font> </span>--%>
-				<%--</div>--%>
-				<%--</div>--%>
-				<%--<div class="control-group">--%>
-				<%--<label class="control-label">姓名:</label>--%>
-				<%--<div class="controls">--%>
-				<%--<form:input path="name" htmlEscape="false" maxlength="50" class="required"/>--%>
-				<%--<span class="help-inline"><font color="red">*</font> </span>--%>
-				<%--</div>--%>
-				<%--</div>--%>
-				<div class="form-group">
-					<div class="row-group">
-						<label class="col-md-1 control-label">登录名:</label>
-						<div class="col-md-3">
-							<input id="oldLoginName" name="oldLoginName" type="hidden" value="${user.userName}">
-							<form:input path="userName" htmlEscape="false" maxlength="50" class=" form-control required userName layerBox"/>
-						</div>
-						<div class="required-wrapper"></div>
-					</div>
-					<div class="row-group">
-						<label class="col-md-1 control-label">用户名称:</label>
-						<div class="col-md-3">
-							<form:input path="name" htmlEscape="false" maxlength="50" class="form-control required layerBox"/>
-						</div>
-						<div class="required-wrapper"></div>
-					</div>
+			</td>
+		</tr>
+		<tr class="form-group">
+			<td class="active col-xs-2">
+				<label class="pull-right">用户类型:</label>
+			</td>
+			<td class="col-xs-4">
+				<form:select path="userType" items="${fns:getDictList('sys_user_type')}" itemLabel="label" itemValue="value" cssClass="form-control inline required"/>
+				<span class="required-wrapper">*</span>
+			</td>
 
-				</div>
-				<c:if test="${not empty user.id}">
-					<div class="form-group">
-						<div class="row-group">
-							<div class="col-md-1 "></div>
-							<div class="col-md-3 ">
-							<div class="help-inline">若不修改密码，请留空。</div>
-							</div>
-						</div>
-					</div>
+			<td class="active col-xs-2">
+				<label class="pull-right">对应员工:</label>
+			</td>
+			<td class="col-xs-4">
+				<sys:treeselect id="employee" name="employee.id" value="${user.employee.id}" labelName="employeeName"
+								labelValue="${user.employee.name}" allowClear="true"
+								title="员工" url="/sys/org/treeData?type=5" cssClass="form-control"
+								dataMsgRequired="请选择员工" notAllowSelectParent="true"/>
+			</td>
+
+		</tr>
+		<tr class="form-group">
+			<td class="active col-xs-2">
+				<label class="pull-right">密码:</label>
+			</td>
+			<td class="col-xs-4">
+				<input id="newPassword" name="newPassword" type="password" value="" maxlength="50" minlength="3" placeholder="${empty user.id?'':'若不修改,请留空'}" class="form-control ${empty user.id?'inline required':''}" />
+				<c:if test="${empty user.id}">
+					<span class="required-wrapper">*</span>
 				</c:if>
-				<div class="form-group">
-					<div class="row-group">
-						<label class="col-md-1 control-label">密码:</label>
-						<div class="col-md-3">
-							<input id="newPassword" name="newPassword" type="password" value="" maxlength="50" minlength="3" class="form-control ${empty user.id?'required layerBox':''}" />
+			</td>
 
-						</div>
-						<c:if test="${empty user.id}"><div class="required-wrapper"></div></c:if>
-						<%--<c:if test="${not empty user.id}"><div class="help-inline">若不修改密码，请留空。</div></c:if>--%>
-					</div>
-					<div class="row-group">
-						<label class="col-md-1 control-label">确认密码:</label>
-						<div class="col-md-3">
-							<input id="confirmNewPassword" name="confirmNewPassword" type="password" value="" maxlength="50" minlength="3" equalTo="#newPassword" class="form-control"/>
-						</div>
-						<c:if test="${empty user.id}"><div class="required-wrapper"></div></c:if>
-					</div>
-				</div>
-
-				<div class="form-group">
-					<div class="row-group">
-						<label class="col-md-1 control-label">用户角色:</label>
-						<div class="col-md-3">
-							<label class="radio-inline">
-								<form:checkboxes path="roleIdList" items="${fns:getRoleList()}" itemLabel="roleName" itemValue="id" htmlEscape="false" class="required layerBox"/>
-
-							</label>
-						</div>
-						<div class="required-wrapper"></div>
-					</div>
-				</div>
-								<%--<div class="control-group">--%>
-				<%--<label class="control-label">邮箱:</label>--%>
-				<%--<div class="controls">--%>
-				<%--<form:input path="email" htmlEscape="false" maxlength="100" class="email"/>--%>
-				<%--</div>--%>
-				<%--</div>--%>
-				<%--<div class="control-group">--%>
-				<%--<label class="control-label">电话:</label>--%>
-				<%--<div class="controls">--%>
-				<%--<form:input path="phone" htmlEscape="false" maxlength="100"/>--%>
-				<%--</div>--%>
-				<%--</div>--%>
-				<%--<div class="control-group">--%>
-				<%--<label class="control-label">手机:</label>--%>
-				<%--<div class="controls">--%>
-				<%--<form:input path="mobile" htmlEscape="false" maxlength="100"/>--%>
-				<%--</div>--%>
-				<%--</div>--%>
-				<%--<div class="control-group">--%>
-				<%--<label class="control-label">是否允许登录:</label>--%>
-				<%--<div class="controls">--%>
-				<%--<form:select path="loginFlag">--%>
-				<%--<form:options items="${fns:getDictList('yes_no')}" itemLabel="label" itemValue="value" htmlEscape="false"/>--%>
-				<%--</form:select>--%>
-				<%--<span class="help-inline"><font color="red">*</font> “是”代表此账号允许登录，“否”则表示此账号不允许登录</span>--%>
-				<%--</div>--%>
-				<%--</div>--%>
-				<%--<div class="control-group">--%>
-				<%--<label class="control-label">用户类型:</label>--%>
-				<%--<div class="controls">--%>
-				<%--<form:select path="userType" class="input-large">--%>
-				<%--<form:option value="1" label="请选择"/>--%>
-				<%--<form:options items="${fns:getDictList('sys_user_type')}" itemLabel="label" itemValue="value" htmlEscape="false"/>--%>
-				<%--</form:select>--%>
-				<%--</div>--%>
-				<%--</div>--%>
-				<c:if test="${not empty user.id}">
-				<div class="form-group">
-					<div class="row-group">
-						<label class="col-md-1 control-label">创建时间:</label>
-						<div class="col-md-3">
-							<label class="control-label"><fmt:formatDate value="${user.createAt}" type="both" dateStyle="full"/></label>
-						</div>
-					</div>
-					<div class="row-group">
-						<label class="col-md-1 control-label">最后登陆:</label>
-						<div class="col-md-3">
-							<label class="control-label">IP: ${user.lastLoginIp}&nbsp;&nbsp;&nbsp;&nbsp;时间：<fmt:formatDate value="${user.lastLoginAt}" type="both" dateStyle="full"/></label>
-						</div>
-					</div>
-				</div>
+			<td class="active col-xs-2">
+				<label class="pull-right">确认密码:</label>
+			</td>
+			<td class="col-xs-4">
+				<input id="confirmNewPassword" name="confirmNewPassword" type="password" value="" maxlength="50" minlength="3" equalTo="#newPassword" class="form-control ${empty user.id?'inline required':''}"/>
+				<c:if test="${empty user.id}">
+					<span class="required-wrapper">*</span>
 				</c:if>
+			</td>
+		</tr>
+		<tr class="form-group">
+			<td class="active col-xs-2">
+				<label class="pull-right">头像:</label>
+			</td>
+			<td class="col-xs-4">
+				<form:hidden path="img" htmlEscape="false" maxlength="255" class="input-xlarge"/>
+				<sys:ckfinder input="img" type="images" uploadPath="/photo" selectMultiple="false" maxWidth="100" maxHeight="100"/>
+			</td>
+			<td class="active col-xs-2">
+				<label class="pull-right">用户角色:</label>
+			</td>
+			<td class="col-xs-4">
+				<form:checkboxes path="roleIdList" items="${fns:getRoleList()}" itemLabel="name" itemValue="id" htmlEscape="false" cssClass="i-checks inline required"/>
+				<span class="required-wrapper">*</span>
+			</td>
+		</tr>
+		<c:if test="${not empty user.id}">
+			<tr class="form-group">
+				<td class="active col-xs-2">
+					<label class="pull-right">创建时间:</label>
+				</td>
+				<td class="col-xs-4">
+					<label class="control-label"><fmt:formatDate value="${user.createAt}" type="both" dateStyle="full"/></label>
+				</td>
+				<td class="active col-xs-2">
+					<label class="pull-right">上次登录IP:</label>
+				</td>
+				<td class="col-xs-4">
+					<label class="control-label">IP: ${user.thisLoginIp}&nbsp;&nbsp;&nbsp;&nbsp;时间：<fmt:formatDate value="${user.thisLoginAt}" type="both"/></label>
+				</td>
+			</tr>
+		</c:if>
 
-				<div class="form-group">
-					<div class="col-md-offset-2">
-					    <shiro:hasPermission name="sys:user:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
-					    <input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
-				    </div>
-				</div>
-			</form:form>
-		</div>
-	</div>
+		</tbody>
+	</table>
+</form:form>
 
-
-</div>
 </body>
 </html>

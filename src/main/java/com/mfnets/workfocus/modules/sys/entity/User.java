@@ -28,7 +28,7 @@ import com.mfnets.workfocus.common.utils.excel.fieldtype.RoleListType;
 public class User extends DataEntity<User> {
 
 	private static final long serialVersionUID = 1L;
-	private String userName;// 登录名
+	private String loginName;// 登录名
 	private String password;// 密码
 	private Integer userType;// 用户类型
 	private String name;//用户名称
@@ -39,8 +39,6 @@ public class User extends DataEntity<User> {
 
 	private String thisLoginIp;	// 最后登陆IP
 	private Date thisLoginAt;	// 最后登陆日期
-
-
 
 	private String lastLoginIp;	// 上次登陆IP
 	private Date lastLoginAt;	// 上次登陆日期
@@ -59,9 +57,9 @@ public class User extends DataEntity<User> {
 		super(id);
 	}
 
-	public User(String id, String userName){
+	public User(String id, String loginName){
 		super(id);
-		this.userName = userName;
+		this.loginName = loginName;
 	}
 
 	public User(Role role){
@@ -79,20 +77,15 @@ public class User extends DataEntity<User> {
 	}
 
 
-	public String getId() {
-		return id;
-	}
 
 	@Length(min=1, max=50, message="登录名长度必须介于 1 和 50 之间")
-	public String getUserName() {
-		return userName;
+	public String getLoginName() {
+		return loginName;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setLoginName(String loginName) {
+		this.loginName = loginName;
 	}
-
-
 
 
 	@JsonIgnore
@@ -105,41 +98,7 @@ public class User extends DataEntity<User> {
 		this.password = password;
 	}
 
-
-
-//	@Email(message="邮箱格式不正确")
-//	@Length(min=0, max=200, message="邮箱长度必须介于 1 和 200 之间")
-//	@ExcelField(title="邮箱", align=1, sort=50)
-//	public String getEmail() {
-//		return email;
-//	}
-//
-//	public void setEmail(String email) {
-//		this.email = email;
-//	}
-//
-//	@Length(min=0, max=200, message="电话长度必须介于 1 和 200 之间")
-//	@ExcelField(title="电话", align=2, sort=60)
-//	public String getPhone() {
-//		return phone;
-//	}
-//
-//	public void setPhone(String phone) {
-//		this.phone = phone;
-//	}
-//
-//	@Length(min=0, max=200, message="手机长度必须介于 1 和 200 之间")
-//	@ExcelField(title="手机", align=2, sort=70)
-//	public String getMobile() {
-//		return mobile;
-//	}
-//
-//	public void setMobile(String mobile) {
-//		this.mobile = mobile;
-//	}
-
-
-
+	@NotNull
 	public Integer getUserType() {
 		return userType;
 	}
@@ -148,6 +107,7 @@ public class User extends DataEntity<User> {
 		this.userType = userType;
 	}
 
+	@Length(min=1, max=20, message="用户名长度必须介于 1 和 20 之间")
 	public String getName() {
 		return name;
 	}
@@ -194,7 +154,7 @@ public class User extends DataEntity<User> {
 		this.lastLoginAt = lastLoginAt;
 	}
 
-
+	@JsonIgnore
 	public String getOldLoginName() {
 		return oldLoginName;
 	}
@@ -203,6 +163,7 @@ public class User extends DataEntity<User> {
 		this.oldLoginName = oldLoginName;
 	}
 
+	@JsonIgnore
 	public String getNewPassword() {
 		return newPassword;
 	}
@@ -211,6 +172,15 @@ public class User extends DataEntity<User> {
 		this.newPassword = newPassword;
 	}
 
+
+
+	public Employee getEmployee() {
+		return employee;
+	}
+
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
+	}
 
 	public Role getRole() {
 		return role;
@@ -261,17 +231,5 @@ public class User extends DataEntity<User> {
 	public static boolean isAdmin(String id){
 		return id != null && "1".equals(id);
 	}
-	
-	@Override
-	public String toString() {
-		return id;
-	}
 
-	public Employee getEmployee() {
-		return employee;
-	}
-
-	public void setEmployee(Employee employee) {
-		this.employee = employee;
-	}
 }

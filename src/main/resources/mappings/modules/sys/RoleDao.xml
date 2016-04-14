@@ -75,8 +75,8 @@
 		<if test="user != null and user.id != null and user.id != ''">
 			AND u.id = #{user.id}
 		</if>
-		<if test="user != null and user.userName != null and user.userName != ''">
-			AND u.user_name = #{user.userName}
+		<if test="user != null and user.loginName != null and user.loginName != ''">
+			AND u.login_name = #{user.loginName}
 		</if>
 		<!--&lt;!&ndash; 数据范围过滤 &ndash;&gt;-->
 		<!--${sqlMap.dsf}-->

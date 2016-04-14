@@ -122,7 +122,7 @@ public class SystemService extends BaseService {
             if (user.getRoleList() != null && user.getRoleList().size() > 0) {
                 userDao.insertUserRole(user);
             } else {
-                throw new ServiceException(user.getUserName() + "没有设置角色！");
+                throw new ServiceException(user.getName() + "没有设置角色！");
             }
 
             // 清除用户缓存
@@ -169,7 +169,7 @@ public class SystemService extends BaseService {
         user.setPassword(entryptPassword(newPassword));
         userDao.updatePasswordById(user);
         // 清除用户缓存
-        user.setUserName(loginName);
+        user.setLoginName(loginName);
         UserUtils.clearCache(user);
 //		// 清除权限缓存
 //		systemRealm.clearAllCachedAuthorizationInfo();
