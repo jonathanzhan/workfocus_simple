@@ -25,7 +25,7 @@
 </head>
 
 <body class="gray-bg">
-<div class="wrapper wrapper-content">
+<div class="wrapper wrapper-content animated fadeInRight">
     <div class="ibox">
         <div class="ibox-content">
             <form:form id="searchForm" modelAttribute="user" action="${ctx}/sys/user/list" method="post"

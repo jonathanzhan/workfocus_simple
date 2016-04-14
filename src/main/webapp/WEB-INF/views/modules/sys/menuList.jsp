@@ -19,7 +19,7 @@
 </head>
 
 <body class="gray-bg">
-<div class="wrapper wrapper-content">
+<div class="wrapper wrapper-content animated fadeInRight">
 	<div class="ibox">
 		<div class="ibox-title">
 			<a href="${ctx}/sys/menu"><h5>菜单管理</h5></a>

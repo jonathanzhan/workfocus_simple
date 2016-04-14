@@ -16,19 +16,19 @@
 	</script>
 </head>
 <body class="gray-bg">
-	<div class="wrapper wrapper-content">
+	<div class="wrapper wrapper-content animated bounce">
 		<div class="ibox" id="main">
 			<div class="ibox-content">
 				<sys:message content="${message}"/>
 				<div id="content" class="row">
-					<div id="left" style="background-color:#e7eaec">
+					<div id="left" style="background-color:#e7eaec" class="animated infinite swing">
 						<a onclick="refresh()" class="pull-right">
 							<i class="fa fa-refresh"></i>
 						</a>
 						<div id="ztree" class="ztree"></div>
 					</div>
 					<div id="openClose" class="close">&nbsp;</div>
-					<div id="right">
+					<div id="right" class="animated infinite rubberBand">
 						<iframe id="employeeContent" name="employeeContent" src="${ctx}/sys/employee/list" width="100%" height="91%" frameborder="0"></iframe>
 					</div>
 				</div>

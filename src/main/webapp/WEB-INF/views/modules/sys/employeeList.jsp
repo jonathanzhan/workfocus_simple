@@ -30,7 +30,7 @@
 </head>
 <body>
 	<form:form id="searchForm" modelAttribute="employee" action="${ctx}/sys/employee/list" method="post"
-			   cssClass="form-horizontal">
+			   cssClass="form-horizontal animated flip">
 	<div class="row">
 		<div class="col-sm-12">
 			<div class="form-group">
@@ -87,7 +87,7 @@
 	<common:tableAllCheck checkBoxClass="i-checks1" checkAllId="check-all" fixedColumn="true"/>
 	<input type="hidden" id="check-all" value="0">
 	<%--数据展示开始--%>
-	<table id="contentTable" class="table table-striped table-bordered table-hover table-condensed dataTable">
+	<table id="contentTable" class="table table-striped table-bordered table-hover table-condensed dataTable animated rotateIn">
 		<thead>
 		<tr>
 			<th class="check-all">选择</th>

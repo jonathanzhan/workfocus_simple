@@ -31,6 +31,9 @@
 <script src="${ctxStatic}/plugins/layer/layer.js"></script>
 <script src="${ctxStatic}/js/common.js"></script>
 
+
+
+
 <!--进度条-->
 <script src="${ctxStatic}/plugins/pace/pace.min.js"></script>
 <!-- 通知插件 -->
@@ -49,7 +52,7 @@
 <script src="${ctxStatic}/plugins/iCheck/icheck.min.js"></script>
 <link href="${ctxStatic}/plugins/iCheck/skins/flat/green.css" rel="stylesheet">
 
-
+<link href="${ctxStatic}/css/animate.css" type="text/css" rel="stylesheet" />
 <%--dataTables--%>
 <link rel="stylesheet" type="text/css" href="${ctxStatic}/plugins/dataTables/datatables.min.css"/>
 <script type="text/javascript" src="${ctxStatic}/plugins/dataTables/datatables.js"></script>

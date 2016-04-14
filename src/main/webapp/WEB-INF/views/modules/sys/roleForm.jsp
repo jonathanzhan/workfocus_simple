@@ -91,7 +91,7 @@
     </script>
 </head>
 <body class="gray-bg">
-<div class="wrapper wrapper-content">
+<div class="wrapper wrapper-content animated fadeInRight">
     <div class="ibox">
         <div class="ibox-title">
             <a href="${ctx}/sys/role/form?id=${role.id}">角色管理</a>

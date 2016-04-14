@@ -16,7 +16,7 @@
 	</script>
 </head>
 <body class="gray-bg">
-	<div class="wrapper wrapper-content">
+	<div class="wrapper wrapper-content animated fadeInRight">
 		<div class="ibox" id="main">
 			<div class="ibox-content">
 				<sys:message content="${message}"/>

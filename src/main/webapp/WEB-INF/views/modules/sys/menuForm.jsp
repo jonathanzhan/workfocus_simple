@@ -40,7 +40,7 @@
 </head>
 
 <body class="gray-bg">
-<div class="wrapper wrapper-content">
+<div class="wrapper wrapper-content animated fadeInRight">
 
 	<div class="ibox">
 		<div class="ibox-title">
