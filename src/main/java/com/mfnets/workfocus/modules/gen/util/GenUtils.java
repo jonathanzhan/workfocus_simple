@@ -323,7 +323,7 @@ public class GenUtils {
 		
 		model.put("functionName", genScheme.getFunctionName());
 		model.put("functionNameSimple", genScheme.getFunctionNameSimple());
-		model.put("functionAuthor", StringUtils.isNotBlank(genScheme.getFunctionAuthor())?genScheme.getFunctionAuthor():UserUtils.getUser().getUserName());
+		model.put("functionAuthor", StringUtils.isNotBlank(genScheme.getFunctionAuthor())?genScheme.getFunctionAuthor():UserUtils.getUser().getName());
 		model.put("functionVersion", DateUtils.getDate());
 		
 		model.put("urlPrefix", model.get("moduleName")+(StringUtils.isNotBlank(genScheme.getSubModuleName())

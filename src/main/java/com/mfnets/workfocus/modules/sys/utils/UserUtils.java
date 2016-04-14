@@ -67,7 +67,7 @@ public class UserUtils {
 			}
 			user.setRoleList(roleDao.findList(new Role(user)));
 			CacheUtils.put(USER_CACHE, USER_CACHE_ID_ + user.getId(), user);
-			CacheUtils.put(USER_CACHE, USER_CACHE_LOGIN_NAME_ + user.getUserName(), user);
+			CacheUtils.put(USER_CACHE, USER_CACHE_LOGIN_NAME_ + user.getLoginName(), user);
 		}
 		return user;
 	}
@@ -87,7 +87,7 @@ public class UserUtils {
 			}
 			user.setRoleList(roleDao.findList(new Role(user)));
 			CacheUtils.put(USER_CACHE, USER_CACHE_ID_ + user.getId(), user);
-			CacheUtils.put(USER_CACHE, USER_CACHE_LOGIN_NAME_ + user.getUserName(), user);
+			CacheUtils.put(USER_CACHE, USER_CACHE_LOGIN_NAME_ + user.getLoginName(), user);
 		}
 		return user;
 	}
@@ -100,7 +100,7 @@ public class UserUtils {
 		removeCache(CACHE_ORG_LIST);
 		removeCache(CACHE_ORG_ALL_LIST);
 		removeCache(CACHE_JOB_LIST);
-		removeCacheStartWith(CACHE_MENU_TREE,CACHE_MENU_LIST);
+		removeCacheStartWith(CACHE_MENU_TREE, CACHE_MENU_LIST);
 		UserUtils.clearCache(getUser());
 	}
 	
@@ -110,7 +110,7 @@ public class UserUtils {
 	 */
 	public static void clearCache(User user){
 		CacheUtils.remove(USER_CACHE, USER_CACHE_ID_ + user.getId());
-		CacheUtils.remove(USER_CACHE, USER_CACHE_LOGIN_NAME_ + user.getUserName());
+		CacheUtils.remove(USER_CACHE, USER_CACHE_LOGIN_NAME_ + user.getLoginName());
 		CacheUtils.remove(USER_CACHE, USER_CACHE_LOGIN_NAME_ + user.getOldLoginName());
 	}
 	

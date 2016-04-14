@@ -114,7 +114,7 @@ public class ActUtils {
 			return null;
 		}
 		UserEntity userEntity = new UserEntity();
-		userEntity.setId(user.getUserName());
+		userEntity.setId(user.getLoginName());
 		userEntity.setFirstName(user.getName());
 		userEntity.setLastName(StringUtils.EMPTY);
 		userEntity.setPassword(user.getPassword());

@@ -28,16 +28,13 @@ public interface DictDao extends CrudDao<Dict> {
     List<Dict> findAllList(Dict dict);
 
     @Override
-    List<Dict> findAllList();
-
-    @Override
     int insert(Dict dict);
 
     @Override
     int update(Dict dict);
 
     @Override
-    int delete(String id);
+    int delete(Dict dict);
 
 
     List<String> findTypeList(Dict dict);

@@ -33,16 +33,6 @@ public abstract class DataEntity<T> extends BaseEntity<T> {
 	protected Date updateAt;	// 更新日期
 	protected int delFlag; 	// 删除标记（0：正常；1：删除；2：审核）
 
-	protected int isEnabled;
-
-	public int getIsEnabled() {
-		return isEnabled;
-	}
-
-	public void setIsEnabled(int isEnabled) {
-		this.isEnabled = isEnabled;
-	}
-
 	public DataEntity() {
 		super();
 		this.delFlag = DEL_FLAG_NORMAL;

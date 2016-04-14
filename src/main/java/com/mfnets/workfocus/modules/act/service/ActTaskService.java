@@ -82,7 +82,7 @@ public class ActTaskService extends BaseService {
 	 * @return
 	 */
 	public List<Act> todoList(Act act){
-		String userId = UserUtils.getUser().getUserName();//ObjectUtils.toString(UserUtils.getUser().getId());
+		String userId = UserUtils.getUser().getLoginName();//ObjectUtils.toString(UserUtils.getUser().getId());
 
 		List<Act> result = new ArrayList<Act>();
 
@@ -138,7 +138,7 @@ public class ActTaskService extends BaseService {
 	 * @return
 	 */
 	public List<Act> claimList(Act act){
-		String userId = UserUtils.getUser().getUserName();//ObjectUtils.toString(UserUtils.getUser().getId());
+		String userId = UserUtils.getUser().getLoginName();//ObjectUtils.toString(UserUtils.getUser().getId());
 		
 		List<Act> result = new ArrayList<Act>();
 
@@ -182,7 +182,7 @@ public class ActTaskService extends BaseService {
 	 * @return
 	 */
 	public Page<Act> historicList(Page<Act> page, Act act){
-		String userId = UserUtils.getUser().getUserName();//ObjectUtils.toString(UserUtils.getUser().getId());
+		String userId = UserUtils.getUser().getLoginName();//ObjectUtils.toString(UserUtils.getUser().getId());
 
 		HistoricTaskInstanceQuery histTaskQuery = historyService.createHistoricTaskInstanceQuery().taskAssignee(userId).finished()
 				.includeProcessVariables().orderByHistoricTaskInstanceEndTime().desc();
@@ -415,7 +415,7 @@ public class ActTaskService extends BaseService {
 	 */
 	@Transactional(readOnly = false)
 	public String startProcess(String procDefKey, ActBusiness actBusiness, String title, Map<String, Object> vars) {
-		String userId = UserUtils.getUser().getUserName();//ObjectUtils.toString(UserUtils.getUser().getId())
+		String userId = UserUtils.getUser().getLoginName();//ObjectUtils.toString(UserUtils.getUser().getId())
 		
 		// 用来设置启动流程的人员ID，引擎会自动把用户ID保存到activiti:initiator中
 		identityService.setAuthenticatedUserId(userId);
@@ -532,7 +532,7 @@ public class ActTaskService extends BaseService {
 	 * @param vars
 	 */
 	public void completeFirstTask(String procInsId, String comment, String title, Map<String, Object> vars){
-		String userId = UserUtils.getUser().getUserName();
+		String userId = UserUtils.getUser().getLoginName();
 		Task task = taskService.createTaskQuery().taskAssignee(userId).processInstanceId(procInsId).active().singleResult();
 		if (task != null){
 			complete(task.getId(), procInsId, comment, title, vars);

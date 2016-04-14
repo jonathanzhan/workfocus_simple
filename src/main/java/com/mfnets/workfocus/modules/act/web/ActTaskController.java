@@ -148,7 +148,7 @@ public class ActTaskController extends BaseController {
 	@RequestMapping(value = "claim")
 	@ResponseBody
 	public String claim(Act act) {
-		String userId = UserUtils.getUser().getUserName();//ObjectUtils.toString(UserUtils.getUser().getId());
+		String userId = UserUtils.getUser().getLoginName();//ObjectUtils.toString(UserUtils.getUser().getId());
 		actTaskService.claim(act.getTaskId(), userId);
 		return "true";//adminPath + "/act/task";
 	}

@@ -129,7 +129,7 @@ public class DynamicFormController extends BaseController{
         User user = UserUtils.getUser();
         if(user!=null && StringUtils.isNotBlank(user.getId())){
             try{
-                identityService.setAuthenticatedUserId(user.getUserName());
+                identityService.setAuthenticatedUserId(user.getLoginName());
 
                 ProcessInstance processInstance = formService.submitStartFormData(procDefId, formProperties);
                 logger.debug("start a processinstance: {}", processInstance);
@@ -169,7 +169,7 @@ public class DynamicFormController extends BaseController{
         User user = UserUtils.getUser();
         if(user!=null && StringUtils.isNotBlank(user.getId())){
             try{
-                identityService.setAuthenticatedUserId(user.getUserName());
+                identityService.setAuthenticatedUserId(user.getLoginName());
                 taskService.addComment(taskId,task.getProcessInstanceId(),"231231");
                 formService.submitTaskFormData(taskId,formProperties);
                 addMessage(redirectAttributes, "任务完成，taskID：" + taskId);
