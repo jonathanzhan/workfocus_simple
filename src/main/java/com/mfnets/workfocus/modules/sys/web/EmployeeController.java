@@ -3,11 +3,14 @@
  */
 package com.mfnets.workfocus.modules.sys.web;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.mfnets.workfocus.common.config.Global;
 import com.mfnets.workfocus.common.persistence.Page;
 import com.mfnets.workfocus.common.utils.StringUtils;
 import com.mfnets.workfocus.common.web.BaseController;
 import com.mfnets.workfocus.modules.sys.entity.Employee;
+import com.mfnets.workfocus.modules.sys.entity.Org;
 import com.mfnets.workfocus.modules.sys.service.EmployeeService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +24,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -134,6 +139,29 @@ public class EmployeeController extends BaseController {
 			addMessage(redirectAttributes, "删除员工成功");
 		}
 		return "redirect:" + adminPath + "/sys/employee/list?repage";
+	}
+
+
+	/**
+	 * 根据机构选择员工，用于弹出树，异步树加载
+	 * @param orgId
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "treeData")
+	public List<Map<String, Object>> treeData(@RequestParam(required=true) String orgId) {
+		List<Map<String, Object>> mapList = Lists.newArrayList();
+		Org org = new Org(orgId);
+		List<Employee> list = employeeService.findList(new Employee(org));
+		for (int i=0; i<list.size(); i++){
+			Employee e = list.get(i);
+			Map<String, Object> map = Maps.newHashMap();
+			map.put("id", "e_"+e.getId());
+			map.put("pId", orgId);
+			map.put("name", StringUtils.replace(e.getName(), " ", "")+"("+StringUtils.replace(e.getCode(), " ", "")+")");
+			mapList.add(map);
+		}
+		return mapList;
 	}
 
 	/**

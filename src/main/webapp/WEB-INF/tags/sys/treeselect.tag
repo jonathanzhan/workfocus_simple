@@ -76,6 +76,7 @@
 	});
 
 	function doLayerChoose${id}(tree,index){
+		var type = getQueryString("type", "${url}");
 		var ids = [], names = [], nodes = [];
 		if ("${checked}" == "true"){
 			nodes = tree.getCheckedNodes(true);
@@ -100,8 +101,11 @@
 				return false;
 			}
 			</c:if>
-			ids.push(nodes[i].id);
-
+			if(type==5){//如果是选择员工的话，需要截止id，因为在树行结构中 id为 e_id的格式
+				ids.push(nodes[i].id.substr(2));
+			}else{
+				ids.push(nodes[i].id);
+			}
 			names.push(nodes[i].name);
 
 			<c:if test="${!checked}">

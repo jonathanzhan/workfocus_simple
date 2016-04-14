@@ -44,6 +44,13 @@ public class Employee extends DataEntity<Employee>{
 
     private String photo;//照片
 
+
+    public Employee(Org org){
+        super();
+        this.org = org;
+    }
+
+
     public Employee() {
         super();
         this.isOpen = 0;

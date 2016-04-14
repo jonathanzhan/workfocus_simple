@@ -56,7 +56,7 @@
                 <sys:treeselect id="org" name="parent.id" value="${org.parent.id}" labelName="parent.name"
                                 labelValue="${org.parent.name}"
                                 title="机构" url="/sys/org/treeData" extId="${org.id}" cssClass="form-control"
-                                 dataMsgRequired="请选择上级机构"/>
+                                 dataMsgRequired="请选择上级机构" notAllowSelectParent="true" allowClear="true"/>
             </td>
             <td class="active col-xs-2">
                 <label class="pull-right"><font color="red">*</font>机构名称:</label>

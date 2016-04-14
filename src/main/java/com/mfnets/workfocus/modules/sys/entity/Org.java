@@ -9,7 +9,6 @@ import com.mfnets.workfocus.common.persistence.TreeEntity;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 /**
  * 机构Entity
@@ -20,7 +19,7 @@ public class Org extends TreeEntity<Org> {
 
 	private static final long serialVersionUID = 1L;
 	private String code; 	// 机构编码
-	private String type; 	// 机构类型
+	private Integer type; 	// 机构类型
 	private String address; // 联系地址
 	private String master; 	// 负责人
 	private String phone; 	// 电话
@@ -31,7 +30,7 @@ public class Org extends TreeEntity<Org> {
 
 	public Org(){
 		super();
-		this.type = "2";
+		this.type = 2;
 	}
 
 	public Org(String id){
@@ -53,12 +52,12 @@ public class Org extends TreeEntity<Org> {
 
 
 	
-	@Length(min=1, max=1)
-	public String getType() {
+	@NotNull
+	public Integer getType() {
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(Integer type) {
 		this.type = type;
 	}
 
