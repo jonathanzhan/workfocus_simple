@@ -67,6 +67,11 @@ public class User extends DataEntity<User> {
 		this.role = role;
 	}
 
+	public User(Employee employee){
+		super();
+		this.employee = employee;
+	}
+
 
 	public String getImg() {
 		return img;

@@ -128,53 +128,10 @@ public class RoleController extends BaseController {
 	public String assign(Role role, Model model) {
 		List<User> userList = systemService.findUser(new User(new Role(role.getId())));
 		model.addAttribute("userList", userList);
+		model.addAttribute("selectIds", Collections3.extractToString(userList, "id", ","));
 		return "modules/sys/roleAssign";
 	}
-	
-	/**
-	 * 角色分配 -- 打开角色分配对话框
-	 * @param role
-	 * @param model
-	 * @return
-	 */
-	@RequiresPermissions("sys:role:view")
-	@RequestMapping(value = "usertorole")
-	public String selectUserToRole(Role role, Model model) {
-		List<User> userList = systemService.findUser(new User(new Role(role.getId())));
-		model.addAttribute("role", role);
-		model.addAttribute("userList", userList);
-		model.addAttribute("orgList", orgService.findAll());
-		model.addAttribute("preids", Collections3.extractToString(userList, "userName", ","));
-		model.addAttribute("selectIds", Collections3.extractToString(userList, "id", ","));
-		return "modules/sys/selectUserToRole1";
-	}
-	
-	/**
-	 * 角色分配 -- 根据部门编号获取用户列表
-	 * @param orgId
-	 * @param response
-	 * @return
-	 */
-	@RequiresPermissions("sys:role:view")
-	@ResponseBody
-	@RequestMapping(value = "users")
-	public List<Map<String, Object>> users(String orgId, HttpServletResponse response) {
-		List<Map<String, Object>> mapList = Lists.newArrayList();
-		User user = new User();
-		Employee employee = new Employee();
-		Org org = new Org(orgId);
-		employee.setOrg(org);
-		user.setEmployee(employee);
-		Page<User> page = systemService.findUser(new Page<User>(1, -1), user);
-		for (User e : page.getList()) {
-			Map<String, Object> map = Maps.newHashMap();
-			map.put("id", e.getId());
-			map.put("pId", 0);
-			map.put("name", e.getName());
-			mapList.add(map);			
-		}
-		return mapList;
-	}
+
 	
 	/**
 	 * 角色分配 -- 从角色中移除用户

@@ -125,7 +125,7 @@ public class OrgController extends BaseController {
 	/**
 	 * 获取机构JSON数据。
 	 * @param extId 排除的ID
-	 * @param type	类型（1：总公司；2：总公司/分公司：3：总公司/分公司/部门   5 包含员工）
+	 * @param type	类型（1：总公司；2：总公司/分公司：3：总公司/分公司/部门   5 根据机构选择员工 6根据机构选择用户）
 	 * @param response
 	 * @return
 	 */
@@ -138,6 +138,7 @@ public class OrgController extends BaseController {
 			@RequestParam(required = false) Boolean isAll,
 			HttpServletResponse response) {
 		List<Map<String, Object>> mapList = Lists.newArrayList();
+
 		List<Org> list = orgService.findList(isAll);
 		for (int i = 0; i < list.size(); i++) {
 			Org e = list.get(i);
@@ -149,6 +150,8 @@ public class OrgController extends BaseController {
 				map.put("pIds", e.getParentIds());
 				map.put("name", e.getName());
 				if (type != null && type.equals(5)) {
+					map.put("isParent", true);
+				}else if(type!=null && type.equals(6)){
 					map.put("isParent", true);
 				}
 				mapList.add(map);

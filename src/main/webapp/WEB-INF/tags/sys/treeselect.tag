@@ -15,7 +15,9 @@
 <%@ attribute name="allowInput" type="java.lang.Boolean" required="false" description="文本框可填写"%>
 <%@ attribute name="cssClass" type="java.lang.String" required="false" description="css样式"%>
 <%@ attribute name="cssStyle" type="java.lang.String" required="false" description="css样式"%>
-<%@ attribute name="hideBtn" type="java.lang.Boolean" required="false" description="是否显示按钮"%>
+<%@ attribute name="btnClass" type="java.lang.String" required="false" description="搜索按钮样式"%>
+<%@ attribute name="btnIcon" type="java.lang.String" required="false" description="搜索按钮图标"%>
+<%@ attribute name="btnContent" type="java.lang.String" required="false" description="搜索按钮内容"%>
 <%@ attribute name="disabled" type="java.lang.String" required="false" description="是否限制选择，如果限制，设置为disabled"%>
 <%@ attribute name="dataMsgRequired" type="java.lang.String" required="false" description="jqueryValidate 验证消息"%>
 <%@ attribute name="treeEvent" type="java.lang.String" required="false" description="选择树后执行事件"%>
@@ -25,8 +27,9 @@
 	<input id="${id}Name" name="${labelName}" ${allowInput?'':'readonly="readonly"'} type="text" value="${labelValue}" data-msg-required="${dataMsgRequired}"
 		class="${cssClass}" style="${cssStyle}"/>
 	<span class="input-group-btn">
-		<button id="${id}Button" href="javascript:" type="button" class="btn btn-primary ${disabled} ${hideBtn ? 'hide' : ''}">
-			<i class="fa fa-search"></i>
+		<button id="${id}Button" href="javascript:" type="button" class="btn btn-primary ${btnClass} ${disabled} ">
+			<i class="${empty btnIcon?"fa fa-search":btnIcon}"></i>
+			${empty btnContent?"":btnContent}
 		</button>
 	</span>
 	<c:if test="${allowClear}">
@@ -52,7 +55,6 @@
 			,fix: false
 			,title: '选择${title}'
 			,maxmin: true
-			,id:"treeAdd"
 			,shade: [0.1, 'grey']
 			,shadeClose: false
 			,content : "${ctx}/tag/treeSelect?url="+encodeURIComponent("${url}")+"&checked=${checked}&extId=${extId}&selectIds="+$("#${id}Id").val()+"&treeId=${id}&iframeId=${iframeId}&index="+index
@@ -101,7 +103,7 @@
 				return false;
 			}
 			</c:if>
-			if(type==5){//如果是选择员工的话，需要截止id，因为在树行结构中 id为 e_id的格式
+			if(type>=5){//如果是选择员工的话，需要截止id，因为在树行结构中 id为 e_id的格式
 				ids.push(nodes[i].id.substr(2));
 			}else{
 				ids.push(nodes[i].id);

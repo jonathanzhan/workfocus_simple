@@ -47,8 +47,9 @@
                         <td><a href="form?id=${role.id}">${role.ename}</a></td>
                         <shiro:hasPermission name="sys:role:edit">
                             <td>
-                                <a href="${ctx}/sys/role/assign?id=${role.id}" title="分配角色">
-                                    <span class="label label-success">分配</span></a>
+
+                                <a href="#" onclick="openDialogView('分配用户', '${ctx}/sys/role/assign?id=${role.id}','800px', '600px')"  class="btn  btn-warning btn-xs" ><i class="glyphicon glyphicon-plus"></i> 分配用户</a>
+
                                 <a href="${ctx}/sys/role/form?id=${role.id}" title="修改">
                                     <span class="label label-primary">修改</span></a>
                                 <a href="${ctx}/sys/role/delete?id=${role.id}" title="删除"

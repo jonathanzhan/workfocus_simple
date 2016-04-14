@@ -28,7 +28,7 @@
 						<div id="ztree" class="ztree"></div>
 					</div>
 					<div id="openClose" class="close">&nbsp;</div>
-					<div id="right" class="animated infinite rubberBand">
+					<div id="right" class="animated rubberBand">
 						<iframe id="employeeContent" name="employeeContent" src="${ctx}/sys/employee/list" width="100%" height="91%" frameborder="0"></iframe>
 					</div>
 				</div>

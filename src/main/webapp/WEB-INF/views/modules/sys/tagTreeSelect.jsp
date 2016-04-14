@@ -10,10 +10,22 @@
 
 		var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 		var key, lastValue = "", nodeList = [], type = getQueryString("type", "${url}");
+
+		var asyncEnabled = false,asyncUrl = "";
+		if(type==5){
+			asyncEnabled = true;
+			asyncUrl = "${ctx}/sys/employee/treeData";
+		}else if(type==6){
+			asyncEnabled = true;
+			asyncUrl = "${ctx}/sys/user/treeData";
+		}else{
+			asyncEnabled = false;
+		}
+
 		var tree, setting = {
 			view:{selectedMulti:false,dblClickExpand:false},
 			check:{enable:"${checked}",nocheckInherit:true},
-			async:{enable:(type==5),url:"${ctx}/sys/employee/treeData",autoParam:["id=orgId"]},//当url参数中type=5,则代表需要走异步程序，参数为orgId=节点ID
+			async:{enable:asyncEnabled,url:asyncUrl,autoParam:["id=orgId"]},//当url参数中type=5,则代表需要走异步程序，参数为orgId=节点ID
 			data:{simpleData:{enable:true}},
 			callback:{
 				onClick:function(event, treeId, treeNode){
@@ -34,16 +46,18 @@
 					selectCheckNode();
 				},
 				onDblClick: function(){
-					var parentIndex = '${index}';
-					if(parentIndex=='undefined'){
-						if('${iframeId}'!=''){
-							top.$(".J_iframe:visible")[0].contentWindow.$("#"+'${iframeId}')[0].contentWindow.doLayerChoose${treeId}(tree,index);
+					if("${checked}" != "true"){
+						var parentIndex = '${index}';
+						if(parentIndex=='undefined'){
+							if('${iframeId}'!=''){
+								top.$(".J_iframe:visible")[0].contentWindow.$("#"+'${iframeId}')[0].contentWindow.doLayerChoose${treeId}(tree,index);
+							}else{
+								top.$(".J_iframe:visible")[0].contentWindow.doLayerChoose${treeId}(tree,index);
+							}
 						}else{
-							top.$(".J_iframe:visible")[0].contentWindow.doLayerChoose${treeId}(tree,index);
-						}
-					}else{
-						var iframeId = "#layui-layer-iframe"+parentIndex;
-						parent.$(iframeId)[0].contentWindow.doLayerChoose${treeId}(tree,index);
+							var iframeId = "#layui-layer-iframe"+parentIndex;
+							parent.$(iframeId)[0].contentWindow.doLayerChoose${treeId}(tree,index);
+					}
 					}
 				}
 			}
@@ -85,7 +99,7 @@
 		function selectCheckNode(){
 			var ids = "${selectIds}".split(",");
 			for(var i=0; i<ids.length; i++) {
-				var node = tree.getNodeByParam("id", (type==5?"e_":"")+ids[i]);
+				var node = tree.getNodeByParam("id", (type>=5?"e_":"")+ids[i]);
 				if("${checked}" == "true"){
 					try{tree.checkNode(node, true, true);}catch(e){}
 					tree.selectNode(node, false);
@@ -179,14 +193,6 @@
 		function search() {
 			$("#search").slideToggle(200);
 			$("#key").focus();
-		}
-
-
-		function onChoose(){
-			parent.doLayerChoose${treeId}(tree,index);
-		}
-		function doReset(){
-			parent.doReset${treeId}(index);
 		}
 		
 	</script>

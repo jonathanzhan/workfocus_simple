@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 
+import com.mfnets.workfocus.modules.sys.entity.Employee;
+import com.mfnets.workfocus.modules.sys.entity.Org;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -227,23 +229,30 @@ public class UserController extends BaseController {
 		model.addAttribute("user", user);
 		return "modules/sys/userModifyPwd";
 	}
-	
-//	@RequiresPermissions("user")
-//	@ResponseBody
-//	@RequestMapping(value = "treeData")
-//	public List<Map<String, Object>> treeData(@RequestParam(required=false) String officeId, HttpServletResponse response) {
-//		List<Map<String, Object>> mapList = Lists.newArrayList();
-//		List<User> list = systemService.findUserByOfficeId(officeId);
-//		for (int i=0; i<list.size(); i++){
-//			User e = list.get(i);
-//			Map<String, Object> map = Maps.newHashMap();
-//			map.put("id", "u_"+e.getId());
-//			map.put("pId", officeId);
-//			map.put("name", StringUtils.replace(e.getUserName(), " ", ""));
-//			mapList.add(map);
-//		}
-//		return mapList;
-//	}
+
+	/**
+	 * 根据部门查询user信息
+	 * @param orgId
+	 * @param response
+	 * @return
+	 */
+	@RequiresPermissions("user")
+	@ResponseBody
+	@RequestMapping(value = "treeData")
+	public List<Map<String, Object>> treeData(@RequestParam(required=false) String orgId, HttpServletResponse response) {
+		List<Map<String, Object>> mapList = Lists.newArrayList();
+		Org org = new Org(orgId);
+		List<User> list = systemService.findUser(new User(new Employee(org)));
+		for (int i=0; i<list.size(); i++){
+			User e = list.get(i);
+			Map<String, Object> map = Maps.newHashMap();
+			map.put("id", "e_"+e.getId());
+			map.put("pId", orgId);
+			map.put("name", StringUtils.replace(e.getEmployee().getName(), " ", "")+"("+StringUtils.replace(e.getEmployee().getCode(), " ", "")+")");
+			mapList.add(map);
+		}
+		return mapList;
+	}
     
 //	@InitBinder
 //	public void initBinder(WebDataBinder b) {
