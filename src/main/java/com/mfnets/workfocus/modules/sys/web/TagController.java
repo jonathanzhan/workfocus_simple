@@ -33,7 +33,9 @@ public class TagController extends BaseController {
 		model.addAttribute("selectIds", request.getParameter("selectIds")); // 指定默认选中的ID
 		model.addAttribute("isAll", request.getParameter("isAll")); 	// 是否读取全部数据，不进行权限过滤
 		model.addAttribute("treeId",request.getParameter("treeId"));//标签的ID
-		model.addAttribute("index",request.getParameter("index"));//父弹出层的index
+		model.addAttribute("index",request.getParameter("index"));//父弹出层的index(用于弹出层中弹出树选择控件)
+		model.addAttribute("iframeId",request.getParameter("iframeId"));//弹出层所在的iframe的Id(用于当前页面包含子iframe，并且弹出层在子iframe中)
+
 		return "modules/sys/tagTreeSelect";
 	}
 	

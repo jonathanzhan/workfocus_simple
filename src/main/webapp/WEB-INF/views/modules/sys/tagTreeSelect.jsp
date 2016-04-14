@@ -4,25 +4,18 @@
 <html>
 <head>
 	<title>数据选择</title>
-	<%@include file="/WEB-INF/views/include/head.jsp" %>
-	<%@include file="/WEB-INF/views/include/treeview.jsp" %>
+	<%@include file="/WEB-INF/views/include/head.jsp"%>
+	<%@include file="/WEB-INF/views/include/treeview.jsp"%>
 	<script type="text/javascript">
 
 		var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-
-		var key, lastValue = "", nodeList = [];
-
+		var key, lastValue = "", nodeList = [], type = getQueryString("type", "${url}");
 		var tree, setting = {
 			view:{selectedMulti:false,dblClickExpand:false},
 			check:{enable:"${checked}",nocheckInherit:true},
+			async:{enable:(type==5),url:"${ctx}/sys/employee/treeData",autoParam:["id=orgId"]},//当url参数中type=5,则代表需要走异步程序，参数为orgId=节点ID
 			data:{simpleData:{enable:true}},
-			callback:{<%--
-				beforeClick: function(treeId, treeNode){
-					if("${checked}" == "true"){
-						//tree.checkNode(treeNode, !node.checked, true, true);
-						tree.expandNode(treeNode, true, false, false);
-					}
-				}, --%>
+			callback:{
 				onClick:function(event, treeId, treeNode){
 					tree.expandNode(treeNode);
 				},
@@ -37,19 +30,21 @@
 					var nodes = tree.getNodesByParam("pId", treeNode.id, null);
 					for (var i=0, l=nodes.length; i<l; i++) {
 						try{tree.checkNode(nodes[i], treeNode.checked, true);}catch(e){}
-						//tree.selectNode(nodes[i], false);
 					}
 					selectCheckNode();
 				},
 				onDblClick: function(){
 					var parentIndex = '${index}';
 					if(parentIndex=='undefined'){
-						top.$(".J_iframe:visible")[0].contentWindow.doLayerChoose${treeId}(tree,index);
+						if('${iframeId}'!=''){
+							top.$(".J_iframe:visible")[0].contentWindow.$("#"+'${iframeId}')[0].contentWindow.doLayerChoose${treeId}(tree,index);
+						}else{
+							top.$(".J_iframe:visible")[0].contentWindow.doLayerChoose${treeId}(tree,index);
+						}
 					}else{
 						var iframeId = "#layui-layer-iframe"+parentIndex;
 						parent.$(iframeId)[0].contentWindow.doLayerChoose${treeId}(tree,index);
 					}
-					top.layer.close(index);
 				}
 			}
 		};
@@ -69,7 +64,7 @@
 				tree = $.fn.zTree.init($("#tree"), setting, zNodes);
 				
 				// 默认展开一级节点
-				var nodes = tree.getNodesByParam("level", 2);
+				var nodes = tree.getNodesByParam("level", 0);
 				for(var i=0; i<nodes.length; i++) {
 					tree.expandNode(nodes[i], true, true, false);
 				}
@@ -85,12 +80,12 @@
 			key.bind('keydown', function (e){if(e.which == 13){searchNode();}});
 			$("#search").toggle();
 		});
-		
+
 		// 默认选择节点
 		function selectCheckNode(){
 			var ids = "${selectIds}".split(",");
 			for(var i=0; i<ids.length; i++) {
-				var node = tree.getNodeByParam("id", ids[i]);
+				var node = tree.getNodeByParam("id", (type==5?"e_":"")+ids[i]);
 				if("${checked}" == "true"){
 					try{tree.checkNode(node, true, true);}catch(e){}
 					tree.selectNode(node, false);
@@ -99,6 +94,7 @@
 				}
 			}
 		}
+
 	  	function focusKey(e) {
 			if (key.hasClass("empty")) {
 				key.removeClass("empty");
@@ -117,10 +113,7 @@
 			var value = $.trim(key.get(0).value);
 			
 			// 按名字查询
-			var keyType = "name";<%--
-			if (key.hasClass("empty")) {
-				value = "";
-			}--%>
+			var keyType = "name";
 			
 			// 如果和上次一次，就退出不查了。
 			if (lastValue === value) {
@@ -153,17 +146,13 @@
 		function showAllNode(nodes){			
 			nodes = tree.transformToArray(nodes);
 			for(var i=nodes.length-1; i>=0; i--) {
-				/* if(!nodes[i].isParent){
-					tree.showNode(nodes[i]);
-				}else{ */
-					if(nodes[i].getParentNode()!=null){
-						tree.expandNode(nodes[i],false,false,false,false);
-					}else{
-						tree.expandNode(nodes[i],true,true,false,false);
-					}
-					tree.showNode(nodes[i]);
-					showAllNode(nodes[i].children);
-				/* } */
+				if(nodes[i].getParentNode()!=null){
+					tree.expandNode(nodes[i],false,false,false,false);
+				}else{
+					tree.expandNode(nodes[i],true,true,false,false);
+				}
+				tree.showNode(nodes[i]);
+				showAllNode(nodes[i].children);
 			}
 		}
 		
@@ -171,10 +160,8 @@
 		function updateNodes(nodeList) {
 			tree.showNodes(nodeList);
 			for(var i=0, l=nodeList.length; i<l; i++) {
-				
 				//展开当前节点的父节点
 				tree.showNode(nodeList[i].getParentNode()); 
-				//tree.expandNode(nodeList[i].getParentNode(), true, false, false);
 				//显示展开符合条件节点的父节点
 				while(nodeList[i].getParentNode()!=null){
 					tree.expandNode(nodeList[i].getParentNode(), true, false, false);

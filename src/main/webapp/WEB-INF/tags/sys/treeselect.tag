@@ -17,8 +17,9 @@
 <%@ attribute name="cssStyle" type="java.lang.String" required="false" description="css样式"%>
 <%@ attribute name="hideBtn" type="java.lang.Boolean" required="false" description="是否显示按钮"%>
 <%@ attribute name="disabled" type="java.lang.String" required="false" description="是否限制选择，如果限制，设置为disabled"%>
-<%@ attribute name="dataMsgRequired" type="java.lang.String" required="false" description=""%>
+<%@ attribute name="dataMsgRequired" type="java.lang.String" required="false" description="jqueryValidate 验证消息"%>
 <%@ attribute name="treeEvent" type="java.lang.String" required="false" description="选择树后执行事件"%>
+<%@ attribute name="iframeId" type="java.lang.String" required="false" description="当前页面的子iframe的选择器ID"%>
 <div class="input-group">
 	<input id="${id}Id" name="${name}" class="${cssClass}" type="hidden" value="${value}"/>
 	<input id="${id}Name" name="${labelName}" ${allowInput?'':'readonly="readonly"'} type="text" value="${labelValue}" data-msg-required="${dataMsgRequired}"
@@ -28,6 +29,13 @@
 			<i class="fa fa-search"></i>
 		</button>
 	</span>
+	<c:if test="${allowClear}">
+	<span class="input-group-btn">
+		<button id="${id}ButtonClear" type="button" title="清除" class="btn btn-warning">
+			<i class="fa fa-times"></i>
+		</button>
+	</span>
+	</c:if>
 </div>
 
 <script type="text/javascript">
@@ -47,7 +55,7 @@
 			,id:"treeAdd"
 			,shade: [0.1, 'grey']
 			,shadeClose: false
-			,content : "${ctx}/tag/treeSelect?url="+encodeURIComponent("${url}")+"&checked=${checked}&extId=${extId}&selectIds="+$("#${id}Id").val()+"&treeId=${id}&index="+index
+			,content : "${ctx}/tag/treeSelect?url="+encodeURIComponent("${url}")+"&checked=${checked}&extId=${extId}&selectIds="+$("#${id}Id").val()+"&treeId=${id}&iframeId=${iframeId}&index="+index
 			,area: ['300px' , '450px']
 			,btn: ['确定', '关闭']
 			,yes: function(index, layero){
@@ -55,16 +63,17 @@
 				doLayerChoose${id}(tree,index);
 			},
 			cancel: function(index){ //或者使用btn2
-				<c:if test="${allowClear}">
-					$("#${id}Id").attr("value","");
-					$("#${id}Name").attr("value","");
-				</c:if>
-				${treeEvent}
 				top.layer.close(index);
 			}
 		});
 	});
 
+	$("#${id}ButtonClear").click(function(){
+		<c:if test="${allowClear}">
+			$("#${id}Id").attr("value","");
+			$("#${id}Name").attr("value","");
+		</c:if>
+	});
 
 	function doLayerChoose${id}(tree,index){
 		var ids = [], names = [], nodes = [];
@@ -81,13 +90,13 @@
 			</c:if>
 			<c:if test="${notAllowSelectRoot}">
 			if (nodes[i].level == 0){
-				layer.msg("不能选择根节点（"+nodes[i].name+"）请重新选择。",2,3)
+				top.layer.msg("不能选择根节点（"+nodes[i].name+"）请重新选择。",2,3)
 				return false;
 			}
 			</c:if>
 			<c:if test="${notAllowSelectParent}">
 			if (nodes[i].isParent){
-				layer.msg("不能选择父节点（"+nodes[i].name+"）请重新选择。",2,3)
+				top.layer.msg("不能选择父节点（"+nodes[i].name+"）请重新选择。",2,3)
 				return false;
 			}
 			</c:if>
@@ -106,11 +115,5 @@
 		top.layer.close(index);
 	}
 
-	function doReset${id}(index){
-		$("#${id}Id").attr("value","");
-		$("#${id}Name").attr("value","");
-		${treeEvent}
-		top.layer.close(index);
-	}
 
 </script>

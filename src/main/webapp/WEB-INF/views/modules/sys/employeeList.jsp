@@ -33,32 +33,32 @@
 			   cssClass="form-horizontal">
 	<div class="row">
 		<div class="col-sm-12">
-				<div class="form-group">
-					<label class="col-sm-2 control-label">部门</label>
-					<div class="col-sm-3">
-						<sys:treeselect id="org" name="org.id" value="${employee.org.id}" labelName="org.name"
-										labelValue="${employee.org.name}"
-										title="机构" url="/sys/org/treeData" cssClass="form-control"/>
-					</div>
-
-					<label class="col-sm-2 control-label">员工编号</label>
-					<div class="col-sm-3">
-						<form:input path="code" class="form-control"/>
-					</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">部门</label>
+				<div class="col-sm-3">
+					<sys:treeselect id="org" name="org.id" value="${employee.org.id}" labelName="org.name"
+									labelValue="${employee.org.name}"
+									title="机构" url="/sys/org/treeData" iframeId="employeeContent" cssClass="form-control"/>
 				</div>
-				<div class="form-group">
-					<label class="col-sm-2 control-label">中文名称</label>
-					<div class="col-sm-3">
-						<form:input path="name" class="form-control"/>
-					</div>
 
-					<label class="col-sm-2 control-label">英文名称</label>
-					<div class="col-sm-3">
-						<form:input path="eName" class="form-control"/>
-					</div>
+				<label class="col-sm-2 control-label">员工编号</label>
+				<div class="col-sm-3">
+					<form:input path="code" class="form-control"/>
 				</div>
-				<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
-				<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">中文名称</label>
+				<div class="col-sm-3">
+					<form:input path="name" class="form-control"/>
+				</div>
+
+				<label class="col-sm-2 control-label">英文名称</label>
+				<div class="col-sm-3">
+					<form:input path="eName" class="form-control"/>
+				</div>
+			</div>
+			<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
+			<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		</div>
 	</div>
 	<div class="row">
