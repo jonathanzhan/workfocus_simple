@@ -2,22 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mfnets.workfocus.modules.sys.dao.RoleDao">
     
-    <resultMap id="roleResult" type="Role">
+    <resultMap id="roleResult" type="com.mfnets.workfocus.modules.sys.entity.Role">
 		<id property="id" column="id" />
 		<result property="name" column="name" />
 		<result property="ename" column="ename" />
 		<result property="isSys" column="is_sys" />
 		<result property="roleType" column="role_type" />
-		<!--<collection property="userList" ofType="User">-->
-			<!--<id property="id" column="userList.id" />-->
-			<!--<id property="username" column="userList.userName" />-->
-			<!--<id property="name" column="userList.name" />-->
-			<!--<id property="usertype" column="userList.userType" />-->
-			<!--&lt;!&ndash;<id property="office.name" column="userList.office.name" />&ndash;&gt;-->
-			<!--&lt;!&ndash;<id property="company.name" column="userList.company.name" />&ndash;&gt;-->
-		<!--</collection>-->
-		<collection property="menuList" ofType="Menu">
+		<result property="dataScope" column="data_scope" />
+		<collection property="menuList" ofType="com.mfnets.workfocus.modules.sys.entity.Menu">
 			<id property="id" column="menuList.id" />
+		</collection>
+		<collection property="orgList" ofType="com.mfnets.workfocus.modules.sys.entity.Org">
+			<id property="id" column="orgList.id" />
+			<result property="name" column="orgList.name"/>
 		</collection>
 	</resultMap>
 	
@@ -26,28 +23,20 @@
     	a.name,
     	a.ename,
     	a.is_sys,
-    	a.role_type
+    	a.role_type,
+    	a.data_scope
     </sql>
     
 	<select id="get" resultMap="roleResult">
 		SELECT
-			<include refid="roleColumns"/>,<!-- 
-			ur.user_id AS "userList.id",
-			u.login_name AS "userList.loginName",
-			u.name AS "userList.name",
-			u.email AS "userList.email",
-			u.phone AS "userList.phone",
-			u.mobile AS "userList.mobile",
-			uc.name AS "userList.company.name",
-			uo.name AS "userList.office.name", -->
-			rm.menu_id AS "menuList.id"
+			<include refid="roleColumns"/>,
+			rm.menu_id AS "menuList.id",
+			ro.org_id AS "orgList.id",
+			o.name as "orgList.name"
 		FROM sys_role a
-		<!--
-		LEFT JOIN sys_userrole ur ON ur.role_id = a.id
-		LEFT JOIN sys_user u ON u.id = ur.user_id
-		LEFT JOIN sys_office uc ON uc.id = u.company_id
-		LEFT JOIN sys_office uo ON uo.id = u.office_id -->
-		LEFT JOIN sys_rolemenu rm ON rm.role_id = a.id
+		LEFT JOIN sys_role_menu rm ON rm.role_id = a.id
+		LEFT JOIN sys_role_org ro ON ro.role_id = a.id
+		LEFT JOIN sys_org o on o.id = ro.org_id
 		WHERE a.id = #{id}
 	</select>
 	
@@ -66,11 +55,13 @@
 	</select>
 	
 	<select id="findList" resultMap="roleResult">
-		SELECT <!-- DISTINCT -->
-			<include refid="roleColumns"/>
+		SELECT
+			<include refid="roleColumns"/>,
+			ro.org_id AS "orgList.id"
 		FROM sys_role a
-		LEFT JOIN sys_userrole ur ON ur.role_id = a.id
+		LEFT JOIN sys_role_user ur ON ur.role_id = a.id
 		LEFT JOIN sys_user u ON u.id = ur.user_id
+		LEFT JOIN sys_role_org ro ON ro.role_id = a.id
 		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
 		<if test="user != null and user.id != null and user.id != ''">
 			AND u.id = #{user.id}
@@ -99,6 +90,7 @@
 			is_sys,
 			del_flag,
 			role_type,
+			data_scope,
 			create_by,
 			create_at,
 			update_by,
@@ -110,6 +102,7 @@
 			#{isSys},
 			#{delFlag},
 			#{roleType},
+			#{dataScope},
 			#{createBy.id},
 			#{createAt},
 			#{updateBy.id},
@@ -122,6 +115,7 @@
 			name = #{name},
 			ename = #{ename},
 			is_sys = #{isSys},
+			data_scope = #{dataScope},
 			role_type = #{roleType},
 			update_by = #{updateBy.id},
 			update_at = #{updateAt}
@@ -129,11 +123,11 @@
 	</update>
 	
 	<delete id="deleteRoleMenu">
-		DELETE FROM sys_rolemenu WHERE role_id = #{id}
+		DELETE FROM sys_role_menu WHERE role_id = #{id}
 	</delete>
 	
 	<insert id="insertRoleMenu">
-		INSERT INTO sys_rolemenu(role_id, menu_id)
+		INSERT INTO sys_role_menu(role_id, menu_id)
 		<foreach collection="menuList" item="menu" separator=" union all ">
 			SELECT #{id}, #{menu.id}
 			<if test="dbName != 'mssql'">
@@ -143,7 +137,21 @@
 	</insert>
 
 
-	
+	<delete id="deleteRoleOrg">
+		DELETE FROM sys_role_org WHERE role_id = #{id}
+	</delete>
+
+	<insert id="insertRoleOrg">
+		INSERT INTO sys_role_org(role_id, org_id)
+		<foreach collection="orgList" item="org" separator=" union all ">
+			SELECT #{id}, #{org.id}
+			<if test="dbName != 'mssql'">
+				FROM dual
+			</if>
+		</foreach>
+	</insert>
+
+
 	<update id="delete">
 		UPDATE sys_role SET 
 			del_flag = #{DEL_FLAG_DELETE}

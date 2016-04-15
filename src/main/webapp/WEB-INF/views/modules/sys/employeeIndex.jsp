@@ -21,7 +21,7 @@
 			<div class="ibox-content">
 				<sys:message content="${message}"/>
 				<div id="content" class="row">
-					<div id="left" style="background-color:#e7eaec" class="animated infinite swing">
+					<div id="left" style="background-color:#e7eaec" class="animated swing">
 						<a onclick="refresh()" class="pull-right">
 							<i class="fa fa-refresh"></i>
 						</a>

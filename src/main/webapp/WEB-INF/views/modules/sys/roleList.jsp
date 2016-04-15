@@ -34,6 +34,7 @@
                     <th class="text-center">编号</th>
                     <th class="text-center">角色名称</th>
                     <th class="text-center">英文名称</th>
+                    <th class="text-center">数据范围</th>
                     <shiro:hasPermission name="sys:role:edit">
                         <th class="text-center">操作</th>
                     </shiro:hasPermission>
@@ -43,8 +44,9 @@
                 <c:forEach items="${list}" var="role" varStatus="st">
                     <tr>
                         <td>${st.count}</td>
-                        <td><a href="form?id=${role.id}">${role.name}</a></td>
-                        <td><a href="form?id=${role.id}">${role.ename}</a></td>
+                        <td><a href="${ctx}/sys/role/form?id=${role.id}">${role.name}</a></td>
+                        <td><a href="${ctx}/sys/role/form?id=${role.id}">${role.ename}</a></td>
+                        <td>${fns:getDictLabel(role.dataScope,'sys_data_scope' ,'' )}</td>
                         <shiro:hasPermission name="sys:role:edit">
                             <td>
 

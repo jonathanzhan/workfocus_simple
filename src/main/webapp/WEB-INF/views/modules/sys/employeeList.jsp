@@ -34,7 +34,7 @@
 </head>
 <body>
 	<form:form id="searchForm" modelAttribute="employee" action="${ctx}/sys/employee/list" method="post"
-			   cssClass="form-horizontal animated flip">
+			   cssClass="form-horizontal">
 	<div class="row">
 		<div class="col-sm-12">
 			<div class="form-group">
@@ -91,7 +91,7 @@
 	<common:tableAllCheck checkBoxClass="i-checks1" checkAllId="check-all" fixedColumn="true"/>
 	<input type="hidden" id="check-all" value="0">
 	<%--数据展示开始--%>
-	<table id="contentTable" class="table table-striped table-bordered table-hover table-condensed dataTable animated rotateIn">
+	<table id="contentTable" class="table table-striped table-bordered table-hover table-condensed dataTable">
 		<thead>
 		<tr>
 			<th class="check-all">选择</th>
@@ -99,16 +99,19 @@
 			<th>编码</th>
 			<th>名称</th>
 			<th>英文名</th>
-			<th>性别</th>
-			<th>电话</th>
-			<th>email</th>
-			<th>学历</th>
-			<th>系统开通</th>
-			<th>性别</th>
-			<th>电话</th>
-			<th>email</th>
-			<th>学历</th>
-			<th>系统开通</th>
+			<th>机构</th>
+			<th>机构编码</th>
+
+			<th>名称</th>
+			<th>英文名</th>
+			<th>机构</th>
+			<th>机构编码</th>
+
+			<th>名称</th>
+			<th>英文名</th>
+			<th>机构</th>
+			<th>机构编码</th>
+
 			<th>性别</th>
 			<th>电话</th>
 			<th>email</th>
@@ -125,16 +128,19 @@
 				<td><a href="${ctx}/sys/employee/form?id=${employee.id}">${employee.code}</a></td>
 				<td>${employee.name}</td>
 				<td>${employee.eName}</td>
-				<td>${fns:getDictLabel(employee.sex,"sex" , "")}</td>
-				<td>${employee.tel}</td>
-				<td>${employee.email}</td>
-				<td>${fns:getDictLabel(employee.education,"education" , "")} </td>
-				<td>${fns:getDictLabel(employee.isOpen,"yes_no" , "")} </td>
-				<td>${fns:getDictLabel(employee.sex,"sex" , "")}</td>
-				<td>${employee.tel}</td>
-				<td>${employee.email}</td>
-				<td>${fns:getDictLabel(employee.education,"education" , "")} </td>
-				<td>${fns:getDictLabel(employee.isOpen,"yes_no" , "")} </td>
+				<td>${employee.org.name}</td>
+				<td>${employee.org.code}</td>
+
+
+				<td>${employee.name}</td>
+				<td>${employee.eName}</td>
+				<td>${employee.org.name}</td>
+				<td>${employee.org.code}</td>
+
+				<td>${employee.name}</td>
+				<td>${employee.eName}</td>
+				<td>${employee.org.name}</td>
+				<td>${employee.org.code}</td>
 				<td>${fns:getDictLabel(employee.sex,"sex" , "")}</td>
 				<td>${employee.tel}</td>
 				<td>${employee.email}</td>

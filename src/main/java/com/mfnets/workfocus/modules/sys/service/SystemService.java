@@ -85,7 +85,7 @@ public class SystemService extends BaseService {
 
     public Page<User> findUser(Page<User> page, User user) {
         // 生成数据权限过滤条件（dsf为dataScopeFilter的简写，在xml中使用 ${sqlMap.dsf}调用权限SQL）
-//		user.getSqlMap().put("dsf", dataScopeFilter(user.getCurrentUser(), "o", "a"));
+		user.getSqlMap().put("dsf", dataScopeFilter(user.getCurrentUser(), "d", "a",true));
         // 设置分页参数
         user.setPage(page);
         // 执行分页查询
@@ -101,7 +101,7 @@ public class SystemService extends BaseService {
      */
     public List<User> findUser(User user) {
         // 生成数据权限过滤条件（dsf为dataScopeFilter的简写，在xml中使用 ${sqlMap.dsf}调用权限SQL）
-//		user.getSqlMap().put("dsf", dataScopeFilter(user.getCurrentUser(), "o", "a"));
+		user.getSqlMap().put("dsf", dataScopeFilter(user.getCurrentUser(), "d", "a",true));
         return userDao.findList(user);
     }
 
@@ -267,6 +267,14 @@ public class SystemService extends BaseService {
         if (role.getMenuList().size() > 0) {
             roleDao.insertRoleMenu(role);
         }
+        // 更新角色与部门关联
+        roleDao.deleteRoleOrg(role);
+        if(role.getDataScope()==5){
+            if (role.getOrgList().size() > 0){
+                roleDao.insertRoleOrg(role);
+            }
+        }
+
         // 清除用户角色缓存
         UserUtils.removeCache(UserUtils.CACHE_ROLE_LIST);
     }

@@ -50,4 +50,13 @@ public interface RoleDao extends CrudDao<Role> {
 	int insertRoleMenu(Role role);
 
 
+	/**
+	 * 维护角色与公司部门关系
+	 * @param role
+	 * @return
+	 */
+	public int deleteRoleOrg(Role role);
+
+	public int insertRoleOrg(Role role);
+
 }

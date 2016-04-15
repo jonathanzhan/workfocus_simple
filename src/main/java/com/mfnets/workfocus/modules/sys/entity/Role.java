@@ -5,6 +5,7 @@ package com.mfnets.workfocus.modules.sys.entity;
 
 import java.util.List;
 
+import com.mfnets.workfocus.common.utils.Collections3;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.constraints.Length;
 
@@ -15,9 +16,12 @@ import com.mfnets.workfocus.common.persistence.DataEntity;
 import javax.validation.constraints.NotNull;
 
 /**
- * 角色Entity
- * @author ThinkGem
- * @version 2013-12-05
+ *
+ * 角色的实体类
+ * @author Jonathan(whatlookingfor@gmail.com)
+ * @date   2016/4/15 15:26
+ * @since  V1.0
+ *
  */
 public class Role extends DataEntity<Role> {
 	
@@ -34,33 +38,31 @@ public class Role extends DataEntity<Role> {
 	private String oldName; 	// 原角色名称（判断重复使用）
 	private String oldEname;	// 原英文名称（判断重复使用）
 
-	
 	private User user;		// 根据用户ID查询角色列表
 
 	private List<Menu> menuList = Lists.newArrayList(); // 拥有菜单列表
+	private List<Org> orgList = Lists.newArrayList(); // 按明细设置数据范围
 
-//	// 数据范围（1：所有数据；2：所在公司及以下数据；3：所在公司数据；4：所在部门及以下数据；5：所在部门数据；8：仅本人数据；9：按明细设置）
-//	public static final String DATA_SCOPE_ALL = "1";
-//	public static final String DATA_SCOPE_COMPANY_AND_CHILD = "2";
-//	public static final String DATA_SCOPE_COMPANY = "3";
-//	public static final String DATA_SCOPE_OFFICE_AND_CHILD = "4";
-//	public static final String DATA_SCOPE_OFFICE = "5";
-//	public static final String DATA_SCOPE_SELF = "8";
-//	public static final String DATA_SCOPE_CUSTOM = "9";
+	// 数据范围（1：所有数据；2：所在部门及以下数据；3：所在部门数据；4：仅本人数据； 5自定义部门
+	public static final int DATA_SCOPE_ALL = 1;
+	public static final int DATA_SCOPE_ORG_AND_CHILD = 2;
+	public static final int DATA_SCOPE_ORG = 3;
+	public static final int DATA_SCOPE_SELF = 4;
+	public static final int DATA_SCOPE_CUSTOM = 5;
 	
 	public Role() {
 		super();
+		this.dataScope = DATA_SCOPE_SELF;
 	}
 	
 	public Role(String id){
 		super(id);
 	}
-	
+
 	public Role(User user) {
 		this();
 		this.user = user;
 	}
-
 
 	public String getRoleType() {
 		return roleType;
@@ -167,6 +169,47 @@ public class Role extends DataEntity<Role> {
 	
 
 
+	public List<Org> getOrgList() {
+		return orgList;
+	}
+
+	public void setOrgList(List<Org> orgList) {
+		this.orgList = orgList;
+	}
+
+	public List<String> getOrgIdList() {
+		List<String> orgIdList = Lists.newArrayList();
+		for (Org org : orgList) {
+			orgIdList.add(org.getId());
+		}
+		return orgIdList;
+	}
+
+	public void setOrgIdList(List<String> orgIdList) {
+		orgList = Lists.newArrayList();
+		for (String orgId : orgIdList) {
+			Org org = new Org();
+			org.setId(orgId);
+			orgList.add(org);
+		}
+	}
+
+	public String getOrgNames() {
+		return Collections3.extractToString(getOrgList(), "name", ",");
+	}
+
+	public String getOrgIds() {
+		return StringUtils.join(getOrgIdList(), ",");
+	}
+
+	public void setOrgIds(String orgIds) {
+		orgList = Lists.newArrayList();
+		if (orgIds != null){
+			String[] ids = StringUtils.split(orgIds, ",");
+			setOrgIdList(Lists.newArrayList(ids));
+		}
+	}
+
 	public User getUser() {
 		return user;
 	}
@@ -174,6 +217,4 @@ public class Role extends DataEntity<Role> {
 	public void setUser(User user) {
 		this.user = user;
 	}
-
-
 }

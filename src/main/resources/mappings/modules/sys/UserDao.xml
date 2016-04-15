@@ -23,7 +23,9 @@
 		b.tel as  "employee.tel",
 		b.org_id as "employee.org.id",
 		d.code as "employee.org.code",
-		d.name as "employee.org.name"
+		d.name as "employee.org.name",
+		d.parent_id as "employee.org.parent.id",
+		d.parent_ids as "employee.org.parentIds"
     </sql>
     
     <sql id="userJoins">
@@ -56,7 +58,7 @@
 		FROM sys_user a
 		<include refid="userJoins"/>
 		<if test="role != null and role.id != null and role.id != ''">
-			INNER JOIN sys_userrole ur ON ur.user_id = a.id AND ur.role_id = #{role.id}
+			INNER JOIN sys_role_user ur ON ur.user_id = a.id AND ur.role_id = #{role.id}
 		</if>
 
 		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
@@ -99,6 +101,8 @@
 		<if test="userType !=null">
 			AND a.user_type = #{userType}
 		</if>
+		<!-- 数据范围过滤 -->
+		${sqlMap.dsf}
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
 				ORDER BY ${page.orderBy}
@@ -175,12 +179,12 @@
 	
 	<!-- 删除用户和角色关联表数据 -->
 	<delete id="deleteUserRole">
-		DELETE FROM sys_userrole WHERE user_id = #{id}
+		DELETE FROM sys_role_user WHERE user_id = #{id}
 	</delete>
 	
 	<!-- 插入用户和角色关联表数据 -->
 	<insert id="insertUserRole">
-		INSERT INTO sys_userrole(user_id, role_id)
+		INSERT INTO sys_role_user(user_id, role_id)
 		<foreach collection="roleList" item="role" separator=" union all ">
 			SELECT #{id}, #{role.id}
 			<if test="dbName != 'mssql'">

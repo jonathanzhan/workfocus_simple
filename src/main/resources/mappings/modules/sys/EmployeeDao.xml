@@ -23,7 +23,10 @@
 		a.update_by AS "updateBy.id",
 		a.update_at,
 		a.del_flag,
-		d.name AS "org.name"
+		d.name AS "org.name",
+		d.code AS "org.code",
+		d.parent_id AS "org.parent.id",
+		d.parent_ids AS "org.parentIds"
 	</sql>
 
 	<sql id="employeeJoins">
@@ -73,8 +76,15 @@
 			<if test="dbName == 'mysql'">CONCAT('%', #{eName}, '%')</if>
 		</if>
 		<if test="org!=null and org.id!=null and org.id!=''">
-			AND a.org_id = #{org.id}
+			AND (a.org_id = #{org.id} or
+			d.parent_ids like
+			<if test="dbName == 'oracle'">'%'||#{org.id}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{org.id}+'%'</if>
+			<if test="dbName == 'mysql'">CONCAT('%', #{org.id}, '%')</if>
+			)
 		</if>
+		<!-- 数据范围过滤 -->
+		${sqlMap.dsf}
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
 				ORDER BY ${page.orderBy}

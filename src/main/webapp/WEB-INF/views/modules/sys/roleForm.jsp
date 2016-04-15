@@ -9,6 +9,12 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $("#name").focus();
+
+            showOrg();
+
+            $("#dataScope").change(function(){
+                showOrg();
+            });
             $("#inputForm").validate({
                 rules: {
                     roleName: {remote: "${ctx}/sys/role/checkName?oldName=" + encodeURIComponent("${role.name}")},
@@ -86,7 +92,27 @@
             }
             // 默认展开全部节点
             tree.expandAll(true);
+
+
+
         });
+
+        function showOrg(){
+
+            if($("#dataScope").val()=='5'){
+                alert("ssssss");
+                $("#orgSelect").removeClass("hide");
+                $("#roleOrgName").addClass("required");
+                $("#roleOrgName").parent().removeClass('has-success').addClass('has-error');
+
+            }else{
+                alert("sad");
+                $("#orgSelect").addClass("hide");
+                $("#roleOrgName").removeClass("required");
+                $("#roleOrgName").parent().removeClass('has-error').addClass('has-success');
+                $("#roleOrgName-error").remove();
+            }
+        }
 
     </script>
 </head>
@@ -144,8 +170,27 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-3 control-label">是否系统数据:</label>
+                            <label class="col-md-3 control-label">数据范围</label>
 
+                            <div class="col-md-5">
+                                <form:select path="dataScope" class="form-control">
+                                    <form:options items="${fns:getDictList('sys_data_scope')}" itemLabel="label"
+                                                  itemValue="value" htmlEscape="false"/>
+                                </form:select>
+                            </div>
+                        </div>
+                        <div class="form-group" id="orgSelect">
+                            <label class="col-md-3 control-label">选择机构</label>
+
+                            <div class="col-md-5">
+                                <sys:treeselect id="roleOrg" name="orgIds" value="${role.orgIds}" labelName="roleName"
+                                                labelValue="${role.orgNames}"
+                                                title="机构" url="/sys/org/treeData" cssClass="form-control"
+                                                dataMsgRequired="请选择机构" allowClear="true" checked="true"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">是否系统数据:</label>
                             <div class="col-md-5">
                                 <form:select path="isSys" class="form-control required">
                                     <form:options items="${fns:getDictList('yes_no')}" itemLabel="label"
@@ -162,12 +207,10 @@
                                 </shiro:hasAnyPermissions>
                                 <input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
                             </div>
-
                         </div>
                     </div>
                     <div class="col-md-4 col-xs-12">
                         <label class="col-md-2 control-label">角色授权:</label>
-
                         <div class="col-md-5">
                             <div id="menuTree" class="ztree" style="margin-top:3px;float:left;"></div>
                             <form:hidden path="menuIds"/>

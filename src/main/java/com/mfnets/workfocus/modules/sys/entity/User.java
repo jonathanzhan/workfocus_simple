@@ -237,4 +237,26 @@ public class User extends DataEntity<User> {
 		return id != null && "1".equals(id);
 	}
 
+	/**
+	 * 判断用户是否有机构
+	 * @return
+	 */
+	@JsonIgnore
+	public boolean hasOrg(){
+		return getEmployee()!=null && getEmployee().getOrg()!=null;
+	}
+
+	/**
+	 * 获取用户对应的机构
+	 * @return
+	 */
+	public Org getOrg(){
+		if(hasOrg()){
+			return getEmployee().getOrg();
+		}else{
+			return null;
+		}
+	}
+
+
 }
