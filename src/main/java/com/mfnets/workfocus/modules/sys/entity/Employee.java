@@ -1,3 +1,6 @@
+/**
+ * Copyright &copy; 2012-2016 <a href="https://github.com/whatlookingfor">whatlookingfor</a> All rights reserved.
+ */
 package com.mfnets.workfocus.modules.sys.entity;
 
 import com.mfnets.workfocus.common.persistence.DataEntity;
@@ -7,12 +10,11 @@ import org.hibernate.validator.constraints.Length;
 import java.util.Date;
 
 /**
- *
  * 员工实体类
- * @author Jonathan(whatlookingfor@gmail.com)
- * @date   2016/4/11 17:00
- * @since  V1.0
  *
+ * @author Jonathan
+ * @version 2016/5/9 16:45
+ * @since JDK 7.0+
  */
 public class Employee extends DataEntity<Employee>{
 
@@ -103,11 +105,18 @@ public class Employee extends DataEntity<Employee>{
     }
 
     public Date getBirthday() {
-        return birthday;
+        if(birthday != null){
+            return (Date)birthday.clone();
+        }
+        return null;
     }
 
     public void setBirthday(Date birthday) {
-        this.birthday = birthday;
+        if(birthday != null){
+            this.birthday = (Date) birthday.clone();
+        }else{
+            this.birthday = null;
+        }
     }
 
     @Length(min = 0,max = 200,message = "联系地址长度最大长度为200")

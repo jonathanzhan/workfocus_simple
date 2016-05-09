@@ -1,5 +1,5 @@
 /**
- * Copyright &copy; 2012-2015 <a href="http://git.oschina.net/whatlookingfor">whatlookingfor</a> All rights reserved.
+ * Copyright &copy; 2012-2016 <a href="https://github.com/whatlookingfor">whatlookingfor</a> All rights reserved.
  */
 package com.mfnets.workfocus.tools;
 

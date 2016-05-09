@@ -15,7 +15,7 @@ import java.util.List;
 
 /**
  * 机构Service
- * @author ThinkGem
+ * @author thinkgem
  * @version 2014-05-16
  */
 @Service

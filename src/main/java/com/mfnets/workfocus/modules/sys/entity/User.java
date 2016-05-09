@@ -1,5 +1,5 @@
 /**
- * Copyright &copy; 2012-2015 <a href="http://git.oschina.net/whatlookingfor">whatlookingfor</a> All rights reserved.
+ * Copyright &copy; 2012-2016 <a href="https://github.com/whatlookingfor">whatlookingfor</a> All rights reserved.
  */
 package com.mfnets.workfocus.modules.sys.entity;
 
@@ -22,7 +22,7 @@ import com.mfnets.workfocus.common.utils.excel.fieldtype.RoleListType;
 
 /**
  * 用户Entity
- * @author ThinkGem
+ * @author Jonathan
  * @version 2013-12-05
  */
 public class User extends DataEntity<User> {

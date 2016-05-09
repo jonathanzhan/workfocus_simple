@@ -1,3 +1,6 @@
+/**
+ * Copyright &copy; 2012-2016 <a href="https://github.com/whatlookingfor">whatlookingfor</a> All rights reserved.
+ */
 package com.mfnets.workfocus.modules.sys.dao;
 
 import com.mfnets.workfocus.common.persistence.CrudDao;
@@ -8,7 +11,11 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 /**
- * Created by yud on 2015/9/6.
+ * 系统参数的dao层
+ * 
+ * @author Jonathan
+ * @version 2016/5/9 17:28
+ * @since JDK 7.0+
  */
 @MyBatisDao
 public interface ParamsDao extends CrudDao<Params> {

@@ -1,3 +1,6 @@
+/**
+ * Copyright &copy; 2012-2016 <a href="https://github.com/whatlookingfor">whatlookingfor</a> All rights reserved.
+ */
 package com.mfnets.workfocus.modules.demo.service;
 
 import com.mfnets.workfocus.common.service.CrudService;
@@ -10,12 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
-import java.util.UUID;
 
 /**
- * @author Jonathan(whatlookingfor@gmail.com)
- * @date 2016/4/6 11:51
- * @since V1.0
+ * 文件上传的service
+ * @author Jonathan
+ * @version 2016/4/6 11:51
+ * @since JDK 7.0+
  */
 @Service
 @Transactional(readOnly = true)

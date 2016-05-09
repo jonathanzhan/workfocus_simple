@@ -2,17 +2,14 @@
  * Copyright &copy; 2012-2014 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
  */
 package com.mfnets.workfocus.common.service;
-import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.google.common.collect.Lists;
 import com.mfnets.workfocus.common.persistence.BaseEntity;
 import com.mfnets.workfocus.common.utils.StringUtils;
 import com.mfnets.workfocus.modules.sys.entity.Role;
 import com.mfnets.workfocus.modules.sys.entity.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Service基类

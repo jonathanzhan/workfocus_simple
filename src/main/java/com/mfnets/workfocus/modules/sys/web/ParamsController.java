@@ -1,8 +1,10 @@
+/**
+ * Copyright &copy; 2012-2016 <a href="https://github.com/whatlookingfor">whatlookingfor</a> All rights reserved.
+ */
 package com.mfnets.workfocus.modules.sys.web;
 
 import com.mfnets.workfocus.common.config.Global;
 import com.mfnets.workfocus.common.persistence.Page;
-import com.mfnets.workfocus.common.utils.StringUtils;
 import com.mfnets.workfocus.common.web.BaseController;
 import com.mfnets.workfocus.modules.sys.entity.Params;
 import com.mfnets.workfocus.modules.sys.service.ParamsService;
@@ -10,9 +12,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -22,7 +22,10 @@ import java.util.List;
 
 /**
  * 系统参数controller
- * Created by yud on 2015/9/6.
+ *
+ * @author Jonathan
+ * @version 2016/5/9 17:35
+ * @since JDK 7.0+
  */
 @Controller
 @RequestMapping(value = "${adminPath}/sys/params")

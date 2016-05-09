@@ -1,3 +1,6 @@
+/**
+ * Copyright &copy; 2012-2016 <a href="https://github.com/whatlookingfor">whatlookingfor</a> All rights reserved.
+ */
 package com.mfnets.workfocus.modules.sys.service;
 
 
@@ -11,9 +14,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
 /**
- * Created by yud on 2015/9/6.
+ * 系统参数的service
+ *
+ * @author Jonathan
+ * @version 2016/5/9 17:33
+ * @since JDK 7.0+
  */
 @Service
 @Transactional(readOnly = true)

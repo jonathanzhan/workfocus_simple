@@ -1,10 +1,16 @@
+/**
+ * Copyright &copy; 2012-2016 <a href="https://github.com/whatlookingfor">whatlookingfor</a> All rights reserved.
+ */
 package com.mfnets.workfocus.modules.act.entity;
 
 import java.io.Serializable;
 
 /**
  * 流程启动后更改业务表的流程ID
- * Created by whatlookingfor on 15/9/7.
+ *
+ * @author Jonathan
+ * @version 2015/9/7 17:16
+ * @since JDK 7.0
  */
 public class ActBusiness implements Serializable{
 

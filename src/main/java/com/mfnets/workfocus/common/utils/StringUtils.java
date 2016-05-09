@@ -27,7 +27,6 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
 	
     private static final char SEPARATOR = '_';
     private static final String CHARSET_NAME = "UTF-8";
-	private static final String errorMessage = "导入失败，";
     /**
      * 转换为字节数组
      * @param str
@@ -349,17 +348,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
 
         return sb.toString();
     }
-    
-    /**
-     * 如果不为空，则设置值
-     * @param target
-     * @param source
-     */
-    public static void setValueIfNotBlank(String target, String source) {
-		if (isNotBlank(source)){
-			target = source;
-		}
-	}
+
  
     /**
      * 转换为JS获取对象值，生成三目运算返回结果
@@ -378,94 +367,6 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
     	result.append(val.substring(1));
     	return result.toString();
     }
-
-	/**
-	 * 格式化巴西身份证（每个3位 增加逗号）
-	 * @param number
-	 * @return
-	 */
-	public static String formatBrasilDocumentNumber(String number){
-		String result = "";
-
-		char[] str = number.toCharArray();
-		if(str!=null && str.length>0){
-			for (int i=0;i<str.length;i++){
-				if((i+1)%3==0 && i>=2){
-					result+=("."+str[i]);
-				}else{
-					result+=str[i];
-				}
-			}
-			return result;
-		}else{
-			return "";
-		}
-	}
-
-
-
-	/**
-	 * 验证导入数据是否为空
-	 * @param value
-	 * @param forInt
-	 * @param title
-	 * @return
-	 */
-	public static String checkIsEmpty(String value,int forInt,String title){
-		if(StringUtils.isEmpty(value)){
-			return errorMessage+"第"+(forInt+1)+"行"+title+"不能为空！<br>";
-		}else {
-			return "";
-		}
-	}
-
-
-	/**
-	 * 验证导入数据是否为空
-	 * @param value
-	 * @param forInt
-	 * @param title
-	 * @return
-	 */
-	public static String checkIsEmpty(Integer value,int forInt,String title){
-		if(value==null){
-			return errorMessage+"第"+(forInt+1)+"行"+title+"不能为空！<br>";
-		}else {
-			return "";
-		}
-	}
-
-	public static String checkDoublePlus(Double value,int forInt,String title){
-		if(value!=null && value>0){
-			return "";
-		}else {
-			return errorMessage+"第"+(forInt+1)+"行"+title+"必须为大于0的数字！<br>";
-		}
-	}
-
-	public static String checkIntegerPlus(Integer value,int forInt,String title){
-		if(value!=null && value>0){
-			return "";
-		}else {
-			return errorMessage+"第"+(forInt+1)+"行"+title+"必须为大于0的整数！<br>";
-		}
-	}
-
-	/**
-	 * 验证导入数据是否为空
-	 * @param value
-	 * @param forInt
-	 * @param title
-	 * @return
-	 */
-	public static String checkObjectIsNull(Object value,int forInt,String title){
-		if(value==null){
-			return errorMessage+"第"+(forInt+1)+"行"+title+"不能为空！<br>";
-		}else {
-			return "";
-		}
-	}
-
 
 
 	/**
@@ -552,43 +453,5 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
 		return b.divide(one, scale, BigDecimal.ROUND_HALF_UP).doubleValue();
 	}
 
-	/**
-	 * 获取批次号  格式为 yyyymmdd-001
-	 * @param count
-	 * @return
-	 */
-	public static String getBillNo(int count) {
-		int i;
-		if(count>=999){
-			i=10001;
-		}else if(count>=9999){
-			i=100001;
-		}else{
-			i=1001;
-		}
-		String tempNo = (i+count)+"";
-		String billNo = DateUtils.getDate("yyyyMMdd");
-		String no = tempNo.substring(1,tempNo.length());
-		return billNo+"-"+no;
-	}
-
-	/**
-	 * 获取物流对账单的批次号
-	 * @param count
-	 * @return
-	 */
-	public static String getBatchNo(int count,String begin) {
-		int i;
-		if(count>=999){
-			i=10001;
-		}else if(count>=9999){
-			i=100001;
-		}else{
-			i=1001;
-		}
-		String tempNo = (i+count)+"";
-		String no = tempNo.substring(1,tempNo.length());
-		return begin+no;
-	}
 
 }

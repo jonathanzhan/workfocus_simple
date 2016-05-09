@@ -1,5 +1,5 @@
 /**
- * Copyright &copy; 2012-2015 <a href="http://git.oschina.net/whatlookingfor">whatlookingfor</a> All rights reserved.
+ * Copyright &copy; 2012-2016 <a href="https://github.com/whatlookingfor">whatlookingfor</a> All rights reserved.
  */
 package com.mfnets.workfocus.modules.sys.interceptor;
 
@@ -18,7 +18,7 @@ import com.mfnets.workfocus.modules.sys.utils.LogUtils;
 
 /**
  * 日志拦截器
- * @author ThinkGem
+ * @author Jonathan
  * @version 2014-8-19
  */
 public class LogInterceptor extends BaseService implements HandlerInterceptor {

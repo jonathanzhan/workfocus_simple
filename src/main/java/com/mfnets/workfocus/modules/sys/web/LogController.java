@@ -1,5 +1,5 @@
 /**
- * Copyright &copy; 2012-2015 <a href="http://git.oschina.net/whatlookingfor">whatlookingfor</a> All rights reserved.
+ * Copyright &copy; 2012-2016 <a href="https://github.com/whatlookingfor">whatlookingfor</a> All rights reserved.
  */
 package com.mfnets.workfocus.modules.sys.web;
 
@@ -19,8 +19,8 @@ import com.mfnets.workfocus.modules.sys.service.LogService;
 
 /**
  * 日志Controller
- * @author ThinkGem
- * @version 2013-6-2
+ * @author Jonathan
+ * @version 2015-6-2
  */
 @Controller
 @RequestMapping(value = "${adminPath}/sys/log")

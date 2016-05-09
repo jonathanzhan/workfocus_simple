@@ -1,3 +1,6 @@
+/**
+ * Copyright &copy; 2012-2016 <a href="https://github.com/whatlookingfor">whatlookingfor</a> All rights reserved.
+ */
 package com.mfnets.workfocus.modules.sys.listener;
 
 import com.mfnets.workfocus.common.config.Global;
@@ -9,7 +12,11 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Service;
 
 /**
- * Created by zhangzhan on 2015/1/21 0021.
+ * 系统启动前的监听处理
+ *
+ * @author Jonathan
+ * @version 2016/5/9 17:31
+ * @since JDK 7.0+
  */
 @Service
 public class StartUpListener implements ApplicationListener<ContextRefreshedEvent> {

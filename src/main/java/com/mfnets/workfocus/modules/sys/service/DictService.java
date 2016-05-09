@@ -1,5 +1,5 @@
 /**
- * Copyright &copy; 2012-2015 <a href="http://git.oschina.net/whatlookingfor">whatlookingfor</a> All rights reserved.
+ * Copyright &copy; 2012-2014 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
  */
 package com.mfnets.workfocus.modules.sys.service;
 
@@ -16,8 +16,8 @@ import java.util.List;
 /**
  * 数据字典Service
  *
- * @author Jonathan
- * @version 2016-03-21
+ * @author thinkgem
+ * @version 2013-03-21
  */
 @Service
 @Transactional(readOnly = true)

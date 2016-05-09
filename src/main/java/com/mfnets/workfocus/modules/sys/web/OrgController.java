@@ -28,7 +28,7 @@ import java.util.Map;
 
 /**
  * 机构Controller
- * @author ThinkGem
+ * @author thinkgem
  * @version 2013-5-15
  */
 @Controller

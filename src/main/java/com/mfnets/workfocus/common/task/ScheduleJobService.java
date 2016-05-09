@@ -1,3 +1,6 @@
+/**
+ * Copyright &copy; 2012-2016 <a href="https://github.com/whatlookingfor">whatlookingfor</a> All rights reserved.
+ */
 package com.mfnets.workfocus.common.task;
 
 import com.mfnets.workfocus.modules.sys.entity.ScheduleJob;
@@ -11,10 +14,11 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * 定时任务 service
+ * quartz 定时任务 service
  *
- * @author whatlookingfor
- * @date 2015年9月1日
+ * @author Jonathan
+ * @version 2015/9/1 16:53
+ * @since JDK 7.0+
  */
 @Service
 public class ScheduleJobService {
@@ -25,8 +29,7 @@ public class ScheduleJobService {
 
     /**
      * 添加定时任务
-     *
-     * @param scheduleJob
+     * @param scheduleJob 定时任务的实体类
      */
     public void add(ScheduleJob scheduleJob) {
         @SuppressWarnings("rawtypes")

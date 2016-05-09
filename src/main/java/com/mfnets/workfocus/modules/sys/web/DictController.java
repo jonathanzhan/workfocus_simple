@@ -1,5 +1,5 @@
 /**
- * Copyright &copy; 2012-2015 <a href="http://git.oschina.net/whatlookingfor">whatlookingfor</a> All rights reserved.
+ * Copyright &copy; 2012-2016 <a href="https://github.com/whatlookingfor">whatlookingfor</a> All rights reserved.
  */
 package com.mfnets.workfocus.modules.sys.web;
 
@@ -29,9 +29,9 @@ import com.mfnets.workfocus.modules.sys.entity.Dict;
 import com.mfnets.workfocus.modules.sys.service.DictService;
 
 /**
- * 字典Controller
- * @author ThinkGem
- * @version 2014-05-16
+ * 数据字典Controller
+ * @author Jonathan
+ * @version 2015-05-16
  */
 @Controller
 @RequestMapping(value = "${adminPath}/sys/dict")

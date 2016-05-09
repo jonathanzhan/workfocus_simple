@@ -1,3 +1,6 @@
+/**
+ * Copyright &copy; 2012-2016 <a href="https://github.com/whatlookingfor">whatlookingfor</a> All rights reserved.
+ */
 package com.mfnets.workfocus.modules.act.web;
 
 import com.google.common.collect.Maps;
@@ -8,16 +11,13 @@ import org.activiti.engine.*;
 import org.activiti.engine.form.FormProperty;
 import org.activiti.engine.form.StartFormData;
 import org.activiti.engine.form.TaskFormData;
-import org.activiti.engine.impl.form.StartFormDataImpl;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,9 +26,12 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Created by whatlookingfor-Jonathan on 16/1/7 14:52.
+ * 动态表单的工作流demo
+ *
+ * @author Jonathan
+ * @version 2016/1/7 14:52
+ * @since JDK 7.0+
  */
-
 @Controller
 @RequestMapping(value = "${adminPath}/act/dynamic")
 public class DynamicFormController extends BaseController{

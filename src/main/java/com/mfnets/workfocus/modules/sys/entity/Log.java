@@ -1,5 +1,5 @@
 /**
- * Copyright &copy; 2012-2015 <a href="http://git.oschina.net/whatlookingfor">whatlookingfor</a> All rights reserved.
+ * Copyright &copy; 2012-2014 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
  */
 package com.mfnets.workfocus.modules.sys.entity;
 
@@ -13,7 +13,7 @@ import com.mfnets.workfocus.common.utils.StringUtils;
 
 /**
  * 日志Entity
- * @author ThinkGem
+ * @author thinkgem
  * @version 2014-8-19
  */
 public class Log extends DataEntity<Log> {

@@ -1,37 +1,6 @@
 /**
- * Copyright &copy; 2012-2015 <a href="http://git.oschina.net/whatlookingfor">whatlookingfor</a> All rights reserved.
- * <p/>
- * _ooOoo_
- * o8888888o
- * 88" . "88
- * (| -_- |)
- * O\ = /O
- * ____/`---'\____
- * .   ' \\| |// `.
- * / \\||| : |||// \
- * / _||||| -:- |||||- \
- * | | \\\ - /// | |
- * | \_| ''\---/'' | |
- * \ .-\__ `-` ___/-. /
- * ___`. .' /--.--\ `. . __
- * ."" '< `.___\_<|>_/___.' >'"".
- * | | : `- \`.;`\ _ /`;.`/ - ` : | |
- * \ \ `-. \_ __\ /__ _/ .-` / /
- * ======`-.____`-.___\_____/___.-`____.-'======
- * `=---='
- * <p/>
- * .............................................
- * 佛祖镇楼                  BUG辟易
- * 佛曰:
- * 写字楼里写字间，写字间里程序员；
- * 程序人员写程序，又拿程序换酒钱。
- * 酒醒只在网上坐，酒醉还来网下眠；
- * 酒醉酒醒日复日，网上网下年复年。
- * 但愿老死电脑间，不愿鞠躬老板前；
- * 奔驰宝马贵者趣，公交自行程序员。
- * 别人笑我忒疯癫，我笑自己命太贱；
- * 不见满街漂亮妹，哪个归得程序员？
- **/
+ * Copyright &copy; 2012-2016 <a href="https://github.com/whatlookingfor">whatlookingfor</a> All rights reserved.
+ */
 package com.mfnets.workfocus.modules.sys.entity;
 
 import com.mfnets.workfocus.common.persistence.DataEntity;
@@ -39,11 +8,12 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.NotNull;
-
 /**
- * 数据字典的实体类
- * create by Jonathan
+ * ç
  *
+ * @author Jonathan
+ * @version 2016/5/9 17:41
+ * @since JDK 7.0+å
  */
 public class Dict extends DataEntity<Dict> {
 

@@ -1,11 +1,16 @@
+/**
+ * Copyright &copy; 2012-2016 <a href="https://github.com/whatlookingfor">whatlookingfor</a> All rights reserved.
+ */
 package com.mfnets.workfocus.modules.sys.entity;
 
 import java.io.Serializable;
 
 /**
- * 定时任务pojo
- * @author whatlookingfor
- * @date
+ * 定时任务的实体类
+ * 
+ * @author Jonathan
+ * @version 2015/5/9 17:30
+ * @since JDK 7.0+
  */
 public class ScheduleJob implements Serializable {
 

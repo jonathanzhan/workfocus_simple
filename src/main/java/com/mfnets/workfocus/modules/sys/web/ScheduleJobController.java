@@ -1,3 +1,6 @@
+/**
+ * Copyright &copy; 2012-2016 <a href="https://github.com/whatlookingfor">whatlookingfor</a> All rights reserved.
+ */
 package com.mfnets.workfocus.modules.sys.web;
 
 import com.google.common.collect.Lists;
@@ -21,8 +24,8 @@ import java.util.List;
 
 /**
  * 定时任务 controller
- * @author whatlookingfor
- * @date 2015年9月1日
+ * @author Jonathan
+ * @version 2015年9月1日
  */
 @Controller
 @RequestMapping(value = "${adminPath}/sys/scheduleJob")

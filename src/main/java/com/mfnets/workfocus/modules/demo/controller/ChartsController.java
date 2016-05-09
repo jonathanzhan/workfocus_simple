@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * 甘特图 demo
- * @author Jonathan(whatlookingfor@gmail.com)
- * @date 2016/3/28 18:47
- * @since V1.0
+ * @author Jonathan
+ * @version 2016/3/28 18:47
+ * @since JDK 7.0+
  */
 @Controller
 @RequestMapping(value = "${adminPath}/demo/charts")

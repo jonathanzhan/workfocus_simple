@@ -1,3 +1,6 @@
+/**
+ * Copyright &copy; 2012-2016 <a href="https://github.com/whatlookingfor">whatlookingfor</a> All rights reserved.
+ */
 package com.mfnets.workfocus.modules.demo.entity;
 
 import com.mfnets.workfocus.common.persistence.DataEntity;
@@ -6,8 +9,8 @@ import org.springframework.web.multipart.MultipartFile;
 /**
  * 文件上传的demo
  * @author Jonathan
- * @time 2016/4/6 11:44
- * @since V1.0
+ * @version 2016/4/6 11:44
+ * @since JDK 7.0+
  */
 public class FileUpload extends DataEntity<FileUpload>{
     private String name;

@@ -1,5 +1,5 @@
 /**
- * Copyright &copy; 2012-2015 <a href="http://git.oschina.net/whatlookingfor">whatlookingfor</a> All rights reserved.
+ * Copyright &copy; 2012-2016 <a href="https://github.com/whatlookingfor">whatlookingfor</a> All rights reserved.
  */
 package com.mfnets.workfocus.modules.sys.web;
 
@@ -30,8 +30,8 @@ import java.util.Map;
 /**
  *
  * 员工的controller
- * @author Jonathan(whatlookingfor@gmail.com)
- * @date   2016/4/11 17:26
+ * @author Jonathan
+ * @version   2016/4/11 17:26
  * @since  V1.0
  *
  */

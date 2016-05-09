@@ -1,5 +1,5 @@
 /**
- * Copyright &copy; 2012-2015 <a href="http://git.oschina.net/whatlookingfor">whatlookingfor</a> All rights reserved.
+ * Copyright &copy; 2012-2016 <a href="https://github.com/whatlookingfor">whatlookingfor</a> All rights reserved.
  */
 package com.mfnets.workfocus.modules.sys.web;
 
@@ -35,8 +35,8 @@ import com.mfnets.workfocus.modules.sys.utils.UserUtils;
 
 /**
  * 角色Controller
- * @author ThinkGem
- * @version 2013-12-05
+ * @author Jonathan
+ * @version 2015-12-05
  */
 @Controller
 @RequestMapping(value = "${adminPath}/sys/role")
@@ -45,8 +45,6 @@ public class RoleController extends BaseController {
 	@Autowired
 	private SystemService systemService;
 
-	@Autowired
-	private OrgService orgService;
 
 	
 	@ModelAttribute("role")
@@ -119,8 +117,8 @@ public class RoleController extends BaseController {
 	
 	/**
 	 * 角色分配页面
-	 * @param role
-	 * @param model
+	 * @param role 角色
+	 * @param model model
 	 * @return
 	 */
 	@RequiresPermissions("sys:role:edit")

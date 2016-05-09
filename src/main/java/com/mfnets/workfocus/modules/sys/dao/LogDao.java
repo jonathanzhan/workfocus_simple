@@ -1,5 +1,5 @@
 /**
- * Copyright &copy; 2012-2015 <a href="http://git.oschina.net/whatlookingfor">whatlookingfor</a> All rights reserved.
+ * Copyright &copy; 2012-2016 <a href="https://github.com/whatlookingfor">whatlookingfor</a> All rights reserved.
  */
 package com.mfnets.workfocus.modules.sys.dao;
 
@@ -9,7 +9,7 @@ import com.mfnets.workfocus.modules.sys.entity.Log;
 
 /**
  * 日志DAO接口
- * @author ThinkGem
+ * @author Jonathan
  * @version 2014-05-16
  */
 @MyBatisDao

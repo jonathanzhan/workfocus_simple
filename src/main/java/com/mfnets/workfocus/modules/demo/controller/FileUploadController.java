@@ -1,3 +1,6 @@
+/**
+ * Copyright &copy; 2012-2016 <a href="https://github.com/whatlookingfor">whatlookingfor</a> All rights reserved.
+ */
 package com.mfnets.workfocus.modules.demo.controller;
 
 import com.mfnets.workfocus.common.utils.StringUtils;
@@ -15,9 +18,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * @author Jonathan(whatlookingfor@gmail.com)
- * @date 2016/4/6 11:15
- * @since V1.0
+ * 文件表单上传的demo
+ * @author Jonathan
+ * @version 2016/4/6 11:15
+ * @since JDK 7.0+
  */
 @Controller
 @RequestMapping(value = "${adminPath}/demo/fileUpload")

@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 
 /**
  * 机构Entity
- * @author ThinkGem
+ * @author thinkgem
  * @version 2013-05-15
  */
 public class Org extends TreeEntity<Org> {

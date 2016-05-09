@@ -1,9 +1,8 @@
 /**
- * Copyright &copy; 2012-2015 <a href="http://git.oschina.net/whatlookingfor">whatlookingfor</a> All rights reserved.
+ * Copyright &copy; 2012-2016 <a href="https://github.com/whatlookingfor">whatlookingfor</a> All rights reserved.
  */
 package com.mfnets.workfocus.modules.sys.service;
 
-import com.mfnets.workfocus.common.config.Global;
 import com.mfnets.workfocus.common.persistence.Page;
 import com.mfnets.workfocus.common.security.Digests;
 import com.mfnets.workfocus.common.security.shiro.session.SessionDAO;
@@ -34,8 +33,8 @@ import java.util.List;
 /**
  * 系统管理，安全相关实体的管理类,包括用户、角色、菜单.
  *
- * @author ThinkGem
- * @version 2013-12-05
+ * @author Jonathan
+ * @version 2015-12-05
  */
 @Service
 @Transactional(readOnly = true)

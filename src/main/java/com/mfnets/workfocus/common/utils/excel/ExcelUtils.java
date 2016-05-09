@@ -1,3 +1,6 @@
+/**
+ * Copyright &copy; 2012-2016 <a href="https://github.com/whatlookingfor">whatlookingfor</a> All rights reserved.
+ */
 package com.mfnets.workfocus.common.utils.excel;
 
 import com.google.common.collect.Lists;
@@ -20,7 +23,11 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 /**
- * Created by whatlookingfor on 15/4/24.
+ * excel的工具类,主要是负责根据模板导出数据
+ *
+ * @author Jonathan
+ * @version 2015/4/24 16:56
+ * @since JDK 7.0+
  */
 public class ExcelUtils {
 
@@ -48,12 +55,11 @@ public class ExcelUtils {
      */
     List<Object[]> annotationList = Lists.newArrayList();
 
+
     /**
      * 读取模板，创建工作薄
-     *
-     * @param path
-     * @return
-     * @throws Exception
+     * @param request HttpServletRequest
+     * @param path 模板路径(基于项目的发布项目下的绝对路径)
      */
     public void getXssfWorkBook(HttpServletRequest request,String path) {
         String basePath = request.getSession().getServletContext().getRealPath("/");
@@ -76,7 +82,7 @@ public class ExcelUtils {
 
     /**
      * 初始化类注释
-     * @param cls
+     * @param cls 类的对象
      * @param type 导出类型（1:导出数据；2：导出模板）
      * @param sortSeq sort对应的下标
      */
@@ -101,6 +107,7 @@ public class ExcelUtils {
 
     /**
      * 添加一行
+     * @param rowNum 行号
      * @return 行对象
      */
     public Row addRow(int rowNum){

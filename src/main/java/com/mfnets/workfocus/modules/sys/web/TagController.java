@@ -1,5 +1,5 @@
 /**
- * Copyright &copy; 2012-2015 <a href="http://git.oschina.net/whatlookingfor">whatlookingfor</a> All rights reserved.
+ * Copyright &copy; 2012-2016 <a href="https://github.com/whatlookingfor">whatlookingfor</a> All rights reserved.
  */
 package com.mfnets.workfocus.modules.sys.web;
 
@@ -14,8 +14,8 @@ import com.mfnets.workfocus.common.web.BaseController;
 
 /**
  * 标签Controller
- * @author ThinkGem
- * @version 2013-3-23
+ * @author Jonathan
+ * @version 2016-3-23
  */
 @Controller
 @RequestMapping(value = "${adminPath}/tag")

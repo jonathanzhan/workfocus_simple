@@ -1,3 +1,6 @@
+/**
+ * Copyright &copy; 2012-2016 <a href="https://github.com/whatlookingfor">whatlookingfor</a> All rights reserved.
+ */
 package com.mfnets.workfocus.common.task;
 
 import org.quartz.JobExecutionContext;
@@ -7,7 +10,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 
 /**
- * Created by whatlookingfor on 15/9/1.
+ * quartz定时任务的基类
+ *
+ * @author Jonathan
+ * @version 2015/9/1 16:51
+ * @since JDK 7.0+
  */
 public class BaseJob {
     protected Logger logger = LoggerFactory.getLogger(getClass());

@@ -1,3 +1,6 @@
+/**
+ * Copyright &copy; 2012-2016 <a href="https://github.com/whatlookingfor">whatlookingfor</a> All rights reserved.
+ */
 package com.mfnets.workfocus.modules.demo.controller;
 
 import com.mfnets.workfocus.common.utils.mail.MailSendUtils;
@@ -10,9 +13,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
+ * 文本编辑器的demo
  * @author Jonathan
- * @date 2016/4/18 16:27
- * @since V1.0
+ * @version 2016/4/18 16:27
+ * @since JDK 7.0+
  */
 @Controller
 @RequestMapping(value = "${adminPath}/demo/editor")

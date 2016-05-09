@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  * 机构DAO接口
- * @author ThinkGem
+ * @author thinkgem
  * @version 2014-05-16
  */
 @MyBatisDao

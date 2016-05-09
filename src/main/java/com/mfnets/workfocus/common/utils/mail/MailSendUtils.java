@@ -1,8 +1,14 @@
+/**
+ * Copyright &copy; 2012-2016 <a href="https://github.com/whatlookingfor">whatlookingfor</a> All rights reserved.
+ */
 package com.mfnets.workfocus.common.utils.mail;
 /**
  * 简单邮件（不带附件的邮件）发送器
+ *
+ * @author Jonathan
+ * @version 2016/5/9 17:01
+ * @since JDK 7.0+
  */
-
 import com.mfnets.workfocus.common.utils.Encodes;
 
 import java.util.Date;
