@@ -19,7 +19,7 @@ import javax.validation.constraints.NotNull;
  *
  * 角色的实体类
  * @author Jonathan
- * @version   2016/4/15 15:26
+ * @version 2016/4/15 15:26
  * @since JDK 7.0+
  *
  */
