@@ -68,10 +68,11 @@ public abstract class BaseController {
 
 	/**
 	 * 服务端参数有效性验证
+	 * @param model Model
 	 * @param object 验证的实体对象
 	 * @param groups 验证组
-	 * @return 验证成功：返回true；严重失败：将错误信息添加到 message 中
-	 */
+     * @return 验证成功：返回true；严重失败：将错误信息添加到 message 中
+     */
 	protected boolean beanValidator(Model model, Object object, Class<?>... groups) {
 		try{
 			BeanValidators.validateWithException(validator, object, groups);
@@ -83,13 +84,14 @@ public abstract class BaseController {
 		}
 		return true;
 	}
-	
+
 	/**
 	 * 服务端参数有效性验证
+	 * @param redirectAttributes RedirectAttributes对象
 	 * @param object 验证的实体对象
 	 * @param groups 验证组
-	 * @return 验证成功：返回true；严重失败：将错误信息添加到 flash message 中
-	 */
+     * @return 验证成功：返回true；严重失败：将错误信息添加到 flash message 中
+     */
 	protected boolean beanValidator(RedirectAttributes redirectAttributes, Object object, Class<?>... groups) {
 		try{
 			BeanValidators.validateWithException(validator, object, groups);
@@ -102,20 +104,21 @@ public abstract class BaseController {
 		return true;
 	}
 	
+
 	/**
 	 * 服务端参数有效性验证
 	 * @param object 验证的实体对象
 	 * @param groups 验证组，不传入此参数时，同@Valid注解验证
-	 * @return 验证成功：继续执行；验证失败：抛出异常跳转400页面。
-	 */
+     */
 	protected void beanValidator(Object object, Class<?>... groups) {
 		BeanValidators.validateWithException(validator, object, groups);
 	}
-	
+
 	/**
 	 * 添加Model消息
-	 * @param message
-	 */
+	 * @param model Model对象
+	 * @param messages 消息的数组
+     */
 	protected void addMessage(Model model, String... messages) {
 		StringBuilder sb = new StringBuilder();
 		for (String message : messages){
@@ -123,11 +126,12 @@ public abstract class BaseController {
 		}
 		model.addAttribute("message", sb.toString());
 	}
-	
+
 	/**
 	 * 添加Flash消息
-	 * @param message
-	 */
+	 * @param redirectAttributes RedirectAttributes对象
+	 * @param messages 消息的数组
+     */
 	protected void addMessage(RedirectAttributes redirectAttributes, String... messages) {
 		StringBuilder sb = new StringBuilder();
 		for (String message : messages){
@@ -138,20 +142,22 @@ public abstract class BaseController {
 	
 	/**
 	 * 客户端返回JSON字符串
-	 * @param response
-	 * @param object
-	 * @return
+	 * @param response HttpServletResponse对象
+	 * @param object Object对象
+	 * @return JSON字符串
 	 */
 	protected String renderString(HttpServletResponse response, Object object) {
 		return renderString(response, JsonMapper.toJsonString(object), "application/json");
 	}
 	
+
 	/**
 	 * 客户端返回字符串
-	 * @param response
-	 * @param string
-	 * @return
-	 */
+	 * @param response HttpServletResponse对象
+	 * @param string Object对象
+	 * @param type contentType
+     * @return json
+     */
 	protected String renderString(HttpServletResponse response, String string, String type) {
 		try {
 			response.reset();
@@ -166,25 +172,28 @@ public abstract class BaseController {
 
 	/**
 	 * 参数绑定异常
-	 */
+	 * @return 400页面
+     */
 	@ExceptionHandler({BindException.class, ConstraintViolationException.class, ValidationException.class})
     public String bindException() {  
         return "error/400";
     }
-	
+
 	/**
 	 * 授权登录异常
-	 */
+	 * @return 403页面
+     */
 	@ExceptionHandler({AuthenticationException.class})
     public String authenticationException() {  
         return "error/403";
     }
-	
+
 	/**
 	 * 初始化数据绑定
 	 * 1. 将所有传递进来的String进行HTML编码，防止XSS攻击
 	 * 2. 将字段中Date类型转换为String类型
-	 */
+	 * @param binder WebDataBinder对象
+     */
 	@InitBinder
 	protected void initBinder(WebDataBinder binder) {
 		// String类型转换，将所有传递进来的String进行HTML编码，防止XSS攻击

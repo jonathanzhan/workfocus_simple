@@ -20,7 +20,7 @@ import javax.validation.constraints.NotNull;
  * 角色的实体类
  * @author Jonathan
  * @version   2016/4/15 15:26
- * @since  V1.0
+ * @since JDK 7.0+
  *
  */
 public class Role extends DataEntity<Role> {

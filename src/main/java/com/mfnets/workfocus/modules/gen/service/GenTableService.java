@@ -55,8 +55,8 @@ public class GenTableService extends BaseService {
 	
 	/**
 	 * 获取物理数据表列表
-	 * @param genTable
-	 * @return
+	 * @param genTable GenTable实体类
+	 * @return GenTable的数组
 	 */
 	public List<GenTable> findTableListFormDb(GenTable genTable){
 		return genDataBaseDictDao.findTableList(genTable);

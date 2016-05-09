@@ -111,13 +111,15 @@ public abstract class BaseService {
 
 	/**
 	 * 数据范围过滤（符合业务表字段不同的时候使用，采用exists方法）
+	 *
+	 *  <pre>dataScopeFilter(user, "dsf", "id=a.office_id", "id=a.create_by");</pre>
+	 * 	<pre>dataScopeFilter(entity, "dsf", "code=a.jgdm", "no=a.cjr"); // 适应于业务表关联不同字段时使用，如果关联的不是机构id是code。</pre>
+	 *
 	 * @param entity 当前过滤的实体类
 	 * @param sqlMapKey sqlMap的键值，例如设置“dsf”时，调用方法：${sqlMap.sdf}
 	 * @param orgWheres org表条件，组成：部门表字段=业务表的部门字段
 	 * @param userWheres user表条件，组成：用户表字段=业务表的用户字段
-	 * @example
-	 * 		dataScopeFilter(user, "dsf", "id=a.office_id", "id=a.create_by");
-	 * 		dataScopeFilter(entity, "dsf", "code=a.jgdm", "no=a.cjr"); // 适应于业务表关联不同字段时使用，如果关联的不是机构id是code。
+	 * @param isBusiness 管理员是否可以查询业务数据(是的话,表示能查看,否表示查询不到任何数据)
 	 */
 	public static void dataScopeFilter(BaseEntity<?> entity, String sqlMapKey, String orgWheres, String userWheres,boolean isBusiness) {
 
