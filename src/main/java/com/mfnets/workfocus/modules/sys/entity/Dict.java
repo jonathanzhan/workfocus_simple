@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
  *
  * @author Jonathan
  * @version 2016/5/9 17:41
- * @since JDK 7.0+å
+ * @since JDK 7.0+
  */
 public class Dict extends DataEntity<Dict> {
 

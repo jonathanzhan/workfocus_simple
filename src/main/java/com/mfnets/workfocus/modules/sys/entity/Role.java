@@ -3,17 +3,14 @@
  */
 package com.mfnets.workfocus.modules.sys.entity;
 
-import java.util.List;
-
+import com.google.common.collect.Lists;
+import com.mfnets.workfocus.common.persistence.DataEntity;
 import com.mfnets.workfocus.common.utils.Collections3;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.constraints.Length;
 
-import com.google.common.collect.Lists;
-import com.mfnets.workfocus.common.config.Global;
-import com.mfnets.workfocus.common.persistence.DataEntity;
-
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  *
