@@ -60,23 +60,23 @@
 	<!-- 设定主仓库，按设定顺序进行查找。 -->
 	<repositories>
 
-		<repository>
-			<id>oschina-repos</id>
-			<name>Oschina Releases</name>
-			<url>http://maven.oschina.net/content/groups/public</url>
-		</repository>
+		<!--<repository>-->
+			<!--<id>oschina-repos</id>-->
+			<!--<name>Oschina Releases</name>-->
+			<!--<url>http://maven.oschina.net/content/groups/public</url>-->
+		<!--</repository>-->
 
-		<repository>
-			<id>central-repos</id>
-			<name>Central Repository</name>
-			<url>http://repo.maven.apache.org/maven2</url>
-		</repository>
+		<!--<repository>-->
+			<!--<id>central-repos</id>-->
+			<!--<name>Central Repository</name>-->
+			<!--<url>http://repo.maven.apache.org/maven2</url>-->
+		<!--</repository>-->
 
-		<repository>
-			<id>central-repos2</id>
-			<name>Central Repository 2</name>
-			<url>http://repo1.maven.org/maven2/</url>
-		</repository>
+		<!--<repository>-->
+			<!--<id>central-repos2</id>-->
+			<!--<name>Central Repository 2</name>-->
+			<!--<url>http://repo1.maven.org/maven2/</url>-->
+		<!--</repository>-->
 
 
 
@@ -84,11 +84,11 @@
 
 	<!-- 设定插件仓库 -->
 	<pluginRepositories>
-		<pluginRepository>
-			<id>oschina-repos</id>
-			<name>Oschina Releases</name>
-			<url>http://maven.oschina.net/content/groups/public</url>
-		</pluginRepository>
+		<!--<pluginRepository>-->
+			<!--<id>oschina-repos</id>-->
+			<!--<name>Oschina Releases</name>-->
+			<!--<url>http://maven.oschina.net/content/groups/public</url>-->
+		<!--</pluginRepository>-->
 
 	</pluginRepositories>
 
@@ -505,6 +505,7 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+
 		<dependency>
 			<groupId>org.activiti</groupId>
 			<artifactId>activiti-modeler</artifactId>
