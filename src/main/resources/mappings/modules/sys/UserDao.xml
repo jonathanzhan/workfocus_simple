@@ -9,7 +9,7 @@
     	a.password,
 		a.user_type,
 		a.img,
-		a.create_by,
+		a.create_by as "createBy.id",
 		a.create_at,
 	  	a.last_login_at,
 	  	a.last_login_ip,
