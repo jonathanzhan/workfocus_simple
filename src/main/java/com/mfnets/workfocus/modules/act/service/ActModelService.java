@@ -107,7 +107,8 @@ public class ActModelService extends BaseService {
 			if (!StringUtils.endsWith(processName, ".bpmn20.xml")){
 				processName += ".bpmn20.xml";
 			}
-			Deployment deployment = repositoryService.createDeployment().name(modelData.getName()).addString(processName, new String(bpmnBytes)).deploy();
+			Deployment deployment = repositoryService.createDeployment().name(modelData.getName()).addString(processName, new String(bpmnBytes,"UTF-8")).deploy();
+//			Deployment deployment = repositoryService.createDeployment().name(modelData.getName()).addString(processName, new String(bpmnBytes)).deploy();
 			// 设置流程分类
 			List<ProcessDefinition> list = repositoryService.createProcessDefinitionQuery().deploymentId(deployment.getId()).list();
 			for (ProcessDefinition processDefinition : list) {
