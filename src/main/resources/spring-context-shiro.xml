@@ -16,7 +16,7 @@
 			<value>
 				/static/** = anon
 				/userfiles/** = anon
-				<!--/act/service/** = anon-->
+				/service/** = anon
 				${adminPath}/cas = cas
 				${adminPath}/login = authc
 				${adminPath}/logout = logout

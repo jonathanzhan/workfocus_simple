@@ -40,9 +40,10 @@
 			<label class="control-label">流程分类：</label>
 			<div class="controls">
 				<select id="category" name="category" class="required input-medium">
-					<c:forEach items="${fns:getDictList('act_category')}" var="dict">
-						<option value="${dict.value}">${dict.label}</option>
-					</c:forEach>
+					<%--<c:forEach items="${fns:getDictList('act_category')}" var="dict">--%>
+						<%--<option value="${dict.value}">${dict.label}</option>--%>
+					<%--</c:forEach>--%>
+					<option value="12321">qwewq</option>
 				</select>
 			</div>
 		</div>
