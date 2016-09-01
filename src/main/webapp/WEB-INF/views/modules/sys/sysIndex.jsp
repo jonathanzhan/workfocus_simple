@@ -101,6 +101,37 @@
                         </li>
                     </c:if>
                 </c:forEach>
+
+                <li>
+                    <a href="#">
+                        <i class="fa fa-edit"></i>
+                        <span>表单</span>
+                        <span class="fa arrow"></span>
+                    </a>
+                    <ul class="nav nav-second-level">
+                        <li>
+                            <a class="J_menuItem" href="form_advanced.html">高级插件</a>
+                        </li>
+                        <li>
+                            <a class="J_menuItem" href="form_wizard.html">表单向导</a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                文件上传
+                                <span class="fa arrow"></span>
+                            </a>
+                            <ul class="nav nav-third-level">
+                                <li>
+                                    <a class="J_menuItem" href="form_webuploader.html">百度WebUploader</a>
+                                </li>
+                                <li>
+                                    <a class="J_menuItem" href="form_file_upload.html">DropzoneJS</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+
             </ul>
         </div>
     </nav>
