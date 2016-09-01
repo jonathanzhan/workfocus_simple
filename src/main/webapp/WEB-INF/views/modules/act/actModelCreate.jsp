@@ -1,76 +1,112 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-<%@ include file="/WEB-INF/views/include/taglib.jsp"%>
+<%@ include file="/WEB-INF/views/include/taglib.jsp" %>
+<!DOCTYPE HTML>
 <html>
 <head>
 	<title>新建模型 - 模型管理</title>
-	<meta name="decorator" content="default"/>
+	<%@include file="/WEB-INF/views/include/head.jsp" %>
 	<script type="text/javascript">
-		$(document).ready(function(){
-			top.$.jBox.tip.mess = null;
+
+		$(document).ready(function () {
+			$("#name").focus();
+
 			$("#inputForm").validate({
-				submitHandler: function(form){
-					loading('正在提交，请稍等...');
+				submitHandler: function (form) {
+					layer.load();
 					form.submit();
 					setTimeout(function(){location='${ctx}/act/model/'}, 1000);
 				},
-				errorContainer: "#messageBox",
-				errorPlacement: function(error, element) {
-					$("#messageBox").text("输入有误，请先更正。");
-					if (element.is(":checkbox")||element.is(":radio")||element.parent().is(".input-append")){
-						error.appendTo(element.parent().parent());
-					} else {
-						error.insertAfter(element);
-					}
+				highlight: function (e) {
+					$(e).closest('.form-group').removeClass('has-success').addClass('has-error');
+				},
+				unhighlight: function (e) {
+					$(e).closest('.form-group').removeClass('has-error').addClass('has-success');
+
+				},
+				invalidHandler: function () {
+					showMessageBox('保存失败,信息填写不完整!');
+				},
+				errorPlacement: function (error, element) {
+					error.appendTo(element.parent().parent());
 				}
 			});
+
 		});
-		function page(n,s){
-        	location = '${ctx}/act/model/?pageNo='+n+'&pageSize='+s;
-        }
 	</script>
 </head>
-<body>
-	<ul class="nav nav-tabs">
-		<li><a href="${ctx}/act/model/">模型管理</a></li>
-		<li class="active"><a href="${ctx}/act/model/create">新建模型</a></li>
-	</ul><br/>
-	<sys:message content="${message}"/>
-	<form id="inputForm" action="${ctx}/act/model/create" target="_blank" method="post" class="form-horizontal">
-		<div class="control-group">
-			<label class="control-label">流程分类：</label>
-			<div class="controls">
-				<select id="category" name="category" class="required input-medium">
-					<%--<c:forEach items="${fns:getDictList('act_category')}" var="dict">--%>
-						<%--<option value="${dict.value}">${dict.label}</option>--%>
-					<%--</c:forEach>--%>
-					<option value="12321">qwewq</option>
-				</select>
+
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content">
+
+	<div class="ibox">
+		<div class="ibox-title">
+			<a href="${ctx}/act/model/create"><h5>模型添加</h5></a>
+
+			<div class="ibox-tools">
+				<a href="${ctx}/act/model" class="btn btn-primary btn-xs">返回模型列表</a>
 			</div>
 		</div>
-		<div class="control-group">
-			<label class="control-label">模块名称：</label>
-			<div class="controls">
-				<input id="name" name="name" type="text" class="required" />
-				<span class="help-inline"></span>
-			</div>
+
+		<div class="ibox-content">
+
+			<form id="inputForm" target="_blank" action="${ctx}/act/model/create" method="post"
+					   class="form-horizontal">
+				<sys:message content="${message}"/>
+				<div class="form-group">
+					<label class="col-md-2 control-label">流程分类</label>
+
+					<div class="col-md-3">
+						<select id="category" name="category" class="form-control inline required">
+							<c:forEach items="${fns:getDictList('act_category')}" var="dict">
+								<option value="${dict.value}">${dict.label}</option>
+							</c:forEach>
+						</select>
+						<span class="required-wrapper">*</span>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-md-2 control-label">模块名称</label>
+
+					<div class="col-md-3">
+						<input id="name" name="name" maxlength="20" type="text" class="form-control inline required" />
+						<span class="required-wrapper">*</span>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-2 control-label">模块标识</label>
+
+					<div class="col-md-3">
+						<input id="key" name="key" type="text" maxlength="20" class="form-control inline required" />
+						<span class="required-wrapper">*</span>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-2 control-label">模块描述</label>
+
+					<div class="col-md-3">
+						<input id="description" name="description" htmlEscape="false" maxlength="50"
+									class="form-control"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-md-offset-2">
+						<shiro:hasAnyPermissions name="act:model:edit">
+							<input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;
+						</shiro:hasAnyPermissions>
+						<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
+					</div>
+
+				</div>
+			</form>
 		</div>
-		<div class="control-group">
-			<label class="control-label">模块标识：</label>
-			<div class="controls">
-				<input id="key" name="key" type="text" class="required" />
-				<span class="help-inline"></span>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">模块描述：</label>
-			<div class="controls">
-				<textarea id="description" name="description" class="required"></textarea>
-			</div>
-		</div>
-		<div class="form-actions">
-			<input id="btnSubmit" class="btn btn-primary" type="submit" value="提 交"/>
-			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
-		</div>
-	</form>
+	</div>
+
+</div>
+
+
 </body>
+
+
 </html>
