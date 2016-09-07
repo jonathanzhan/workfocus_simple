@@ -43,10 +43,10 @@
 		<if test="level!=null and level>0">
 			and a.level = #{level}
 		</if>
-		<if test="startLevel!=null and startLevel>0">
+		<if test="startLevel!=null and startLevel>=0">
 			and a.level &gt;= #{startLevel}
 		</if>
-		<if test="endLevel!=null and endLevel>0">
+		<if test="endLevel!=null and endLevel>=0">
 			and a.level &lt;= #{endLevel}
 		</if>
 		ORDER BY a.seq
@@ -75,10 +75,10 @@
 		<if test="level!=null and level>0">
 			and a.level = #{level}
 		</if>
-		<if test="startLevel!=null and startLevel>0">
+		<if test="startLevel!=null and startLevel>=0">
 			and a.level &gt;= #{startLevel}
 		</if>
-		<if test="endLevel!=null and endLevel>0">
+		<if test="endLevel!=null and endLevel>=0">
 			and a.level &lt;= #{endLevel}
 		</if>
 		ORDER BY a.seq

@@ -42,9 +42,9 @@ public class Menu extends DataEntity<Menu> {
 
 	private Integer level;//菜单级别
 
-	private Integer startLevel;//开始级别
+	private Integer startLevel = -1;//开始级别
 
-	private Integer endLevel;//截止级别
+	private Integer endLevel = -1;//截止级别
 
 	private List<Menu> childList;
 	

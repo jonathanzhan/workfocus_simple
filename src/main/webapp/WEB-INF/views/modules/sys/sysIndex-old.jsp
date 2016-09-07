@@ -72,9 +72,11 @@
                         </ul>
                     </div>
                 </li>
-                <c:forEach items="${fns:getMenuTree(1,3)}" var="menu" varStatus="idxStatus">
+
+
+                <c:forEach items="${fns:getMenuTree(2,3)}" var="menu" varStatus="idxStatus">
                     <c:if test="${menu.isShow eq '1'}">
-                        <li class="firstMenu firstMenu-${menu.parent.id}" id="firstMenu-${menu.id}">
+                        <li class="hidden-xs secondMenu secondMenu-${menu.parent.id}" id="secondMenu-${menu.id}">
                             <c:if test="${empty menu.href}">
                                 <a href="#">
                                     <i class="${menu.icon}"></i>
@@ -87,48 +89,48 @@
                             </c:if>
                             <c:if test="${fn:length(menu.childList)>0}">
                                 <ul class="nav nav-second-level">
-                                    <c:forEach items="${menu.childList}" var="second">
-                                        <c:if test="${second.isShow eq '1'}">
-                                            <li>
-                                                <c:if test="${empty second.href}">
-                                                    <a href="#">
-                                                        <i class="${second.icon}"></i>
-                                                        <span>${second.name}</span>
-                                                        <span class="fa arrow"></span>
-                                                    </a>
-                                                </c:if>
-                                                <c:if test="${not empty second.href}">
-                                                    <a class="J_menuItem" href="${fn:indexOf(second.href, '://') eq -1 ? ctx : ''}${second.href}"><i class="${second.icon}"></i><span>${second.name}</span></a>
-                                                </c:if>
-                                                <c:if test="${fn:length(second.childList)>0}">
-                                                    <ul class="nav nav-third-level">
-                                                        <c:forEach items="${second.childList}" var="third">
-                                                            <c:if test="${third.isShow eq '1'}">
-                                                                <li>
-                                                                    <c:if test="${empty third.href}">
-                                                                        <a href="#">
-                                                                            <i class="${third.icon}"></i>
-                                                                            <span>${third.name}</span>
-                                                                            <span class="fa arrow"></span>
-                                                                        </a>
-                                                                    </c:if>
-                                                                    <c:if test="${not empty third.href}">
-                                                                        <a class="J_menuItem" href="${fn:indexOf(third.href, '://') eq -1 ? ctx : ''}${third.href}"><i class="${third.icon}"></i><span>${third.name}</span></a>
-                                                                    </c:if>
-
-                                                                </li>
-                                                            </c:if>
-                                                        </c:forEach>
-                                                    </ul>
-                                                </c:if>
-                                            </li>
-                                        </c:if>
-                                    </c:forEach>
+                                <c:forEach items="${menu.childList}" var="child" varStatus="idxStatus1">
+                                    <c:if test="${child.isShow eq '1'}">
+                                        <li>
+                                            <a class="J_menuItem" href="${fn:indexOf(child.href, '://') eq -1 ? ctx : ''}${child.href}"><i class="${child.icon}"></i>${child.name}</a>
+                                        </li>
+                                    </c:if>
+                                </c:forEach>
                                 </ul>
                             </c:if>
                         </li>
                     </c:if>
                 </c:forEach>
+
+                <li>
+                    <a href="#">
+                        <i class="fa fa-edit"></i>
+                        <span>表单</span>
+                        <span class="fa arrow"></span>
+                    </a>
+                    <ul class="nav nav-second-level">
+                        <li>
+                            <a class="J_menuItem" href="form_advanced.html">高级插件</a>
+                        </li>
+                        <li>
+                            <a class="J_menuItem" href="form_wizard.html">表单向导</a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                文件上传
+                                <span class="fa arrow"></span>
+                            </a>
+                            <ul class="nav nav-third-level">
+                                <li>
+                                    <a class="J_menuItem" href="form_webuploader.html">百度WebUploader</a>
+                                </li>
+                                <li>
+                                    <a class="J_menuItem" href="form_file_upload.html">DropzoneJS</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
 
             </ul>
         </div>
@@ -154,7 +156,20 @@
 
 
                 <div class="navbar-collapse collapse top-navigation" id="navbar">
-
+                    <ul class="nav navbar-nav">
+                        <c:forEach items="${fns:getMenuListByLevel(1,1)}" var="menu" varStatus="idxStatus">
+                            <c:if test="${menu.parent.id eq '1'&&menu.isShow eq '1'}">
+                                <li class="hidden-xs">
+                                    <c:if test="${empty menu.href}">
+                                        <a class="first-menu" href="#" data-id="${menu.id}"><span><i class="${menu.icon}"></i>${menu.name}</span></a>
+                                    </c:if>
+                                    <c:if test="${not empty menu.href}">
+                                        <a class="first-menu1 J_menuItem" href="${fn:indexOf(menu.href, '://') eq -1 ? ctx : ''}${menu.href}" data-id="${menu.id}"><span><i class="${menu.icon}"></i>${menu.name}</span></a>
+                                    </c:if>
+                                </li>
+                            </c:if>
+                        </c:forEach>
+                    </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li class="dropdown">
                             <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
