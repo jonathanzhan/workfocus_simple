@@ -176,8 +176,11 @@ public class ActProcessService extends BaseService {
 	}
 
 	/**
-	 * 挂起、激活流程实例
-	 */
+	 * 挂起,激活流程定义
+	 * @param state
+	 * @param procDefId
+     * @return
+     */
 	@Transactional(readOnly = false)
 	public String updateState(String state, String procDefId) {
 		if (state.equals("active")) {
@@ -189,6 +192,24 @@ public class ActProcessService extends BaseService {
 		}
 		return "无操作";
 	}
+
+	/**
+	 * 挂起,激活流程实例(正在运行的流程)
+	 * @param state
+	 * @param processInstanceId
+     * @return
+     */
+	public String updateProcessInstanceState(String state, String processInstanceId) {
+		if (state.equals("active")) {
+			runtimeService.activateProcessInstanceById(processInstanceId);
+			return "已激活ID为[" + processInstanceId + "]的流程实例。";
+		} else if (state.equals("suspend")) {
+			runtimeService.suspendProcessInstanceById(processInstanceId);
+			return "已挂起ID为[" + processInstanceId + "]的流程实例。";
+		}
+		return "无操作";
+	}
+
 	
 	/**
 	 * 将部署的流程转换为模型
@@ -298,5 +319,6 @@ public class ActProcessService extends BaseService {
 	public void deleteProcIns(String procInsId, String deleteReason) {
 		runtimeService.deleteProcessInstance(procInsId, deleteReason);
 	}
-	
+
+
 }

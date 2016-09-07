@@ -35,55 +35,47 @@
 <body class="gray-bg">
 <div class="wrapper wrapper-content animated fadeIn">
 
-	<div class="tabs-container">
-		<ul class="nav nav-tabs">
-			<li><a href="${ctx}/act/process/">流程管理</a></li>
-			<li  class="active"><a href="${ctx}/act/process/deploy/">部署流程</a></li>
-			<li><a href="${ctx}/act/process/running/">运行中的流程</a></li>
-		</ul>
-		<div class="tab-content">
-			<!--查询表单开始-->
-			<div class="ibox m-b-sm border-bottom">
-				<div class="ibox-content">
-					<sys:message content="${message}"/>
-					<form id="inputForm" enctype="multipart/form-data" action="${ctx}/act/process/deploy"  method="post"
-						  class="form-horizontal">
-						<sys:message content="${message}"/>
-						<div class="form-group">
-							<label class="col-md-2 control-label">流程分类</label>
+	<!--查询表单开始-->
+	<div class="ibox m-b-sm border-bottom">
+		<div class="ibox-title">
+			<a href="${ctx}/act/process/deploy"><h5>流程部署</h5></a>
+		</div>
 
-							<div class="col-md-3">
-								<select id="category" name="category" class="form-control inline required">
-									<c:forEach items="${fns:getDictList('act_category')}" var="dict">
-										<option value="${dict.value}">${dict.label}</option>
-									</c:forEach>
-								</select>
-								<span class="required-wrapper">*</span>
-							</div>
-						</div>
+		<div class="ibox-content">
+			<sys:message content="${message}"/>
+			<form id="inputForm" enctype="multipart/form-data" action="${ctx}/act/process/deploy"  method="post"
+				  class="form-horizontal">
+				<sys:message content="${message}"/>
+				<div class="form-group">
+					<label class="col-md-2 control-label">流程分类</label>
 
-						<div class="form-group">
-							<label class="col-md-2 control-label">流程文件</label>
-
-							<div class="col-md-3">
-								<input type="file" id="file" name="file" class="form-control required"/>
-								<span class="help-inline">支持文件格式：zip、bar、bpmn、bpmn20.xml</span>
-							</div>
-						</div>
-						<div class="form-group">
-							<div class="col-md-offset-2">
-								<shiro:hasAnyPermissions name="act:model:edit">
-									<input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;
-								</shiro:hasAnyPermissions>
-								<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
-							</div>
-
-						</div>
-
-					</form>
-
+					<div class="col-md-3">
+						<select id="category" name="category" class="form-control inline required">
+							<c:forEach items="${fns:getDictList('act_category')}" var="dict">
+								<option value="${dict.value}">${dict.label}</option>
+							</c:forEach>
+						</select>
+						<span class="required-wrapper">*</span>
+					</div>
 				</div>
-			</div>
+
+				<div class="form-group">
+					<label class="col-md-2 control-label">流程文件</label>
+					<div class="col-md-3">
+						<input type="file" id="file" name="file" class="form-control required"/>
+						<span class="help-inline">支持文件格式：zip、bar、bpmn、bpmn20.xml</span>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-md-offset-2">
+						<shiro:hasAnyPermissions name="act:model:edit">
+							<input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;
+						</shiro:hasAnyPermissions>
+					</div>
+				</div>
+
+			</form>
+
 		</div>
 	</div>
 </div>

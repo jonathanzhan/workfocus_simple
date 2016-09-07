@@ -10,54 +10,30 @@
 		$(function () {
 
 		});
-		function page(n, s) {
-			$("#pageNo").val(n);
-			$("#pageSize").val(s);
-			$("#searchForm").submit();
-			return false;
-		}
 
 		function updateCategory(id, category){
-			$("#categoryBoxId").val(id);
 			$("#categoryBoxCategory").val(category);
-			top.layer.open({
+			$("#categoryBoxId").val(id);
+			layer.open({
 				type: 1,
 				skin: 'layui-layer-rim', //加上边框
 				area: ['420px', '240px'], //宽高
-				content: $("#categoryBox").html(),
+				content: $("#layBox").html(),
 				btn: ['确定', '关闭'],
 				yes: function(index, layero){
-					var body = top.layer.getChildFrame('body', index);
-					var inputForm = body.find('#inputForm');
-					alert(inputForm.attr("id"));
+					layer.load();
+					var categoryForm =$("#categoryForm");
+					var top_iframe = top.getActiveTab().attr("name");//获取当前active的tab的iframe
+					categoryForm.attr("target",top_iframe);//表单提交成功后，从服务器返回的url在当前tab中展示
+
+					$("#categoryForm").submit();
+					layer.close(index);
 				},
 				cancel: function(index){
-
+					layer.close(index);
 				}
 			});
-			return false;
-
-//			$.jBox($("#categoryBox").html(), {title:"设置分类", buttons:{"关闭":true}, submit: function(){}});
-//			$("#categoryBoxId").val(id);
-//			$("#categoryBoxCategory").val(category);
 		}
-
-	</script>
-
-	<script type="text/template" id="categoryBox">
-		<body>
-		<form id="categoryForm" action="${ctx}/act/model/updateCategory" method="post" enctype="multipart/form-data"
-			  style="text-align:center;" class="form-search" onsubmit="loading('正在分类，请稍等...');"><br/>
-			<input id="categoryBoxId" type="hidden" name="id" value="" />
-			<select id="categoryBoxCategory" name="category">
-				<c:forEach items="${fns:getDictList('act_category')}" var="dict">
-					<option value="${dict.value}">${dict.label}</option>
-				</c:forEach>
-			</select>
-			<br/><br/>　　
-			<input id="categorySubmit" class="btn btn-primary" type="submit" value="   保    存   "/>　　
-		</form>
-		</body>
 
 	</script>
 
@@ -81,6 +57,24 @@
 		</div>
 
 		<div class="ibox-content">
+			<div id="layBox" class="hide">
+				<form id="categoryForm" action="${ctx}/act/model/updateCategory" method="post" enctype="multipart/form-data"
+					  class="form-horizontal">
+					<div class="col-md-10">
+						<label class="col-md-3 control-label">分类</label>
+						<div class="col-md-7">
+							<input id="categoryBoxId" type="hidden" name="id" value="" />
+							<select id="categoryBoxCategory" name="category" class="form-control">
+								<c:forEach items="${fns:getDictList('act_category')}" var="dict">
+									<option value="${dict.value}">${dict.label}</option>
+								</c:forEach>
+							</select>
+						</div>
+					</div>
+				</form>
+			</div>
+
+
 			<form:form id="searchForm" modelAttribute="category" action="${ctx}/act/model/" method="post"
 					   cssClass="form-horizontal">
 				<div class="row">
@@ -118,8 +112,6 @@
 				   data-sort-order="asc"
 				   data-row-style="rowStyle">
 				<thead>
-
-
 				<tr>
 					<th data-field="category" data-sortable="true">流程分类</th>
 					<th data-field="id">模型ID</th>

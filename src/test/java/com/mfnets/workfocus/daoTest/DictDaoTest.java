@@ -34,16 +34,11 @@
 package com.mfnets.workfocus.daoTest;
 
 import com.mfnets.workfocus.common.test.SpringTransactionalContextTests;
-import com.mfnets.workfocus.modules.sys.dao.DictDao;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Created by whatlookingfor on 15/9/11.
  */
 public class DictDaoTest extends SpringTransactionalContextTests {
-
-    @Autowired
-    private DictDao dictDao;
 
 
 }

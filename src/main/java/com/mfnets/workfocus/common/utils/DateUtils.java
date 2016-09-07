@@ -344,6 +344,8 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
 	 * @throws ParseException
 	 */
 	public static void main(String[] args) throws ParseException {
-		System.out.println(timeZoneBx2Bx("2015-11-27T09:59:44.000-0200"));
+		Date date = new Date();
+		String str = DateFormatUtils.format(new Date(), "yyyy-MM-dd'T'HH:mm:ss");
+		System.out.println(str);
 	}
 }

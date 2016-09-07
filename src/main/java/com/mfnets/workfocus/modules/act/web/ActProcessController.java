@@ -8,6 +8,7 @@ import com.mfnets.workfocus.common.utils.StringUtils;
 import com.mfnets.workfocus.common.web.BaseController;
 import com.mfnets.workfocus.modules.act.service.ActProcessService;
 import org.activiti.engine.runtime.ProcessInstance;
+import org.apache.poi.xwpf.usermodel.VerticalAlign;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -70,9 +71,9 @@ public class ActProcessController extends BaseController {
 
 	/**
 	 * 读取资源，通过部署ID
-	 * @param processDefinitionId  流程定义ID
-	 * @param processInstanceId 流程实例ID
-	 * @param resourceType 资源类型(xml|image)
+	 * @param procDefId  流程定义ID
+	 * @param proInsId 流程实例ID
+	 * @param resType 资源类型(xml|image)
 	 * @param response
 	 * @throws Exception
 	 */
@@ -128,17 +129,41 @@ public class ActProcessController extends BaseController {
 		return "redirect:" + adminPath + "/act/process";
 	}
 
+
 	/**
-	 * 挂起、激活流程实例
-	 */
+	 * 挂起,激活流程定义
+	 * @param state
+	 * @param procDefId
+	 * @param redirectAttributes
+     * @return
+     */
 	@RequiresPermissions("act:process:edit")
-	@RequestMapping(value = "update/{state}")
-	public String updateState(@PathVariable("state") String state, String procDefId, RedirectAttributes redirectAttributes) {
+	@RequestMapping(value = "update/{state}/{procDefId}")
+	public String updateState(@PathVariable("state") String state,@PathVariable("procDefId") String procDefId, RedirectAttributes redirectAttributes) {
 		String message = actProcessService.updateState(state, procDefId);
 		redirectAttributes.addFlashAttribute("message", message);
 		return "redirect:" + adminPath + "/act/process";
 	}
-	
+
+
+	/**
+	 * 挂起,激活流程实例
+	 * @param state
+	 * @param processInstanceId
+	 * @param redirectAttributes
+     * @return
+     */
+	@RequiresPermissions("act:process:edit")
+	@RequestMapping(value = "processInstance/update/{state}/{processInstanceId}")
+	public String updateProcessInstanceState(@PathVariable("state") String state, @PathVariable("processInstanceId") String processInstanceId,
+							  RedirectAttributes redirectAttributes) {
+		String message = actProcessService.updateProcessInstanceState(state, processInstanceId);
+
+		redirectAttributes.addFlashAttribute("message", message);
+		return "redirect:" + adminPath + "/act/process/running";
+	}
+
+
 	/**
 	 * 将部署的流程转换为模型
 	 * @param procDefId
