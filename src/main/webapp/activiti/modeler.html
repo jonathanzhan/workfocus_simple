@@ -135,6 +135,11 @@
 	
 	<script src="editor-app/configuration/properties.js" type="text/javascript"></script>
 	<script src="editor-app/configuration/properties-custom-controllers.js" type="text/javascript"></script>
-
+	<script type="text/javascript">
+		function CloseWindow(action) {
+			if (window.CloseOwnerWindow) return window.CloseOwnerWindow(action);
+			else window.close();
+		}
+	</script>
 </body>
 </html>

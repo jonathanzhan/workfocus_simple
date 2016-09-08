@@ -743,7 +743,7 @@
         {
           "id": "initiator",
           "type": "String",
-          "title": "初始化器",
+          "title": "发起人变量",
           "value": "",
           "description": "流程定义的初始初始化器",
           "popular": true
