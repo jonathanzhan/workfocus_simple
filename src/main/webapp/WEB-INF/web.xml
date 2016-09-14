@@ -109,7 +109,15 @@
 		<url-pattern>/act/rest/*</url-pattern>
 	</servlet-mapping>
 
-
+	<!-- JSONP -->
+	<filter>
+		<filter-name>JSONPFilter</filter-name>
+		<filter-class>org.activiti.explorer.JsonpCallbackFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>JSONPFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
 
 	<!-- DruidStatView -->
 	<servlet>
@@ -147,6 +155,7 @@
 		<servlet-name>CKFinderConnectorServlet</servlet-name>
 		<url-pattern>/static/ckfinder/core/connector/java/connector.java</url-pattern>
 	</servlet-mapping>
+
 	<filter>
 		<filter-name>FileUploadFilter</filter-name>
 		<filter-class>com.ckfinder.connector.FileUploadFilter</filter-class>
