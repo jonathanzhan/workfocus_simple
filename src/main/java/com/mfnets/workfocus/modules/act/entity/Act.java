@@ -1,5 +1,17 @@
-/**
- * Copyright &copy; 2012-2014 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
+/*
+ * Copyright  2014-2016 whatlookingfor@gmail.com(Jonathan)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.mfnets.workfocus.modules.act.entity;
 
@@ -16,53 +28,124 @@ import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 /**
- * 工作流Entity
- * @author ThinkGem
- * @version 2013-11-03
+ * 封装统一的工作流实体类
+ *
+ * @author Jonathan
+ * @version 2016/9/14 17:01
+ * @since JDK 7.0+
  */
 public class Act extends BaseEntity<Act> {
 	
 	private static final long serialVersionUID = 1L;
 
-	private String taskId; 		// 任务编号
-	private String taskName; 	// 任务名称
-	private String taskDefKey; 	// 任务定义Key（任务环节标识）
+	/**
+	 * 任务编号
+	 */
+	private String taskId;
 
-	private String procInsId; 	// 流程实例ID
-	private String procDefId; 	// 流程定义ID
-	private String procDefKey; 	// 流程定义Key（流程定义标识）
+	/**
+	 * 任务名称
+	 */
+	private String taskName;
 
-//	private String businessTable;	// 业务绑定Table
-	private String businessId;		// 业务绑定ID
-	
-	private String title; 		// 任务标题
+	/**
+	 * 任务定义key(任务环节标识)
+	 */
+	private String taskDefKey;
 
-	private String status; 		// 任务状态（todo/claim/finish）
+	/**
+	 * 流程实例ID
+	 */
+	private String procInsId;
 
-//	private String procExecUrl; 	// 流程执行（办理）RUL
-	private String comment; 	// 任务意见
-	private String flag; 		// 意见状态
-	
-	private Task task; 			// 任务对象
-	private ProcessDefinition procDef; 	// 流程定义对象
-	private ProcessInstance procIns;	// 流程实例对象
-	private HistoricTaskInstance histTask; // 历史任务
-	private HistoricActivityInstance histIns;	//历史活动任务
+	/**
+	 * 流程定义ID
+	 */
+	private String procDefId;
 
-	private String assignee; // 任务执行人编号
-	private String assigneeName; // 任务执行人名称
+	/**
+	 * 流程定义标识(key)
+	 */
+	private String procDefKey;
 
-	private Variable vars; 		// 流程变量
-	private Variable taskVars; 	// 流程任务变量
+	/**
+	 * 业务绑定的表
+	 */
+	private String businessTable;
+
+	/**
+	 * 业务绑定ID(业务表主键)
+	 */
+	private String businessId;
+
+	/**
+	 * 任务标题
+	 */
+	private String title;
+
+	/**
+	 * 任务状态(待认领(claim),待办(todo),已办(finish))
+	 */
+	private String status;
+
+	/**
+	 * 任务意见(审批意见)
+	 */
+	private String comment;
+
+	/**
+	 * 意见状态(审批时,选择的操作)
+	 */
+	private String flag;
+
+	/**
+	 * 任务对象
+	 */
+	private Task task;
+
+	/**
+	 * 流程定义对象
+	 */
+	private ProcessDefinition procDef;
+
+	/**
+	 * 流程实例对象
+	 */
+	private ProcessInstance procIns;
+
+	/**
+	 * 历史任务
+	 */
+	private HistoricTaskInstance histTask;
+
+	/**
+	 * 历史活动任务
+	 */
+	private HistoricActivityInstance histIns;
+
+	/**
+	 * 任务执行人编号
+	 */
+	private String assignee;
+
+	/**
+	 * 任务执行人名称
+	 */
+	private String assigneeName;
+
+	/**
+	 * 流程变量
+	 */
+	private Variable vars;
+
 	
 	private Date beginDate;	// 开始查询日期
 	private Date endDate;	// 结束查询日期
-
-	private List<Act> list; // 任务列表
+//
+//	private List<Act> list; // 任务列表
 
 	public Act() {
 		super();
@@ -146,20 +229,13 @@ public class Act extends BaseEntity<Act> {
 
 	public void setProcIns(ProcessInstance procIns) {
 		this.procIns = procIns;
-//		if (procIns != null && procIns.getBusinessKey() != null){
-//			String[] ss = procIns.getBusinessKey().split(":");
-//			setBusinessTable(ss[0]);
-//			setBusinessId(ss[1]);
-//		}
+		if(procIns != null && procIns.getBusinessKey() != null){
+			String[] ss = procIns.getBusinessKey().split(":");
+			setBusinessTable(ss[0]);
+			setBusinessId(ss[1]);
+		}
 	}
 
-//	public String getProcExecUrl() {
-//		return procExecUrl;
-//	}
-//
-//	public void setProcExecUrl(String procExecUrl) {
-//		this.procExecUrl = procExecUrl;
-//	}
 
 	public String getTitle() {
 		return title;
@@ -259,13 +335,13 @@ public class Act extends BaseEntity<Act> {
 		this.businessId = businessId;
 	}
 
-//	public String getBusinessTable() {
-//		return businessTable;
-//	}
-//
-//	public void setBusinessTable(String businessTable) {
-//		this.businessTable = businessTable;
-//	}
+	public String getBusinessTable() {
+		return businessTable;
+	}
+
+	public void setBusinessTable(String businessTable) {
+		this.businessTable = businessTable;
+	}
 
 	public String getAssigneeName() {
 		return assigneeName;
@@ -286,13 +362,13 @@ public class Act extends BaseEntity<Act> {
 		this.assignee = assignee;
 	}
 
-	public List<Act> getList() {
-		return list;
-	}
-
-	public void setList(List<Act> list) {
-		this.list = list;
-	}
+//	public List<Act> getList() {
+//		return list;
+//	}
+//
+//	public void setList(List<Act> list) {
+//		this.list = list;
+//	}
 
 	public Variable getVars() {
 		return vars;
@@ -310,21 +386,6 @@ public class Act extends BaseEntity<Act> {
 		this.vars = new Variable(map);
 	}
 
-	public Variable getTaskVars() {
-		return taskVars;
-	}
-
-	public void setTaskVars(Variable taskVars) {
-		this.taskVars = taskVars;
-	}
-//
-//	/**
-//	 * 通过Map设置流程任务变量值
-//	 * @param map
-//	 */
-//	public void setTaskVars(Map<String, Object> map) {
-//		this.taskVars = new Variable(map);
-//	}
 
 	/**
 	 * 获取流程定义KEY
@@ -351,13 +412,21 @@ public class Act extends BaseEntity<Act> {
 		}
 		return "";
 	}
-	
+
+	/**
+	 * 是否是一个待认领的任务
+	 * @return
+     */
+	public boolean isClaimTask() {
+		return "claim".equals(status);
+	}
+
 	/**
 	 * 是否是一个待办任务
 	 * @return
 	 */
 	public boolean isTodoTask(){
-		return "todo".equals(status) || "claim".equals(status);
+		return "todo".equals(status);
 	}
 	
 	/**

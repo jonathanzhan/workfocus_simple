@@ -1,15 +1,23 @@
-/**
- * Copyright &copy; 2012-2014 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
+/*
+ * Copyright  2014-2016 whatlookingfor@gmail.com(Jonathan)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.mfnets.workfocus.modules.act.web;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.mfnets.workfocus.common.persistence.Page;
 import com.mfnets.workfocus.common.web.BaseController;
 import com.mfnets.workfocus.modules.act.service.ActModelService;
-import org.activiti.editor.constants.ModelDataJsonConstants;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,10 +30,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+
 /**
- * 流程模型相关Controller
- * @author ThinkGem
- * @version 2013-11-03
+ * 流程模型的相关controller
+ *
+ * @author Jonathan
+ * @version 2016/9/14 10:17
+ * @since JDK 7.0+
  */
 @Controller
 @RequestMapping(value = "${adminPath}/act/model")

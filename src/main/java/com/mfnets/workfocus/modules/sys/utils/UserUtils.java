@@ -66,8 +66,8 @@ public class UserUtils {
 				return null;
 			}
 			user.setRoleList(roleDao.findList(new Role(user)));
-//			CacheUtils.put(USER_CACHE, USER_CACHE_ID_ + user.getId(), user);
-//			CacheUtils.put(USER_CACHE, USER_CACHE_LOGIN_NAME_ + user.getLoginName(), user);
+			CacheUtils.put(USER_CACHE, USER_CACHE_ID_ + user.getId(), user);
+			CacheUtils.put(USER_CACHE, USER_CACHE_LOGIN_NAME_ + user.getLoginName(), user);
 		}
 		return user;
 	}
@@ -86,8 +86,8 @@ public class UserUtils {
 				return null;
 			}
 			user.setRoleList(roleDao.findList(new Role(user)));
-//			CacheUtils.put(USER_CACHE, USER_CACHE_ID_ + user.getId(), user);
-//			CacheUtils.put(USER_CACHE, USER_CACHE_LOGIN_NAME_ + user.getLoginName(), user);
+			CacheUtils.put(USER_CACHE, USER_CACHE_ID_ + user.getId(), user);
+			CacheUtils.put(USER_CACHE, USER_CACHE_LOGIN_NAME_ + user.getLoginName(), user);
 		}
 		return user;
 	}
@@ -149,7 +149,7 @@ public class UserUtils {
 //				role.getSqlMap().put("dsf", BaseService.dataScopeFilter(user.getCurrentUser(), "o", "u"));
 				roleList = roleDao.findList(role);
 			}
-//			putCache(CACHE_ROLE_LIST, roleList);
+			putCache(CACHE_ROLE_LIST, roleList);
 		}
 		return roleList;
 	}
@@ -238,7 +238,7 @@ public class UserUtils {
 //				office.getSqlMap().put("dsf", BaseService.dataScopeFilter(user, "a", ""));
 				orgList = orgDao.findList(org);
 			}
-//			putCache(CACHE_ORG_LIST, orgList);
+			putCache(CACHE_ORG_LIST, orgList);
 		}
 		return orgList;
 	}

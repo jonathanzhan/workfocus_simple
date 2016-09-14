@@ -1,5 +1,17 @@
-/**
- * Copyright &copy; 2012-2014 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
+/*
+ * Copyright  2014-2016 whatlookingfor@gmail.com(Jonathan)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.mfnets.workfocus.modules.act.service;
 
@@ -12,7 +24,6 @@ import com.mfnets.workfocus.modules.act.dao.ActDao;
 import com.mfnets.workfocus.modules.act.entity.Act;
 import com.mfnets.workfocus.modules.act.entity.ActBusiness;
 import com.mfnets.workfocus.modules.act.utils.ActUtils;
-import com.mfnets.workfocus.modules.act.utils.ProcessDefCache;
 import com.mfnets.workfocus.modules.sys.entity.User;
 import com.mfnets.workfocus.modules.sys.utils.UserUtils;
 import org.activiti.bpmn.model.BpmnModel;
@@ -37,8 +48,8 @@ import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Comment;
 import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskQuery;
-//import org.activiti.spring.ProcessEngineFactoryBean;
 import org.activiti.image.ProcessDiagramGenerator;
+import org.activiti.spring.ProcessEngineFactoryBean;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,10 +59,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.InputStream;
 import java.util.*;
 
+
 /**
- * 流程定义相关Service
- * @author ThinkGem
- * @version 2013-11-03
+ * 流程的任务的事物层
+ *
+ * @author Jonathan
+ * @version 2016/9/14 16:45
+ * @since JDK 7.0+
  */
 @Service
 @Transactional(readOnly = true)
@@ -60,8 +74,8 @@ public class ActTaskService extends BaseService {
 	@Autowired
 	private ActDao actDao;
 	
-//	@Autowired
-//	private ProcessEngineFactoryBean processEngine;
+	@Autowired
+	private ProcessEngineFactoryBean processEngine;
 	@Autowired
 	private RuntimeService runtimeService;
 	@Autowired
@@ -74,6 +88,49 @@ public class ActTaskService extends BaseService {
 	private RepositoryService repositoryService;
 	@Autowired
 	private IdentityService identityService;
+	@Autowired
+	private ProcessEngineConfiguration processEngineConfiguration;
+
+	/**
+	 * 获取待签收的任务列表
+	 * @param act 流程定义标识
+	 * @return 待签收的任务列表
+	 */
+	public List<Act> claimList(Act act){
+		String userId = UserUtils.getUser().getLoginName();//ObjectUtils.toString(UserUtils.getUser().getId());
+
+		List<Act> result = new ArrayList<Act>();
+
+
+		// =============== 等待签收的任务  ===============
+		TaskQuery toClaimQuery = taskService.createTaskQuery().taskCandidateUser(userId)
+				.includeProcessVariables().active().orderByTaskCreateTime().desc();
+
+		// 设置查询条件
+		if (StringUtils.isNotBlank(act.getProcDefKey())){
+			toClaimQuery.processDefinitionKey(act.getProcDefKey());
+		}
+		if (act.getBeginDate() != null){
+			toClaimQuery.taskCreatedAfter(act.getBeginDate());
+		}
+		if (act.getEndDate() != null){
+			toClaimQuery.taskCreatedBefore(act.getEndDate());
+		}
+
+		// 查询列表
+		List<Task> toClaimList = toClaimQuery.list();
+		for (Task task : toClaimList) {
+			Act e = new Act();
+			e.setTask(task);
+			e.setVars(task.getProcessVariables());
+//			e.setTaskVars(task.getTaskLocalVariables());
+			e.setProcDef(ActUtils.getProcessDefinition(task.getProcessDefinitionId()));
+			e.setStatus("claim");
+			result.add(e);
+		}
+		return result;
+	}
+
 
 
 	/**
@@ -101,7 +158,6 @@ public class ActTaskService extends BaseService {
 		if (act.getEndDate() != null){
 			todoTaskQuery.taskCreatedBefore(act.getEndDate());
 		}
-		todoTaskQuery.processVariableValueGreaterThan("days",4L);
 
 		// 查询列表
 		List<Task> todoList = todoTaskQuery.list();
@@ -111,18 +167,10 @@ public class ActTaskService extends BaseService {
 
 			e.setVars(task.getProcessVariables());
 
-			String proDefId = task.getProcessDefinitionId();
-			ProcessDefinition processDefinition = repositoryService.getProcessDefinition(proDefId);
-
-			System.out.println(processDefinition.getCategory());
 		 	ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(task.getProcessInstanceId()).singleResult();
-//			e.setTaskVars(task.getTaskLocalVariables());
 			e.setProcIns(processInstance);
 			logger.debug(task.getId()+"  =  "+task.getProcessVariables() + "  ========== " + task.getTaskLocalVariables());
-//			System.out.println(task.getId()+"  =  "+task.getProcessVariables() + "  ========== " + task.getTaskLocalVariables());
-			e.setProcDef(ProcessDefCache.get(task.getProcessDefinitionId()));
-//			e.setProcIns(runtimeService.createProcessInstanceQuery().processInstanceId(task.getProcessInstanceId()).singleResult());
-//			e.setProcExecUrl(ActUtils.getProcExeUrl(task.getProcessDefinitionId()));
+			e.setProcDef(ActUtils.getProcessDefinition(task.getProcessDefinitionId()));
 			e.setStatus("todo");
 			result.add(e);
 		}
@@ -130,51 +178,6 @@ public class ActTaskService extends BaseService {
 		return result;
 	}
 
-
-	
-	/**
-	 * 获取待办列表
-	 * @param act 流程定义标识
-	 * @return
-	 */
-	public List<Act> claimList(Act act){
-		String userId = UserUtils.getUser().getLoginName();//ObjectUtils.toString(UserUtils.getUser().getId());
-		
-		List<Act> result = new ArrayList<Act>();
-
-		
-		// =============== 等待签收的任务  ===============
-		TaskQuery toClaimQuery = taskService.createTaskQuery().taskCandidateUser(userId)
-				.includeProcessVariables().active().orderByTaskCreateTime().desc();
-		
-		// 设置查询条件
-		if (StringUtils.isNotBlank(act.getProcDefKey())){
-			toClaimQuery.processDefinitionKey(act.getProcDefKey());
-		}
-		if (act.getBeginDate() != null){
-			toClaimQuery.taskCreatedAfter(act.getBeginDate());
-		}
-		if (act.getEndDate() != null){
-			toClaimQuery.taskCreatedBefore(act.getEndDate());
-		}
-		
-		// 查询列表
-		List<Task> toClaimList = toClaimQuery.list();
-		for (Task task : toClaimList) {
-			Act e = new Act();
-			e.setTask(task);
-			e.setVars(task.getProcessVariables());
-//			e.setTaskVars(task.getTaskLocalVariables());
-//			System.out.println(task.getId()+"  =  "+task.getProcessVariables() + "  ========== " + task.getTaskLocalVariables());
-			e.setProcDef(ProcessDefCache.get(task.getProcessDefinitionId()));
-//			e.setProcIns(runtimeService.createProcessInstanceQuery().processInstanceId(task.getProcessInstanceId()).singleResult());
-//			e.setProcExecUrl(ActUtils.getProcExeUrl(task.getProcessDefinitionId()));
-			e.setStatus("claim");
-			result.add(e);
-		}
-		return result;
-	}
-	
 	/**
 	 * 获取已办任务
 	 * @param page
@@ -182,11 +185,11 @@ public class ActTaskService extends BaseService {
 	 * @return
 	 */
 	public Page<Act> historicList(Page<Act> page, Act act){
-		String userId = UserUtils.getUser().getLoginName();//ObjectUtils.toString(UserUtils.getUser().getId());
+		String userId = UserUtils.getUser().getLoginName();
 
 		HistoricTaskInstanceQuery histTaskQuery = historyService.createHistoricTaskInstanceQuery().taskAssignee(userId).finished()
 				.includeProcessVariables().orderByHistoricTaskInstanceEndTime().desc();
-		
+
 		// 设置查询条件
 		if (StringUtils.isNotBlank(act.getProcDefKey())){
 			histTaskQuery.processDefinitionKey(act.getProcDefKey());
@@ -197,27 +200,24 @@ public class ActTaskService extends BaseService {
 		if (act.getEndDate() != null){
 			histTaskQuery.taskCompletedBefore(act.getEndDate());
 		}
-		
+
 		// 查询总数
 		page.setCount(histTaskQuery.count());
-		
+
 		// 查询列表
 		List<HistoricTaskInstance> histList = histTaskQuery.listPage(page.getFirstResult(), page.getMaxResults());
 		for (HistoricTaskInstance histTask : histList) {
 			Act e = new Act();
 			e.setHistTask(histTask);
 			e.setVars(histTask.getProcessVariables());
-//			e.setTaskVars(histTask.getTaskLocalVariables());
-//			System.out.println(histTask.getId()+"  =  "+histTask.getProcessVariables() + "  ========== " + histTask.getTaskLocalVariables());
-			e.setProcDef(ProcessDefCache.get(histTask.getProcessDefinitionId()));
+			e.setProcDef(ActUtils.getProcessDefinition(histTask.getProcessDefinitionId()));
 //			e.setProcIns(runtimeService.createProcessInstanceQuery().processInstanceId(task.getProcessInstanceId()).singleResult());
-//			e.setProcExecUrl(ActUtils.getProcExeUrl(task.getProcessDefinitionId()));
 			e.setStatus("finish");
 			page.getList().add(e);
 		}
 		return page;
 	}
-	
+
 	/**
 	 * 获取流转历史列表
 	 * @param procInsId 流程实例
@@ -565,30 +565,31 @@ public class ActTaskService extends BaseService {
 //	}
 	
 	////////////////////////////////////////////////////////////////////
-	
+
 	/**
 	 * 读取带跟踪的图片
 	 * @param executionId	环节ID
 	 * @return	封装了各种节点信息
 	 */
-//	public InputStream tracePhoto(String processDefinitionId, String executionId) {
-//		// ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(executionId).singleResult();
-//		BpmnModel bpmnModel = repositoryService.getBpmnModel(processDefinitionId);
-//
-//		List<String> activeActivityIds = Lists.newArrayList();
-//		if (runtimeService.createExecutionQuery().executionId(executionId).count() > 0){
-//			activeActivityIds = runtimeService.getActiveActivityIds(executionId);
-//		}
-//
-//		// 不使用spring请使用下面的两行代码
-//		// ProcessEngineImpl defaultProcessEngine = (ProcessEngineImpl)ProcessEngines.getDefaultProcessEngine();
-//		// Context.setProcessEngineConfiguration(defaultProcessEngine.getProcessEngineConfiguration());
-//
-//		// 使用spring注入引擎请使用下面的这行代码
-//		Context.setProcessEngineConfiguration(processEngine.getProcessEngineConfiguration());
-//
-//		return ProcessDiagramGenerator.generateDiagram(bpmnModel, "png", activeActivityIds);
-//	}
+	public InputStream tracePhoto(String processDefinitionId, String executionId) {
+		// ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(executionId).singleResult();
+		BpmnModel bpmnModel = repositoryService.getBpmnModel(processDefinitionId);
+
+		List<String> activeActivityIds = Lists.newArrayList();
+		if (runtimeService.createExecutionQuery().executionId(executionId).count() > 0){
+			activeActivityIds = runtimeService.getActiveActivityIds(executionId);
+		}
+
+		// 不使用spring请使用下面的两行代码
+		// ProcessEngineImpl defaultProcessEngine = (ProcessEngineImpl)ProcessEngines.getDefaultProcessEngine();
+		// Context.setProcessEngineConfiguration(defaultProcessEngine.getProcessEngineConfiguration());
+
+		// 使用spring注入引擎请使用下面的这行代码
+		Context.setProcessEngineConfiguration(processEngine.getProcessEngineConfiguration());
+
+		ProcessDiagramGenerator diagramGenerator = processEngineConfiguration.getProcessDiagramGenerator();
+		return diagramGenerator.generateDiagram(bpmnModel, "png", activeActivityIds);
+	}
 	
 	/**
 	 * 流程跟踪图信息

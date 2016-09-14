@@ -95,7 +95,7 @@
 						</td>
 						<td>
 							<shiro:hasPermission name="act:process:edit">
-								<a href="${ctx}/act/process/deleteProcIns?procInsId=${procIns.processInstanceId}&reason=" onclick="return promptx('删除流程','删除原因',this.href);">删除流程</a>
+								<a href="${ctx}/act/process/deleteProcIns?procInsId=${procIns.processInstanceId}&reason=" onclick="return promptx('删除原因',this.href);">删除流程</a>
 							</shiro:hasPermission>&nbsp;
 						</td>
 					</tr>

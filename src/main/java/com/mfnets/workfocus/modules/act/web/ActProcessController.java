@@ -1,14 +1,27 @@
-/**
- * Copyright &copy; 2012-2014 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
+/*
+ * Copyright  2014-2016 whatlookingfor@gmail.com(Jonathan)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.mfnets.workfocus.modules.act.web;
 
 import com.mfnets.workfocus.common.persistence.Page;
 import com.mfnets.workfocus.common.utils.StringUtils;
 import com.mfnets.workfocus.common.web.BaseController;
+import com.mfnets.workfocus.modules.act.entity.Act;
 import com.mfnets.workfocus.modules.act.service.ActProcessService;
+import com.mfnets.workfocus.modules.act.utils.ActUtils;
 import org.activiti.engine.runtime.ProcessInstance;
-import org.apache.poi.xwpf.usermodel.VerticalAlign;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,10 +42,13 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
+
 /**
- * 流程定义相关Controller
- * @author ThinkGem
- * @version 2013-11-03
+ * 流程实例的controller
+ *
+ * @author Jonathan
+ * @version 2016/9/14 15:19
+ * @since JDK 7.0+
  */
 @Controller
 @RequestMapping(value = "${adminPath}/act/process")
@@ -217,6 +233,27 @@ public class ActProcessController extends BaseController {
 			addMessage(redirectAttributes, "删除流程实例成功，实例ID=" + procInsId);
 		}
 		return "redirect:" + adminPath + "/act/process/running/";
+	}
+
+
+	/**
+	 * 流程的启动页面跳转(定制表单或者动态表单都可以,根据判断是否定义formKey来区分)
+	 * @param procDefId
+	 * @param redirectAttributes
+	 * @return
+	 */
+	@RequestMapping(value = "startForm/{procDefId}")
+	public String run(@PathVariable("procDefId") String procDefId,RedirectAttributes redirectAttributes){
+		// 获取流程XML上的流程启动表单KEY
+		String formKey = actProcessService.getStartFormKey(procDefId);
+		//根据formKey是否在模型中定义来判断是走动态表单还是自定义表单
+		if(StringUtils.isNotBlank(formKey)) {
+			Act act = new Act();
+			act.setProcDefId(procDefId);
+			return "redirect:" + ActUtils.getFormUrl(formKey, act);
+		} else {
+			return "redirect:" + adminPath + "/act/dynamic/startForm/"+procDefId;
+		}
 	}
 	
 }

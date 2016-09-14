@@ -48,8 +48,9 @@
 		<div class="ibox-content">
 
 			<div id="layBox" class="hide">
-				<form id="categoryForm" action="${ctx}/act/process/updateCategory" method="post" enctype="multipart/form-data"
-					  class="form-horizontal">
+				<form id="categoryForm" action="${ctx}/act/process/updateCategory" method="post" enctype="multipart/form-data">
+					<br>
+					<br>
 					<div class="col-md-10">
 						<label class="col-md-3 control-label">分类</label>
 						<div class="col-md-7">
@@ -89,7 +90,7 @@
 			</form:form>
 		</div>
 	</div>
-
+	<sys:message content="${message}"/>
 	<%--数据展示开始--%>
 	<div class="ibox">
 		<div class="ibox-content">
@@ -121,15 +122,17 @@
 						<td><a target="_blank" href="${ctx}/act/process/resource/read?procDefId=${process.id}&resType=image">${process.diagramResourceName}</a></td>
 						<td><fmt:formatDate value="${deployment.deploymentTime}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
 						<td>
-							<a href="${ctx}/act/dynamic/startForm?procDefId=${process.id}">动态表单</a>
+							<a href="#" onclick="openDialog('流程启动', '${ctx}/act/dynamic/startForm/${process.id}','800px', '620px')" class="btn btn-success btn-xs" ><i class="fa fa-toggle-right"></i>动态表单</a>
+							<a href="#" onclick="openDialog('流程启动', '${ctx}/act/process/startForm/${process.id}','800px', '620px')" class="btn btn-success btn-xs" ><i class="fa fa-toggle-right"></i></a>
+
 							<c:if test="${process.suspended}">
-								<a href="${ctx}/act/process/update/active/${process.id}" onclick="return confirmx('确认要激活吗？', this.href)">激活</a>
+								<a href="${ctx}/act/process/update/active/${process.id}" onclick="return confirmx('确认要激活吗？', this.href)" class="btn btn-info btn-xs"><i class="fa fa-toggle-on"></i>激活</a>
 							</c:if>
 							<c:if test="${!process.suspended}">
-								<a href="${ctx}/act/process/update/suspend/${process.id}" onclick="return confirmx('确认挂起除吗？', this.href)">挂起</a>
+								<a href="${ctx}/act/process/update/suspend/${process.id}" onclick="return confirmx('确认挂起除吗？', this.href)" class="btn btn-warning btn-xs"><i class="fa fa-toggle-off"></i>挂起</a>
 							</c:if>
-							<a href='${ctx}/act/process/delete?deploymentId=${process.deploymentId}' onclick="return confirmx('确认要删除该流程吗？', this.href)">删除</a>
-							<a href='${ctx}/act/process/convert/toModel?procDefId=${process.id}' onclick="return confirmx('确认要转换为模型吗？', this.href)">转换为模型</a>
+							<a href='${ctx}/act/process/delete?deploymentId=${process.deploymentId}' onclick="return confirmx('确认要删除该流程吗？', this.href)" class="btn btn-danger btn-xs">删除</a>
+							<a href='${ctx}/act/process/convert/toModel?procDefId=${process.id}' onclick="return confirmx('确认要转换为模型吗？', this.href)" class="btn btn-info btn-xs">转换为模型</a>
 						</td>
 					</tr>
 				</c:forEach>

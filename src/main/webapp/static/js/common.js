@@ -19,6 +19,21 @@ function confirmx(mess, href){
     return false;
 }
 
+// 提示输入对话框
+function promptx(title,  href){
+
+    var index = top.layer.prompt({title: title, formType: 2}, function(text){
+        if (typeof href == 'function') {
+            href();
+        }else{
+            location = href + encodeURIComponent(text);
+        }
+
+        top.layer.close(index);
+    });
+    return false;
+}
+
 
 
 $(document).ready(function () {

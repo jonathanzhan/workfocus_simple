@@ -57,6 +57,9 @@
 <link rel="stylesheet" type="text/css" href="${ctxStatic}/plugins/dataTables/datatables.min.css"/>
 <script type="text/javascript" src="${ctxStatic}/plugins/dataTables/datatables.js"></script>
 
+<script src="${ctxStatic}/plugins/My97DatePicker/WdatePicker.js" type="text/javascript"></script>
+
+
 
 <link href="${ctxStatic}/css/style.css?v=4.1.0" rel="stylesheet">
 <link href="${ctxStatic}/css/common.css" rel="stylesheet">

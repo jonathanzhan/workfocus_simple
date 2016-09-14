@@ -1,5 +1,17 @@
-/**
- * Copyright &copy; 2012-2014 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
+/*
+ * Copyright  2014-2016 whatlookingfor@gmail.com(Jonathan)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.mfnets.workfocus.modules.act.service;
 
@@ -13,6 +25,7 @@ import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.editor.constants.ModelDataJsonConstants;
 import org.activiti.editor.language.json.converter.BpmnJsonConverter;
 import org.activiti.engine.ActivitiException;
+import org.activiti.engine.FormService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.repository.Deployment;
@@ -36,10 +49,13 @@ import java.util.List;
 import java.util.zip.ZipInputStream;
 
 /**
- * 流程定义相关Controller
- * @author ThinkGem
- * @version 2013-11-03
+ * 流程定义事物层处理
+ * 
+ * @author Jonathan
+ * @version 2016/9/12 13:46
+ * @since JDK 7.0+
  */
+
 @Service
 @Transactional(readOnly = true)
 public class ActProcessService extends BaseService {
@@ -48,6 +64,9 @@ public class ActProcessService extends BaseService {
 	private RepositoryService repositoryService;
 	@Autowired
 	private RuntimeService runtimeService;
+
+	@Autowired
+	private FormService formService;
 
 	/**
 	 * 流程定义列表
@@ -199,6 +218,7 @@ public class ActProcessService extends BaseService {
 	 * @param processInstanceId
      * @return
      */
+	@Transactional(readOnly = false)
 	public String updateProcessInstanceState(String state, String processInstanceId) {
 		if (state.equals("active")) {
 			runtimeService.activateProcessInstanceById(processInstanceId);
@@ -321,4 +341,21 @@ public class ActProcessService extends BaseService {
 	}
 
 
+	/**
+	 * 根据流程定义ID获取流程启动的formKey值
+	 * @param procDefId
+	 * @return
+	 */
+	public String getStartFormKey(String procDefId) {
+		String formKey = "";
+		if(StringUtils.isNotBlank(procDefId)){
+			try{
+				formKey = formService.getStartFormKey(procDefId);
+			}catch (Exception e){
+				formKey = "";
+			}
+		}
+		logger.debug("流程定义ID:{},对应的流程开始表单key为{}",procDefId,formKey);
+		return formKey;
+	}
 }
