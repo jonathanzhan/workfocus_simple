@@ -62,6 +62,9 @@
 								<c:when test="${property.type.name=='string' || property.type.name=='long'}">
 									<input id="${property.id}" name="fp_${property.id}" value="${property.value}" type="text" <c:if test="${!property.writable}">readonly disabled</c:if> class="form-control <c:if test="${property.required}">required</c:if>" />
 								</c:when>
+								<c:when test="${property.type.name=='date'}">
+									<input id="${property.id}" name="fp_${property.id}" value="${property.value}" type="text" readonly="readonly" <c:if test="${!property.writable}">disabled</c:if> class="form-control input-sm <c:if test="${property.required}">required</c:if>" <c:if test="${property.writable}">onclick="WdatePicker({dateFmt:'${datePatterns[datePattern]}'});"</c:if> />
+								</c:when>
 								<c:when test="${property.type.name=='enum'}">
 									<select id="${property.id}" <c:if test="${property.writable}">name="fp_${property.id}" </c:if> <c:if test="${!property.writable}">readonly</c:if> class="form-control <c:if test="${property.required}">required</c:if>" />
 									<c:forEach items="${result[enumKeyList]}" var="enums">

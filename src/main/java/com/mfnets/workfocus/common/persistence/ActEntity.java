@@ -1,5 +1,17 @@
-/**
- * Copyright &copy; 2012-2014 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
+/*
+ * Copyright  2014-2016 whatlookingfor@gmail.com(Jonathan)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.mfnets.workfocus.common.persistence;
 
@@ -9,9 +21,11 @@ import com.mfnets.workfocus.modules.act.entity.Act;
 import java.io.Serializable;
 
 /**
- * Activiti Entity类
- * @author ThinkGem
- * @version 2013-05-28
+ * activiti的工作流的实体基类
+ *
+ * @author Jonathan
+ * @version 2016/9/18 10:31
+ * @since JDK 7.0+
  */
 public abstract class ActEntity<T> extends DataEntity<T> implements Serializable {
 

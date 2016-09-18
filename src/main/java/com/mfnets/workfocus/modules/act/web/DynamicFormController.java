@@ -19,7 +19,9 @@ import com.google.common.collect.Maps;
 import com.mfnets.workfocus.common.web.BaseController;
 import com.mfnets.workfocus.modules.sys.entity.User;
 import com.mfnets.workfocus.modules.sys.utils.UserUtils;
-import org.activiti.engine.*;
+import org.activiti.engine.FormService;
+import org.activiti.engine.IdentityService;
+import org.activiti.engine.TaskService;
 import org.activiti.engine.form.FormProperty;
 import org.activiti.engine.form.StartFormData;
 import org.activiti.engine.form.TaskFormData;
@@ -69,19 +71,26 @@ public class DynamicFormController extends BaseController {
 	public String startForm(@PathVariable(value = "procDefId") String procDefId, Model model) {
 
 		Map<String, Map<String, String>> result = Maps.newHashMap();
-
+		Map<String,String> datePatterns = Maps.newHashMap();
 		StartFormData startFormData = formService.getStartFormData(procDefId);
 		List<FormProperty> formProperties = startFormData.getFormProperties();
 		for (FormProperty formProperty : formProperties) {
-			Map<String, String> values;
-			values = (Map<String, String>) formProperty.getType().getInformation("values");
-			if (values != null) {
-				for (Map.Entry<String, String> enumEntry : values.entrySet())
-					logger.debug("enum, key: {}, value: {}", enumEntry.getKey(), enumEntry.getValue());
-				result.put("enum_" + formProperty.getId(), values);
-			}
-		}
+			if("enum".equals(formProperty.getType().getName())){
+				Map<String, String> values;
+				values = (Map<String, String>) formProperty.getType().getInformation("values");
+				if (values != null) {
+					for (Map.Entry<String, String> enumEntry : values.entrySet())
+						logger.debug("enum, key: {}, value: {}", enumEntry.getKey(), enumEntry.getValue());
+					result.put("enum_" + formProperty.getId(), values);
+				}
 
+			}else if("date".equals(formProperty.getType().getName())){
+				datePatterns.put("pattern_"+formProperty.getId(), (String)formProperty.getType().getInformation("datePattern"));
+				logger.debug("date,key:{},pattern:{}",formProperty.getId(),(String)formProperty.getType().getInformation("datePattern"));
+			}
+
+		}
+		model.addAttribute("datePatterns",datePatterns);
 		model.addAttribute("result", result);
 		model.addAttribute("list", formProperties);
 		model.addAttribute("formData", startFormData);
@@ -98,22 +107,28 @@ public class DynamicFormController extends BaseController {
 	@RequestMapping(value = "completeForm/{taskId}")
 	public String completeForm(@PathVariable(value = "taskId") String taskId, Model model) {
 		Map<String, Map<String, String>> result = Maps.newHashMap();
+		Map<String,String> datePatterns = Maps.newHashMap();
+
 		TaskFormData formData = formService.getTaskFormData(taskId);
 		List<FormProperty> list = formData.getFormProperties();
 
 		for (FormProperty formProperty : list) {
-			Map<String, String> values = (Map<String, String>) formProperty.getType().getInformation("values");
-			if (values != null) {
-				for (Map.Entry<String, String> enumEntry : values.entrySet())
-					logger.debug("enum, key: {}, value: {}", enumEntry.getKey(), enumEntry.getValue());
-				result.put("enum_" + formProperty.getId(), values);
-			}
-		}
-		Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
-		System.out.println(formData.getTask().getId());
-		System.out.println(formData.getTask().getName());
-		System.out.println(formData.getTask().getAssignee());
+			if("enum".equals(formProperty.getType().getName())){
+				Map<String, String> values = (Map<String, String>) formProperty.getType().getInformation("values");
+				if (values != null) {
+					for (Map.Entry<String, String> enumEntry : values.entrySet())
+						logger.debug("enum, key: {}, value: {}", enumEntry.getKey(), enumEntry.getValue());
+					result.put("enum_" + formProperty.getId(), values);
+				}
 
+			}else if("date".equals(formProperty.getType().getName())){
+				datePatterns.put("pattern_"+formProperty.getId(), (String)formProperty.getType().getInformation("datePattern"));
+				logger.debug("date,key:{},pattern:{}",formProperty.getId(),(String)formProperty.getType().getInformation("datePattern"));
+			}
+
+		}
+
+		Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
 
 		model.addAttribute("result", result);
 		model.addAttribute("list", list);
