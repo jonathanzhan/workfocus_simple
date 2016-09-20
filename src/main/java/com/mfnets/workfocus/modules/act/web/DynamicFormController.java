@@ -129,7 +129,7 @@ public class DynamicFormController extends BaseController {
 		}
 
 		Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
-
+		model.addAttribute("datePatterns",datePatterns);
 		model.addAttribute("result", result);
 		model.addAttribute("list", list);
 		model.addAttribute("task", task);
@@ -208,12 +208,12 @@ public class DynamicFormController extends BaseController {
 		}
 		String taskId = request.getParameter("taskId");
 		logger.debug("task form parameters: {}", formProperties);
-		Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+//		Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
 		User user = UserUtils.getUser();
 		if (user != null && StringUtils.isNotBlank(user.getId())) {
 			try {
 				identityService.setAuthenticatedUserId(user.getLoginName());
-				taskService.addComment(taskId, task.getProcessInstanceId(), "231231");
+//				taskService.addComment(taskId, task.getProcessInstanceId(), "231231");
 				formService.submitTaskFormData(taskId, formProperties);
 				addMessage(redirectAttributes, "任务完成，taskID：" + taskId);
 				return "redirect:" + adminPath + "/act/task/todo/list";

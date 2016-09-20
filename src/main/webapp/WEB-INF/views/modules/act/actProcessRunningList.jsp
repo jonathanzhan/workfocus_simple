@@ -28,7 +28,7 @@
 
 
 <body class="gray-bg">
-<div class="wrapper wrapper-content animated fadeIn">
+<div class="wrapper wrapper-content animated fadeInRight">
 	<!--查询表单开始-->
 	<div class="ibox m-b-sm border-bottom">
 		<div class="ibox-title">
@@ -87,16 +87,16 @@
 						<td>${procIns.activityId}</td>
 						<td>
 							<c:if test="${procIns.suspended }">
-								<a href="${ctx}/act/process/processInstance/update/active/${procIns.processInstanceId}">激活</a>
+								<a href="${ctx}/act/process/processInstance/update/active/${procIns.processInstanceId}" class="btn btn-info btn-xs"><i class="fa fa-toggle-on"></i>激活</a>
 							</c:if>
 							<c:if test="${!procIns.suspended }">
-								<a href="${ctx}/act/process/processInstance/update/suspend/${procIns.processInstanceId}">挂起</a>
+								<a href="${ctx}/act/process/processInstance/update/suspend/${procIns.processInstanceId}" class="btn btn-warning btn-xs"><i class="fa fa-toggle-off"></i>挂起</a>
 							</c:if>
 						</td>
 						<td>
 							<shiro:hasPermission name="act:process:edit">
-								<a href="${ctx}/act/process/deleteProcIns?procInsId=${procIns.processInstanceId}&reason=" onclick="return promptx('删除原因',this.href);">删除流程</a>
-							</shiro:hasPermission>&nbsp;
+								<a href="${ctx}/act/process/deleteProcIns?procInsId=${procIns.processInstanceId}&reason=" onclick="return promptx('删除原因',this.href);" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i>删除</a>
+							</shiro:hasPermission>
 						</td>
 					</tr>
 				</c:forEach>

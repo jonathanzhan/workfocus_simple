@@ -13,7 +13,7 @@
 </head>
 
 <body class="gray-bg">
-<div class="wrapper wrapper-content animated fadeIn">
+<div class="wrapper wrapper-content animated fadeInRight">
 	<!--查询表单开始-->
 	<div class="ibox m-b-sm border-bottom">
 		<div class="ibox-title">
@@ -78,11 +78,11 @@
 							<a href="${ctx}/act/task/form?taskId=${task.id}&taskName=${fns:urlEncode(task.name)}&taskDefKey=${task.taskDefinitionKey}&procInsId=${task.processInstanceId}&procDefId=${task.processDefinitionId}&status=${status}">${fns:abbr(not empty vars.map.title ? vars.map.title : task.id, 60)}</a>
 						</td>
 						<td>
-							<a target="_blank" href="${ctx}/act/task/trace/photo/${task.processDefinitionId}/${task.executionId}">${task.name}</a>
-							<a target="_blank" href="${pageContext.request.contextPath}/diagram-viewer/index.html?processDefinitionId=${task.processDefinitionId}&processInstanceId=${task.processInstanceId}">跟踪1</a>
-
+							<a href="#" onclick="openDialogView('流程跟踪', '${ctx}/act/task/trace/photo/${task.processDefinitionId}/${task.executionId}','800px', '620px')" class="btn btn-info btn-xs" ><i class="fa fa-search-plus"></i>${task.name}</a>
 						</td>
-						<td>${procDef.name}</td>
+						<td>
+							<a href="#" onclick="openDialogView('流程跟踪', '${pageContext.request.contextPath}/activiti/diagram-viewer/index.html?processDefinitionId=${task.processDefinitionId}&processInstanceId=${task.processInstanceId}','900px', '650px')" class="btn btn-info btn-xs" ><i class="fa fa-search-plus"></i>${procDef.name}</a>
+						</td>
 						<td><fmt:formatDate value="${task.createTime}" type="both"/></td>
 						<td><fmt:formatDate value="${task.dueDate}" type="both"/></td>
 						<td>${task.owner}</td>
@@ -90,17 +90,11 @@
 							<c:if test="${not empty task.assignee}">
 								<a href="#" onclick="openDialog('任务办理', '${ctx}/act/task/form/${task.id}','800px', '620px')" class="btn btn-primary btn-xs" >任务办理</a>
 							</c:if>
-
-							<%--<a href="${ctx}/act/dynamic/completeForm?taskId=${task.id}">动态办理</a>--%>
-							<%--<c:if test="${not empty task.assignee}">--%>
-								<%--<a href="${ctx}/act/task/form?taskId=${task.id}&taskName=${fns:urlEncode(task.name)}&taskDefKey=${task.taskDefinitionKey}&procInsId=${task.processInstanceId}&procDefId=${task.processDefinitionId}&status=${status}">任务办理</a>--%>
-							<%--</c:if>--%>
 							<shiro:hasPermission name="act:process:edit">
 								<c:if test="${empty task.executionId}">
-									<a href="${ctx}/act/task/deleteTask?taskId=${task.id}&reason=" onclick="return promptx('删除任务','删除原因',this.href);" class="btn btn-danger btn-xs">删除任务</a>
+									<a href="${ctx}/act/task/deleteTask?taskId=${task.id}&reason=" onclick="return promptx('删除原因',this.href);" class="btn btn-danger btn-xs"><i class="fa fa-trash">删除任务</i></a>
 								</c:if>
 							</shiro:hasPermission>
-
 						</td>
 					</tr>
 				</c:forEach>

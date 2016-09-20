@@ -193,7 +193,7 @@ public class ActProcessController extends BaseController {
 	public String convertToModel(String procDefId, RedirectAttributes redirectAttributes) throws UnsupportedEncodingException, XMLStreamException {
 		org.activiti.engine.repository.Model modelData = actProcessService.convertToModel(procDefId);
 		redirectAttributes.addFlashAttribute("message", "转换模型成功，模型ID="+modelData.getId());
-		return "redirect:" + adminPath + "/act/model";
+		return "redirect:" + adminPath + "/act/process";
 	}
 	
 	/**

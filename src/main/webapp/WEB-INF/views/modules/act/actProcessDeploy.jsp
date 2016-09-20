@@ -33,7 +33,7 @@
 
 
 <body class="gray-bg">
-<div class="wrapper wrapper-content animated fadeIn">
+<div class="wrapper wrapper-content animated fadeInRight">
 
 	<!--查询表单开始-->
 	<div class="ibox m-b-sm border-bottom">

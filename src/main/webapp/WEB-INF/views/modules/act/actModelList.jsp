@@ -43,7 +43,7 @@
 
 <body class="gray-bg">
 
-<div class="wrapper wrapper-content">
+<div class="wrapper wrapper-content animated fadeInRight">
 
 	<!--查询表单开始-->
 	<div class="ibox m-b-sm border-bottom">
@@ -137,10 +137,16 @@
 						<td><fmt:formatDate value="${model.lastUpdateTime}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
 						<shiro:hasPermission name="act:model:edit">
 						<td>
-							<a href="${pageContext.request.contextPath}/activiti/modeler.html?modelId=${model.id}" target="_blank">编辑</a>
-							<a href="${ctx}/act/model/deploy?id=${model.id}" onclick="return confirmx('确认要部署该模型吗？', this.href)">部署</a>
-							<a href="${ctx}/act/model/export?id=${model.id}" target="_blank">导出</a>
-							<a href="${ctx}/act/model/delete?id=${model.id}" onclick="return confirmx('确认要删除该模型吗？', this.href)">删除</a>
+							<a href="${pageContext.request.contextPath}/activiti/modeler.html?modelId=${model.id}" target="_blank" class="btn btn-info btn-xs"><i class="fa fa-edit"></i>编辑</a>
+							<a href="${ctx}/act/model/deploy/${model.id}" onclick="return confirmx('确认要部署该模型吗？', this.href)" class="btn btn-success btn-xs"><i class="fa fa-check"></i>部署</a>
+							<a href="${ctx}/act/model/delete/${model.id}" onclick="return confirmx('确认要删除该模型吗？', this.href)" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i>删除</a>
+							<div class="btn-group">
+								<button data-toggle="dropdown" class="btn btn-primary btn-xs dropdown-toggle"><i class="fa fa-download"></i>导出<span class="caret"></span></button>
+								<ul class="dropdown-menu">
+									<li><a href="${ctx}/act/model/export/${model.id}/bpmn" target="_blank">BPMN</a></li>
+									<li><a href="${ctx}/act/model/export/${model.id}/json" target="_blank">JSON</a></li>
+								</ul>
+							</div>
 						</td>
 						</shiro:hasPermission>
 					</tr>

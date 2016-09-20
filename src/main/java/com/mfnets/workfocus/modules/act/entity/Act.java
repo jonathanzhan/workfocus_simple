@@ -87,7 +87,7 @@ public class Act extends BaseEntity<Act> {
 	private String title;
 
 	/**
-	 * 任务状态(待认领(claim),待办(todo),已办(finish))
+	 * 任务状态(待认领(claim),待办(to do),已办(finish))
 	 */
 	private String status;
 

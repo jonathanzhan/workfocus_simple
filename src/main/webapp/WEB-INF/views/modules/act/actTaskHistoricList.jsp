@@ -72,7 +72,7 @@
 					<c:set var="status" value="${act.status}" />
 					<tr>
 						<td>
-							<a href="${ctx}/act/task/form?taskId=${task.id}&taskName=${fns:urlEncode(task.name)}&taskDefKey=${task.taskDefinitionKey}&procInsId=${task.processInstanceId}&procDefId=${task.processDefinitionId}&status=${status}">${fns:abbr(not empty vars.map.title ? vars.map.title : task.id, 60)}</a>
+							<a href="${ctx}/act/task/form/${task.id}">${fns:abbr(not empty vars.map.title ? vars.map.title : task.id, 60)}</a>
 						</td>
 						<td>
 								${task.name}

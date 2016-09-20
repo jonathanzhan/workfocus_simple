@@ -54,9 +54,9 @@
 				<sys:message content="${message}"/>
 				<c:forEach items="${list}" var="property">
 					<c:set var="enumKeyList" value="enum_${property.id}"></c:set>
-
+					<c:set var="datePattern" value="pattern_${property.id}"></c:set>
 					<div class="form-group">
-						<label class="col-xs-2 control-label">${property.name} ${property.value}</label>
+						<label class="col-xs-2 control-label">${property.name}</label>
 						<div class="col-xs-3">
 							<c:choose>
 								<c:when test="${property.type.name=='string' || property.type.name=='long'}">

@@ -27,11 +27,13 @@ import org.activiti.editor.language.json.converter.BpmnJsonConverter;
 import org.activiti.engine.ActivitiException;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.repository.Deployment;
+import org.activiti.engine.repository.Model;
 import org.activiti.engine.repository.ModelQuery;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -103,13 +105,15 @@ public class ActModelService extends BaseService {
 	}
 
 	/**
-	 * 根据Model部署流程
+	 * 根据模型ID部署流程
+	 * @param id 模型ID
+	 * @return
 	 */
 	@Transactional(readOnly = false)
 	public String deploy(String id) {
 		String message = "";
 		try {
-			org.activiti.engine.repository.Model modelData = repositoryService.getModel(id);
+			Model modelData = repositoryService.getModel(id);
 
 			ObjectNode modelNode = (ObjectNode) new ObjectMapper().readTree(repositoryService.getModelEditorSource(modelData.getId()));
 			byte[] bpmnBytes = null;
@@ -138,26 +142,54 @@ public class ActModelService extends BaseService {
 		}
 		return message;
 	}
-	
-	/**
-	 * 导出model的xml文件
-	 */
-	public void export(String id, HttpServletResponse response) {
-		try {
-			org.activiti.engine.repository.Model modelData = repositoryService.getModel(id);
-			BpmnJsonConverter jsonConverter = new BpmnJsonConverter();
-			JsonNode editorNode = new ObjectMapper().readTree(repositoryService.getModelEditorSource(modelData.getId()));
-			BpmnModel bpmnModel = jsonConverter.convertToBpmnModel(editorNode);
-			BpmnXMLConverter xmlConverter = new BpmnXMLConverter();
-			byte[] bpmnBytes = xmlConverter.convertToXML(bpmnModel);
 
-			ByteArrayInputStream in = new ByteArrayInputStream(bpmnBytes);
-			IOUtils.copy(in, response.getOutputStream());
-			String filename = bpmnModel.getMainProcess().getId() + ".bpmn20.xml";
+	/**
+	 * 模型导出
+	 * @param modelId 模型ID
+	 * @param type 导出类型 bpmn/json
+	 * @param response
+	 */
+	public void export(String modelId, String type, HttpServletResponse response) {
+		try {
+			Model modelData = repositoryService.getModel(modelId);
+			BpmnJsonConverter jsonConverter = new BpmnJsonConverter();
+			byte[] modelEditorSource = repositoryService.getModelEditorSource(modelData.getId());
+
+			JsonNode editorNode = new ObjectMapper().readTree(modelEditorSource);
+			BpmnModel bpmnModel = jsonConverter.convertToBpmnModel(editorNode);
+
+			// 处理异常
+			if (bpmnModel.getMainProcess() == null) {
+				response.setStatus(HttpStatus.UNPROCESSABLE_ENTITY.value());
+				response.getOutputStream().println("no main process, can't export for type: " + type);
+				response.flushBuffer();
+				return;
+			}
+
+			String filename = "";
+			byte[] exportBytes = null;
+
+			String mainProcessId = bpmnModel.getMainProcess().getId();
+
+			if (type.equals("bpmn")) {
+
+				BpmnXMLConverter xmlConverter = new BpmnXMLConverter();
+				exportBytes = xmlConverter.convertToXML(bpmnModel);
+
+				filename = mainProcessId + ".bpmn20.xml";
+			} else if (type.equals("json")) {
+
+				exportBytes = modelEditorSource;
+				filename = mainProcessId + ".json";
+
+			}
 			response.setHeader("Content-Disposition", "attachment; filename=" + filename);
+			ByteArrayInputStream in = new ByteArrayInputStream(exportBytes);
+			IOUtils.copy(in, response.getOutputStream());
 			response.flushBuffer();
 		} catch (Exception e) {
-			throw new ActivitiException("导出model的xml文件失败，模型ID="+id, e);
+			logger.error("导出model的xml文件失败：modelId={}, type={}", modelId, type, e);
+			throw new ActivitiException("导出model的xml文件失败，模型ID="+modelId, e);
 		}
 		
 	}
@@ -174,7 +206,7 @@ public class ActModelService extends BaseService {
 	
 	/**
 	 * 删除模型
-	 * @param id
+	 * @param id 模型ID
 	 * @return
 	 */
 	@Transactional(readOnly = false)

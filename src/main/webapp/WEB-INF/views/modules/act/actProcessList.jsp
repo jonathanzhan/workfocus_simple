@@ -38,7 +38,7 @@
 </head>
 
 <body class="gray-bg">
-<div class="wrapper wrapper-content animated fadeIn">
+<div class="wrapper wrapper-content animated fadeInRight">
 	<!--查询表单开始-->
 	<div class="ibox m-b-sm border-bottom">
 		<div class="ibox-title">
@@ -102,8 +102,6 @@
 					<th>流程标识</th>
 					<th>流程名称</th>
 					<th>流程版本</th>
-					<th>流程XML</th>
-					<th>流程图片</th>
 					<th>部署时间</th>
 					<th>操作</th>
 				</tr>
@@ -118,12 +116,10 @@
 						<td>${process.key}</td>
 						<td>${process.name}</td>
 						<td><b title='流程版本号'>V: ${process.version}</b></td>
-						<td><a target="_blank" href="${ctx}/act/process/resource/read?procDefId=${process.id}&resType=xml">${process.resourceName}</a></td>
-						<td><a target="_blank" href="${ctx}/act/process/resource/read?procDefId=${process.id}&resType=image">${process.diagramResourceName}</a></td>
 						<td><fmt:formatDate value="${deployment.deploymentTime}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
 						<td>
-							<a href="#" onclick="openDialog('流程启动', '${ctx}/act/dynamic/startForm/${process.id}','800px', '620px')" class="btn btn-success btn-xs" ><i class="fa fa-toggle-right"></i>动态表单</a>
-							<a href="#" onclick="openDialog('流程启动', '${ctx}/act/process/startForm/${process.id}','800px', '620px')" class="btn btn-success btn-xs" ><i class="fa fa-toggle-right"></i></a>
+							<%--<a href="#" onclick="openDialog('流程启动', '${ctx}/act/dynamic/startForm/${process.id}','800px', '620px')" class="btn btn-success btn-xs" ><i class="fa fa-toggle-right"></i>动态表单</a>--%>
+							<a href="#" onclick="openDialog('流程启动', '${ctx}/act/process/startForm/${process.id}','800px', '620px')" class="btn btn-success btn-xs" ><i class="fa fa-toggle-right"></i>启动</a>
 
 							<c:if test="${process.suspended}">
 								<a href="${ctx}/act/process/update/active/${process.id}" onclick="return confirmx('确认要激活吗？', this.href)" class="btn btn-info btn-xs"><i class="fa fa-toggle-on"></i>激活</a>
@@ -131,8 +127,15 @@
 							<c:if test="${!process.suspended}">
 								<a href="${ctx}/act/process/update/suspend/${process.id}" onclick="return confirmx('确认挂起除吗？', this.href)" class="btn btn-warning btn-xs"><i class="fa fa-toggle-off"></i>挂起</a>
 							</c:if>
-							<a href='${ctx}/act/process/delete?deploymentId=${process.deploymentId}' onclick="return confirmx('确认要删除该流程吗？', this.href)" class="btn btn-danger btn-xs">删除</a>
-							<a href='${ctx}/act/process/convert/toModel?procDefId=${process.id}' onclick="return confirmx('确认要转换为模型吗？', this.href)" class="btn btn-info btn-xs">转换为模型</a>
+							<a href='${ctx}/act/process/delete?deploymentId=${process.deploymentId}' onclick="return confirmx('确认要删除该流程吗？', this.href)" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i>删除</a>
+							<a href='${ctx}/act/process/convert/toModel?procDefId=${process.id}' onclick="return confirmx('确认要转换为模型吗？', this.href)" class="btn btn-info btn-xs"><i class="fa fa-check"></i>模型</a>
+								<div class="btn-group">
+									<button data-toggle="dropdown" class="btn btn-primary btn-xs dropdown-toggle"><i class="fa fa-search-plus"></i>查看<span class="caret"></span></button>
+									<ul class="dropdown-menu">
+										<li><a target="_blank" href="${ctx}/act/process/resource/read?procDefId=${process.id}&resType=xml" title="${process.resourceName}">XML</a></li>
+										<li><a target="_blank" href="${ctx}/act/process/resource/read?procDefId=${process.id}&resType=image" title="${process.diagramResourceName}">图片</a></li>
+									</ul>
+								</div>
 						</td>
 					</tr>
 				</c:forEach>

@@ -18,10 +18,12 @@ package com.mfnets.workfocus.modules.act.web;
 import com.mfnets.workfocus.common.persistence.Page;
 import com.mfnets.workfocus.common.web.BaseController;
 import com.mfnets.workfocus.modules.act.service.ActModelService;
+import org.activiti.engine.RepositoryService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -44,6 +46,9 @@ public class ActModelController extends BaseController {
 
 	@Autowired
 	private ActModelService actModelService;
+
+	@Autowired
+	RepositoryService repositoryService;
 
 	/**
 	 * 流程模型列表
@@ -90,23 +95,31 @@ public class ActModelController extends BaseController {
 	}
 
 	/**
-	 * 根据Model部署流程
+	 * 根据模型ID部署流程
+	 * @param id 模型ID
+	 * @param redirectAttributes
+	 * @return
 	 */
 	@RequiresPermissions("act:model:edit")
-	@RequestMapping(value = "deploy")
-	public String deploy(String id, RedirectAttributes redirectAttributes) {
+	@RequestMapping(value = "deploy/{id}")
+	public String deploy(@PathVariable("id") String id, RedirectAttributes redirectAttributes) {
 		String message = actModelService.deploy(id);
 		redirectAttributes.addFlashAttribute("message", message);
 		return "redirect:" + adminPath + "/act/model";
 	}
-	
+
 	/**
-	 * 导出model的xml文件
+	 * 模型的导出
+	 * @param modelId 模型ID
+	 * @param type 导出类型,bpmn/json
+	 * @param response
 	 */
 	@RequiresPermissions("act:model:edit")
-	@RequestMapping(value = "export")
-	public void export(String id, HttpServletResponse response) {
-		actModelService.export(id, response);
+	@RequestMapping(value = "export/{modelId}/{type}")
+	public void export(@PathVariable("modelId") String modelId,
+					   @PathVariable("type") String type,
+					   HttpServletResponse response) {
+		actModelService.export(modelId, type, response);
 	}
 
 	/**
@@ -127,8 +140,8 @@ public class ActModelController extends BaseController {
 	 * @return
 	 */
 	@RequiresPermissions("act:model:edit")
-	@RequestMapping(value = "delete")
-	public String delete(String id, RedirectAttributes redirectAttributes) {
+	@RequestMapping(value = "delete/{id}")
+	public String delete(@PathVariable("id") String id, RedirectAttributes redirectAttributes) {
 		actModelService.delete(id);
 		redirectAttributes.addFlashAttribute("message", "删除成功，模型ID=" + id);
 		return "redirect:" + adminPath + "/act/model";
