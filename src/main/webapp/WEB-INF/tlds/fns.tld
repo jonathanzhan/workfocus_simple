@@ -260,6 +260,13 @@
         <function-signature>long pastDays(java.util.Date)</function-signature>
         <example>${fns:pastDays(date)}</example>
     </function>
+    <function>
+        <description>将times转换为中文时间</description>
+        <name>toTimeString</name>
+        <function-class>com.mfnets.workfocus.common.utils.TimeUtils</function-class>
+        <function-signature>java.lang.String toTimeString(long)</function-signature>
+        <example>${fns:toTimeString(date)}</example>
+    </function>
 
     <!-- JsonMapper -->
     <function>

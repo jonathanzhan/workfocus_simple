@@ -43,9 +43,19 @@
 				<bean class="com.mfnets.workfocus.modules.act.service.ext.ActGroupEntityServiceFactory"/>
             </list>
     	</property>
+
+		<!-- 自定义表单字段类型 -->
+		<property name="customFormTypes">
+			<list>
+				<bean class="com.mfnets.workfocus.modules.act.utils.UsersFormType"/>
+				<bean class="com.mfnets.workfocus.modules.act.utils.JavascriptFormType"/>
+			</list>
+		</property>
         
 	</bean>
-	
+
+
+
 	<bean id="processEngine" class="org.activiti.spring.ProcessEngineFactoryBean">
 		<property name="processEngineConfiguration" ref="processEngineConfiguration" />
 	</bean>

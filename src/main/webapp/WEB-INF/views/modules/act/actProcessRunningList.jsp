@@ -11,19 +11,6 @@
 		});
 
 	</script>
-	<script type="text/template" id="categoryBox">
-		<form id="categoryForm" action="${ctx}/act/process/updateCategory" method="post" enctype="multipart/form-data"
-			style="text-align:center;" class="form-search" onsubmit="loading('正在设置，请稍等...');"><br/>
-			<input id="categoryBoxId" type="hidden" name="procDefId" value="" />
-			<select id="categoryBoxCategory" name="category">
-				<c:forEach items="${fns:getDictList('act_category')}" var="dict">
-					<option value="${dict.value}">${dict.label}</option>
-				</c:forEach>
-			</select>
-			<br/><br/>　　
-			<input id="categorySubmit" class="btn btn-primary" type="submit" value="   保    存   "/>　　
-		</form>
-	</script>
 </head>
 
 
@@ -72,7 +59,7 @@
 				<tr>
 					<th>执行ID</th>
 					<th>流程实例ID</th>
-					<th>流程定义ID</th>
+					<th>流程名称</th>
 					<th>当前环节</th>
 					<th>是否挂起</th>
 					<th>操作</th>
@@ -83,17 +70,19 @@
 					<tr>
 						<td>${procIns.id}</td>
 						<td>${procIns.processInstanceId}</td>
-						<td>${procIns.processDefinitionId}</td>
+						<td>${procIns.processDefinitionName}(${procIns.processDefinitionKey})</td>
 						<td>${procIns.activityId}</td>
 						<td>
 							<c:if test="${procIns.suspended }">
-								<a href="${ctx}/act/process/processInstance/update/active/${procIns.processInstanceId}" class="btn btn-info btn-xs"><i class="fa fa-toggle-on"></i>激活</a>
+								<a href="${ctx}/act/process/processInstance/update/active/${procIns.processInstanceId}" class="btn btn-info btn-xs" onclick="return confirmx('确认要激活吗？', this.href)"><i class="fa fa-toggle-on"></i>激活</a>
 							</c:if>
 							<c:if test="${!procIns.suspended }">
-								<a href="${ctx}/act/process/processInstance/update/suspend/${procIns.processInstanceId}" class="btn btn-warning btn-xs"><i class="fa fa-toggle-off"></i>挂起</a>
+								<a href="${ctx}/act/process/processInstance/update/suspend/${procIns.processInstanceId}" class="btn btn-warning btn-xs" onclick="return confirmx('确认挂起吗？', this.href)"><i class="fa fa-toggle-off"></i>挂起</a>
 							</c:if>
 						</td>
 						<td>
+							<a href="#" onclick="openDialog('详细信息', '${ctx}/act/process/historic/view/${procIns.processInstanceId}','800px', '620px')" class="btn btn-primary btn-xs" ><i class="fa fa-search-plus"></i>查看</a>
+
 							<shiro:hasPermission name="act:process:edit">
 								<a href="${ctx}/act/process/deleteProcIns?procInsId=${procIns.processInstanceId}&reason=" onclick="return promptx('删除原因',this.href);" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i>删除</a>
 							</shiro:hasPermission>

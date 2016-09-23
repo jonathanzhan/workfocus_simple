@@ -456,7 +456,13 @@ public class ActTaskService extends BaseService {
 	public Task getTask(String taskId){
 		return taskService.createTaskQuery().taskId(taskId).singleResult();
 	}
-	
+
+	public Map<String, Object> getTaskIncludeVars(String taskId) {
+		return taskService.getVariables(taskId);
+	}
+
+
+
 	/**
 	 * 删除任务
 	 * @param taskId 任务ID

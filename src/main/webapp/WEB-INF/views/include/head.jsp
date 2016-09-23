@@ -30,7 +30,7 @@
 <script src="${ctxStatic}/plugins/slimscroll/jquery.slimscroll.min.js"></script>
 <script src="${ctxStatic}/plugins/layer/layer.js"></script>
 <script src="${ctxStatic}/js/common.js"></script>
-
+<script src="${ctxStatic}/js/contabs.js"></script>
 
 
 

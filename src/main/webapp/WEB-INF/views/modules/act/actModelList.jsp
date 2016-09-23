@@ -6,35 +6,52 @@
 <head>
 	<title>模型管理</title>
 	<%@include file="/WEB-INF/views/include/head.jsp" %>
+	<script src="${ctxStatic}/js/contabs.js"></script>
 	<script type="text/javascript">
 		$(function () {
 
 		});
 
 		function updateCategory(id, category){
-			$("#categoryBoxCategory").val(category);
-			$("#categoryBoxId").val(id);
 			layer.open({
 				type: 1,
 				skin: 'layui-layer-rim', //加上边框
 				area: ['420px', '240px'], //宽高
-				content: $("#layBox").html(),
+				maxmin: true, //开启最大化最小化按钮
+				content: $("#categoryBox").html() ,
 				btn: ['确定', '关闭'],
 				yes: function(index, layero){
 					layer.load();
-					var categoryForm =$("#categoryForm");
-					var top_iframe = top.getActiveTab().attr("name");//获取当前active的tab的iframe
-					categoryForm.attr("target",top_iframe);//表单提交成功后，从服务器返回的url在当前tab中展示
-
 					$("#categoryForm").submit();
-					layer.close(index);
 				},
 				cancel: function(index){
-					layer.close(index);
+				},
+				success:function(layero,index){
+					$("#categoryBoxCategory").val(category);
+					$("#categoryBoxId").val(id);
+					if(category!=null && category!=''){
+						$("#categoryBoxCategory").find("option[value="+category+"]").attr("selected",true);
+					}
 				}
 			});
 		}
 
+	</script>
+
+	<script type="text/template" id="categoryBox">
+		<form id="categoryForm" action="${ctx}/act/model/updateCategory" class="form-horizontal" method="post">
+			<div class="col-md-10">
+				<label class="col-md-3 control-label">分类</label>
+				<div class="col-md-7">
+					<input id="categoryBoxId" type="hidden" name="id" value="" />
+					<select id="categoryBoxCategory" name="category" class="form-control">
+						<c:forEach items="${fns:getDictList('act_category')}" var="dict">
+							<option value="${dict.value}">${dict.label}</option>
+						</c:forEach>
+					</select>
+				</div>
+			</div>
+		</form>
 	</script>
 
 </head>
@@ -57,22 +74,6 @@
 		</div>
 
 		<div class="ibox-content">
-			<div id="layBox" class="hide">
-				<form id="categoryForm" action="${ctx}/act/model/updateCategory" method="post" enctype="multipart/form-data"
-					  class="form-horizontal">
-					<div class="col-md-10">
-						<label class="col-md-3 control-label">分类</label>
-						<div class="col-md-7">
-							<input id="categoryBoxId" type="hidden" name="id" value="" />
-							<select id="categoryBoxCategory" name="category" class="form-control">
-								<c:forEach items="${fns:getDictList('act_category')}" var="dict">
-									<option value="${dict.value}">${dict.label}</option>
-								</c:forEach>
-							</select>
-						</div>
-					</div>
-				</form>
-			</div>
 
 
 			<form:form id="searchForm" modelAttribute="category" action="${ctx}/act/model/" method="post"

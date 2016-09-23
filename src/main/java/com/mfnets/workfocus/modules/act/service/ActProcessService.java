@@ -20,14 +20,16 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.mfnets.workfocus.common.persistence.Page;
 import com.mfnets.workfocus.common.service.BaseService;
 import com.mfnets.workfocus.common.utils.StringUtils;
+import com.mfnets.workfocus.modules.act.entity.Act;
 import org.activiti.bpmn.converter.BpmnXMLConverter;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.editor.constants.ModelDataJsonConstants;
 import org.activiti.editor.language.json.converter.BpmnJsonConverter;
-import org.activiti.engine.ActivitiException;
-import org.activiti.engine.FormService;
-import org.activiti.engine.RepositoryService;
-import org.activiti.engine.RuntimeService;
+import org.activiti.engine.*;
+import org.activiti.engine.history.HistoricActivityInstanceQuery;
+import org.activiti.engine.history.HistoricProcessInstance;
+import org.activiti.engine.history.HistoricProcessInstanceQuery;
+import org.activiti.engine.history.HistoricVariableInstance;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.repository.ProcessDefinitionQuery;
@@ -45,6 +47,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.zip.ZipInputStream;
 
@@ -67,6 +70,9 @@ public class ActProcessService extends BaseService {
 
 	@Autowired
 	private FormService formService;
+
+	@Autowired
+	private HistoryService historyService;
 
 	/**
 	 * 流程定义列表
@@ -111,6 +117,34 @@ public class ActProcessService extends BaseService {
 	    page.setList(processInstanceQuery.listPage(page.getFirstResult(), page.getMaxResults()));
 		return page;
 	}
+
+	/**
+	 * 已经完成的流程列表查询
+	 * @param page 分页信息实体类
+	 * @param act 流程查询实体类(procDefKey,beginDate,endDate)
+	 * @return
+	 */
+	public Page<HistoricProcessInstance> finishList(Page<HistoricProcessInstance> page, Act act) {
+
+		HistoricProcessInstanceQuery historicProcessInstanceQuery = historyService.createHistoricProcessInstanceQuery().finished();
+		// 设置查询条件
+		if (StringUtils.isNotBlank(act.getProcDefKey())){
+			historicProcessInstanceQuery.processDefinitionKey(act.getProcDefKey());
+		}
+		if (act.getBeginDate() != null){
+			historicProcessInstanceQuery.finishedAfter(act.getBeginDate());
+		}
+		if (act.getEndDate() != null){
+			historicProcessInstanceQuery.finishedBefore(act.getEndDate());
+		}
+
+		page.setCount(historicProcessInstanceQuery.count());
+		page.setList(historicProcessInstanceQuery.listPage(page.getFirstResult(), page.getMaxResults()));
+		return page;
+	}
+
+
+
 	
 	/**
 	 * 读取资源，通过部署ID
@@ -357,5 +391,14 @@ public class ActProcessService extends BaseService {
 		}
 		logger.debug("流程定义ID:{},对应的流程开始表单key为{}",procDefId,formKey);
 		return formKey;
+	}
+
+	/**
+	 * 根据流程实例ID,查询已经完成的流程的变量信息
+	 * @param proInsId
+	 * @return
+	 */
+	public List<HistoricVariableInstance> getHistoricVariable(String proInsId) {
+		return historyService.createHistoricVariableInstanceQuery().processInstanceId(proInsId).orderByVariableName().desc().list();
 	}
 }

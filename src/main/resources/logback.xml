@@ -56,6 +56,7 @@
     <logger name="dao" level="DEBUG"/>
 
     <logger name="com.mfnets.workfocus" level="debug"/>
+    <logger name="org.activiti.engine.impl.persistence.entity" level="DEBUG" />
 
 
 

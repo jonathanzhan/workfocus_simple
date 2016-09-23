@@ -123,6 +123,24 @@ public class ActUtils {
 		return null;
 	}
 
+	/**
+	 * 获取流程表单的完整URL
+	 * @param formKey
+	 * @return
+	 */
+	public static String getFormUrl(String formKey){
+		StringBuilder formUrl = new StringBuilder();
+
+		String formServerUrl = Global.getConfig("activiti.form.server.url");
+		if (StringUtils.isBlank(formServerUrl)){
+			formUrl.append(Global.getAdminPath());
+		}else{
+			formUrl.append(formServerUrl);
+		}
+		formUrl.append(formKey);
+		logger.debug("formUrl:{}",formUrl.toString());
+		return formUrl.toString();
+	}
 
 	/**
 	 * 获取流程表单URL
@@ -147,6 +165,7 @@ public class ActUtils {
 		formUrl.append("&act.taskDefKey=").append(act.getTaskDefKey() != null ? act.getTaskDefKey() : "");
 		formUrl.append("&act.procInsId=").append(act.getProcInsId() != null ? act.getProcInsId() : "");
 		formUrl.append("&act.procDefId=").append(act.getProcDefId() != null ? act.getProcDefId() : "");
+		formUrl.append("&act.procDefKey=").append(act.getProcDefKey() != null ? act.getProcDefKey() : "");
 		formUrl.append("&act.status=").append(act.getStatus() != null ? act.getStatus() : "");
 		formUrl.append("&id=").append(act.getBusinessId() != null ? act.getBusinessId() : "");
 		logger.debug("formUrl:{}",formUrl.toString());
