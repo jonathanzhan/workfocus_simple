@@ -81,7 +81,7 @@
 						<td>${fns:toTimeString(hpi.durationInMillis)}</td>
 						<td>${empty hpi.deleteReason ? "正常结束" : hpi.deleteReason}</td>
 						<td>
-							<a href="#" onclick="openDialog('详细信息', '${ctx}/act/process/historic/view/${hpi.id}','800px', '620px')" class="btn btn-primary btn-xs" ><i class="fa fa-search-plus"></i>查看</a>
+							<a href="#" onclick="openDialogView('详细信息', '${ctx}/act/process/historic/view/${hpi.id}','800px', '620px')" class="btn btn-primary btn-xs" ><i class="fa fa-search-plus"></i>查看</a>
 						</td>
 					</tr>
 				</c:forEach>
