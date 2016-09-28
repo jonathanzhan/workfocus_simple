@@ -353,7 +353,7 @@ public class ActProcessService extends BaseService {
 	/**
 	 * 根据流程实例ID,查询已经完成的流程的变量信息
 	 * @param proInsId
-	 * @return
+	 * @return 流程参数列表
 	 */
 	public List<HistoricVariableInstance> getHistoricVariable(String proInsId) {
 		return historyService.createHistoricVariableInstanceQuery().processInstanceId(proInsId).orderByVariableName().desc().list();

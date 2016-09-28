@@ -115,10 +115,21 @@ public class ActProcessController extends BaseController {
 	 */
 	@RequestMapping(value = "view/{proInsId}", method = RequestMethod.GET)
 	public String historicView(@PathVariable("proInsId") String proInsId,Model model) {
+		return "modules/act/processView";
+	}
+
+
+	/**
+	 * 查看流程的具体信息
+	 * @param proInsId
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "historicVariable/{proInsId}")
+	public String historicVariable(@PathVariable("proInsId") String proInsId,Model model) {
 		List<HistoricVariableInstance> variableInstanceList = actProcessService.getHistoricVariable(proInsId);
 		model.addAttribute("varList",variableInstanceList);
-		model.addAttribute("proInsId",proInsId);
-		return "modules/act/processView";
+		return "modules/act/actTaskHistoricVariable";
 	}
 
 

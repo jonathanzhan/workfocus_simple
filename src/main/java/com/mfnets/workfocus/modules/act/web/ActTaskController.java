@@ -22,6 +22,7 @@ import com.mfnets.workfocus.modules.act.entity.ActBusiness;
 import com.mfnets.workfocus.modules.act.service.ActTaskService;
 import com.mfnets.workfocus.modules.act.utils.ActUtils;
 import com.mfnets.workfocus.modules.sys.utils.UserUtils;
+import org.activiti.engine.history.HistoricVariableInstance;
 import org.activiti.engine.task.Task;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -30,6 +31,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
