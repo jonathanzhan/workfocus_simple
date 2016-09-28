@@ -86,7 +86,7 @@ public class DynamicFormController extends BaseController {
 
 			}else if("date".equals(formProperty.getType().getName())){
 				datePatterns.put("pattern_"+formProperty.getId(), (String)formProperty.getType().getInformation("datePattern"));
-				logger.debug("date,key:{},pattern:{}",formProperty.getId(),(String)formProperty.getType().getInformation("datePattern"));
+				logger.debug("date,key:{},pattern:{}",formProperty.getId(),formProperty.getType().getInformation("datePattern"));
 			}
 
 		}
@@ -123,7 +123,7 @@ public class DynamicFormController extends BaseController {
 
 			}else if("date".equals(formProperty.getType().getName())){
 				datePatterns.put("pattern_"+formProperty.getId(), (String)formProperty.getType().getInformation("datePattern"));
-				logger.debug("date,key:{},pattern:{}",formProperty.getId(),(String)formProperty.getType().getInformation("datePattern"));
+				logger.debug("date,key:{},pattern:{}",formProperty.getId(),formProperty.getType().getInformation("datePattern"));
 			}
 
 		}

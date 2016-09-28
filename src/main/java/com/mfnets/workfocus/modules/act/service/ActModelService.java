@@ -88,7 +88,7 @@ public class ActModelService extends BaseService {
 		editorNode.put("resourceId", "canvas");
 		ObjectNode stencilSetNode = objectMapper.createObjectNode();
 		stencilSetNode.put("namespace", "http://b3mn.org/stencilset/bpmn2.0#");
-		editorNode.put("stencilset", stencilSetNode);
+		editorNode.replace("stencilset", stencilSetNode);
 
 		org.activiti.engine.repository.Model modelData = repositoryService.newModel();
 
