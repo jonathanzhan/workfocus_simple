@@ -76,6 +76,9 @@ public class ActProcessService extends BaseService {
 
 	/**
 	 * 流程定义列表
+	 * @param page
+	 * @param category
+	 * @return
 	 */
 	public Page<Object[]> processList(Page<Object[]> page, String category) {
 
@@ -99,7 +102,11 @@ public class ActProcessService extends BaseService {
 	}
 
 	/**
-	 * 流程定义列表
+	 * 正在执行的流程列表
+	 * @param page
+	 * @param procInsId
+	 * @param procDefKey
+	 * @return
 	 */
 	public Page<ProcessInstance> runningList(Page<ProcessInstance> page, String procInsId, String procDefKey) {
 
@@ -303,57 +310,7 @@ public class ActProcessService extends BaseService {
 	
 		return modelData;
 	}
-	
-	/**
-	 * 导出图片文件到硬盘
-	 */
-	public List<String> exportDiagrams(String exportDir) throws IOException {
-		List<String> files = new ArrayList<String>();
-		List<ProcessDefinition> list = repositoryService.createProcessDefinitionQuery().list();
-		
-		for (ProcessDefinition processDefinition : list) {
-			String diagramResourceName = processDefinition.getDiagramResourceName();
-			String key = processDefinition.getKey();
-			int version = processDefinition.getVersion();
-			String diagramPath = "";
 
-			InputStream resourceAsStream = repositoryService.getResourceAsStream(
-					processDefinition.getDeploymentId(), diagramResourceName);
-			byte[] b = new byte[resourceAsStream.available()];
-
-			@SuppressWarnings("unused")
-			int len = -1;
-			resourceAsStream.read(b, 0, b.length);
-
-			// create file if not exist
-			String diagramDir = exportDir + "/" + key + "/" + version;
-			File diagramDirFile = new File(diagramDir);
-			if (!diagramDirFile.exists()) {
-				diagramDirFile.mkdirs();
-			}
-			diagramPath = diagramDir + "/" + diagramResourceName;
-			File file = new File(diagramPath);
-
-			// 文件存在退出
-			if (file.exists()) {
-				// 文件大小相同时直接返回否则重新创建文件(可能损坏)
-				logger.debug("diagram exist, ignore... : {}", diagramPath);
-				
-				files.add(diagramPath);
-			} else {
-				file.createNewFile();
-				logger.debug("export diagram to : {}", diagramPath);
-
-				// wirte bytes to file
-				FileUtils.writeByteArrayToFile(file, b, true);
-				
-				files.add(diagramPath);
-			}
-			
-		}
-		
-		return files;
-	}
 
 	/**
 	 * 删除部署的流程，级联删除流程实例

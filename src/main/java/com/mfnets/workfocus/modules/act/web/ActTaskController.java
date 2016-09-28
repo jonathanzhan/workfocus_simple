@@ -81,9 +81,6 @@ public class ActTaskController extends BaseController {
 		return "modules/act/actTaskTodoList";
 	}
 
-
-
-	
 	/**
 	 *
 	 * 获取已办任务
@@ -96,6 +93,16 @@ public class ActTaskController extends BaseController {
 		page = actTaskService.historicList(page, act);
 		model.addAttribute("page", page);
 		return "modules/act/actTaskHistoricList";
+	}
+
+
+
+
+
+	@RequestMapping(value = "addSubTask/{parentTaskId}")
+	public String addSubTask(@PathVariable("parentTaskId") String parentTaskId,String taskName){
+		actTaskService.addSubTask(parentTaskId,taskName);
+		return "redirect:" + adminPath + "/act/task/todo/list";
 	}
 
 	/**
@@ -190,20 +197,7 @@ public class ActTaskController extends BaseController {
 		}
 	}
 
-	
-	/**
-	 * 输出跟踪流程信息
-	 * 
-	 * @param proInsId
-	 * @return
-	 * @throws Exception
-	 */
-	@ResponseBody
-	@RequestMapping(value = "trace/info/{proInsId}")
-	public List<Map<String, Object>> traceInfo(@PathVariable("proInsId") String proInsId) throws Exception {
-		List<Map<String, Object>> activityInfos = actTaskService.traceProcess(proInsId);
-		return activityInfos;
-	}
+
 
 	
 	/**

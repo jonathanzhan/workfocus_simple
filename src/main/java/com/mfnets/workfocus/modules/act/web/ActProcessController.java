@@ -108,17 +108,17 @@ public class ActProcessController extends BaseController {
 	}
 
 	/**
-	 * 查看已结束的流程的具体信息
+	 * 查看流程的具体信息
 	 * @param proInsId
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "historic/view/{proInsId}", method = RequestMethod.GET)
+	@RequestMapping(value = "view/{proInsId}", method = RequestMethod.GET)
 	public String historicView(@PathVariable("proInsId") String proInsId,Model model) {
 		List<HistoricVariableInstance> variableInstanceList = actProcessService.getHistoricVariable(proInsId);
 		model.addAttribute("varList",variableInstanceList);
 		model.addAttribute("proInsId",proInsId);
-		return "modules/act/processHistoricView";
+		return "modules/act/processView";
 	}
 
 
@@ -233,17 +233,7 @@ public class ActProcessController extends BaseController {
 		redirectAttributes.addFlashAttribute("message", "转换模型成功，模型ID="+modelData.getId());
 		return "redirect:" + adminPath + "/act/process";
 	}
-	
-	/**
-	 * 导出图片文件到硬盘
-	 */
-	@RequiresPermissions("act:process:edit")
-	@RequestMapping(value = "export/diagrams")
-	@ResponseBody
-	public List<String> exportDiagrams(@Value("#{APP_PROP['activiti.export.diagram.path']}") String exportDir) throws IOException {
-		List<String> files = actProcessService.exportDiagrams(exportDir);;
-		return files;
-	}
+
 
 	/**
 	 * 删除部署的流程，级联删除流程实例

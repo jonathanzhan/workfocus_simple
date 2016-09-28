@@ -309,56 +309,6 @@ public class ActTaskService extends BaseService {
 		return actList;
 	}
 
-	/**
-	 * 获取流程列表
-	 * @param category 流程分类
-	 */
-	public Page<Object[]> processList(Page<Object[]> page, String category) {
-		/*
-		 * 保存两个对象，一个是ProcessDefinition（流程定义），一个是Deployment（流程部署）
-		 */
-	    ProcessDefinitionQuery processDefinitionQuery = repositoryService.createProcessDefinitionQuery()
-	    		.latestVersion().active().orderByProcessDefinitionKey().asc();
-	    
-	    if (StringUtils.isNotEmpty(category)){
-	    	processDefinitionQuery.processDefinitionCategory(category);
-		}
-	    
-	    page.setCount(processDefinitionQuery.count());
-	    
-	    List<ProcessDefinition> processDefinitionList = processDefinitionQuery.listPage(page.getFirstResult(), page.getMaxResults());
-	    for (ProcessDefinition processDefinition : processDefinitionList) {
-	      String deploymentId = processDefinition.getDeploymentId();
-	      Deployment deployment = repositoryService.createDeploymentQuery().deploymentId(deploymentId).singleResult();
-	      page.getList().add(new Object[]{processDefinition, deployment});
-	    }
-		return page;
-	}
-	
-	/**
-	 * 获取流程表单（首先获取任务节点表单KEY，如果没有则取流程开始节点表单KEY）
-	 * @return
-	 */
-	public String getFormKey(String procDefId, String taskDefKey){
-		String formKey = "";
-		if (StringUtils.isNotBlank(procDefId)){
-			if (StringUtils.isNotBlank(taskDefKey)){
-				try{
-					formKey = formService.getTaskFormKey(procDefId, taskDefKey);
-				}catch (Exception e) {
-					formKey = "";
-				}
-			}
-			if (StringUtils.isBlank(formKey)){
-				formKey = formService.getStartFormKey(procDefId);
-			}
-			if (StringUtils.isBlank(formKey)){
-				formKey = "/404";
-			}
-		}
-		logger.debug("getFormKey: {}", formKey);
-		return "/"+formKey;
-	}
 	
 	/**
 	 * 获取流程实例对象
@@ -545,33 +495,6 @@ public class ActTaskService extends BaseService {
 		}
 	}
 
-//	/**
-//	 * 委派任务
-//	 * @param taskId 任务ID
-//	 * @param userId 被委派人
-//	 */
-//	public void delegateTask(String taskId, String userId){
-//		taskService.delegateTask(taskId, userId);
-//	}
-//	
-//	/**
-//	 * 被委派人完成任务
-//	 * @param taskId 任务ID
-//	 */
-//	public void resolveTask(String taskId){
-//		taskService.resolveTask(taskId);
-//	}
-//	
-//	/**
-//	 * 回退任务
-//	 * @param taskId
-//	 */
-//	public void backTask(String taskId){
-//		taskService.
-//	}
-	
-	////////////////////////////////////////////////////////////////////
-
 	/**
 	 * 读取带跟踪的图片
 	 * @param executionId	环节ID
@@ -596,128 +519,7 @@ public class ActTaskService extends BaseService {
 		ProcessDiagramGenerator diagramGenerator = processEngineConfiguration.getProcessDiagramGenerator();
 		return diagramGenerator.generateDiagram(bpmnModel, "png", activeActivityIds);
 	}
-	
-	/**
-	 * 流程跟踪图信息
-	 * @param processInstanceId		流程实例ID
-	 * @return	封装了各种节点信息
-	 */
-	public List<Map<String, Object>> traceProcess(String processInstanceId) throws Exception {
-		Execution execution = runtimeService.createExecutionQuery().executionId(processInstanceId).singleResult();//执行实例
-		Object property = PropertyUtils.getProperty(execution, "activityId");
-		String activityId = "";
-		if (property != null) {
-			activityId = property.toString();
-		}
-		ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId)
-				.singleResult();
-		ProcessDefinitionEntity processDefinition = (ProcessDefinitionEntity) ((RepositoryServiceImpl) repositoryService)
-				.getDeployedProcessDefinition(processInstance.getProcessDefinitionId());
-		List<ActivityImpl> activitiList = processDefinition.getActivities();//获得当前任务的所有节点
 
-		List<Map<String, Object>> activityInfos = new ArrayList<Map<String, Object>>();
-		for (ActivityImpl activity : activitiList) {
-
-			boolean currentActiviti = false;
-			String id = activity.getId();
-
-			// 当前节点
-			if (id.equals(activityId)) {
-				currentActiviti = true;
-			}
-
-			Map<String, Object> activityImageInfo = packageSingleActivitiInfo(activity, processInstance, currentActiviti);
-
-			activityInfos.add(activityImageInfo);
-		}
-
-		return activityInfos;
-	}
-
-	/**
-	 * 封装输出信息，包括：当前节点的X、Y坐标、变量信息、任务类型、任务描述
-	 * @param activity
-	 * @param processInstance
-	 * @param currentActiviti
-	 * @return
-	 */
-	private Map<String, Object> packageSingleActivitiInfo(ActivityImpl activity, ProcessInstance processInstance,
-			boolean currentActiviti) throws Exception {
-		Map<String, Object> vars = new HashMap<String, Object>();
-		Map<String, Object> activityInfo = new HashMap<String, Object>();
-		activityInfo.put("currentActiviti", currentActiviti);
-		setPosition(activity, activityInfo);
-		setWidthAndHeight(activity, activityInfo);
-
-		Map<String, Object> properties = activity.getProperties();
-		vars.put("节点名称", properties.get("name"));
-		vars.put("任务类型", ActUtils.parseToZhType(properties.get("type").toString()));
-
-		ActivityBehavior activityBehavior = activity.getActivityBehavior();
-		logger.debug("activityBehavior={}", activityBehavior);
-		if (activityBehavior instanceof UserTaskActivityBehavior) {
-
-			Task currentTask = null;
-
-			// 当前节点的task
-			if (currentActiviti) {
-				currentTask = getCurrentTaskInfo(processInstance);
-			}
-
-			// 当前任务的分配角色
-			UserTaskActivityBehavior userTaskActivityBehavior = (UserTaskActivityBehavior) activityBehavior;
-			TaskDefinition taskDefinition = userTaskActivityBehavior.getTaskDefinition();
-			Set<Expression> candidateGroupIdExpressions = taskDefinition.getCandidateGroupIdExpressions();
-			if (!candidateGroupIdExpressions.isEmpty()) {
-
-				// 任务的处理角色
-				setTaskGroup(vars, candidateGroupIdExpressions);
-
-				// 当前处理人
-				if (currentTask != null) {
-					setCurrentTaskAssignee(vars, currentTask);
-				}
-			}
-		}
-
-		vars.put("节点说明", properties.get("documentation"));
-
-		String description = activity.getProcessDefinition().getDescription();
-		vars.put("描述", description);
-
-		logger.debug("trace variables: {}", vars);
-		activityInfo.put("vars", vars);
-		return activityInfo;
-	}
-
-	/**
-	 * 设置任务组
-	 * @param vars
-	 * @param candidateGroupIdExpressions
-	 */
-	private void setTaskGroup(Map<String, Object> vars, Set<Expression> candidateGroupIdExpressions) {
-		String roles = "";
-		for (Expression expression : candidateGroupIdExpressions) {
-			String expressionText = expression.getExpressionText();
-			String roleName = identityService.createGroupQuery().groupId(expressionText).singleResult().getName();
-			roles += roleName;
-		}
-		vars.put("任务所属角色", roles);
-	}
-
-	/**
-	 * 设置当前处理人信息
-	 * @param vars
-	 * @param currentTask
-	 */
-	private void setCurrentTaskAssignee(Map<String, Object> vars, Task currentTask) {
-		String assignee = currentTask.getAssignee();
-		if (assignee != null) {
-			org.activiti.engine.identity.User assigneeUser = identityService.createUserQuery().userId(assignee).singleResult();
-			String userInfo = assigneeUser.getFirstName() + " " + assigneeUser.getLastName();
-			vars.put("当前处理人", userInfo);
-		}
-	}
 
 	/**
 	 * 获取当前节点信息
@@ -740,24 +542,14 @@ public class ActTaskService extends BaseService {
 		return currentTask;
 	}
 
-	/**
-	 * 设置宽度、高度属性
-	 * @param activity
-	 * @param activityInfo
-	 */
-	private void setWidthAndHeight(ActivityImpl activity, Map<String, Object> activityInfo) {
-		activityInfo.put("width", activity.getWidth());
-		activityInfo.put("height", activity.getHeight());
-	}
 
-	/**
-	 * 设置坐标位置
-	 * @param activity
-	 * @param activityInfo
-	 */
-	private void setPosition(ActivityImpl activity, Map<String, Object> activityInfo) {
-		activityInfo.put("x", activity.getX());
-		activityInfo.put("y", activity.getY());
+	@Transactional(readOnly = false)
+	public void addSubTask(String parentTaskId, String taskName) {
+		Task subTask = taskService.newTask();
+		subTask.setName(taskName);
+		subTask.setAssignee("admin");
+		subTask.setDescription("子任务");
+		subTask.setParentTaskId(parentTaskId);
+		taskService.saveTask(subTask);
 	}
-	
 }

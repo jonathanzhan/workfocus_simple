@@ -6,7 +6,6 @@ package com.mfnets.workfocus.modules.demo.listener;
 
 import org.activiti.engine.delegate.DelegateTask;
 import org.activiti.engine.delegate.TaskListener;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 /**

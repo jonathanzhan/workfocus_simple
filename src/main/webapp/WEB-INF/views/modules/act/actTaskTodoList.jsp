@@ -87,6 +87,8 @@
 						<td><fmt:formatDate value="${task.dueDate}" type="both"/></td>
 						<td>${task.owner}</td>
 						<td>
+							<a href="${ctx}/act/task/addSubTask/${task.id}&taskName=" onclick="return promptx('子流程名称',this.href);" class="btn btn-danger btn-xs"><i class="fa fa-trash">子任务</i></a>
+
 							<c:if test="${not empty task.assignee}">
 								<a href="#" onclick="openDialog('任务办理', '${ctx}/act/task/form/${task.id}','800px', '620px')" class="btn btn-primary btn-xs" >任务办理</a>
 							</c:if>

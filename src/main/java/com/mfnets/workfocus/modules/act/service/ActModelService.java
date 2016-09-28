@@ -57,7 +57,10 @@ public class ActModelService extends BaseService {
 	private RepositoryService repositoryService;
 
 	/**
-	 * 流程模型列表
+	 * 流程的模型列表
+	 * @param page
+	 * @param category
+	 * @return
 	 */
 	public Page<org.activiti.engine.repository.Model> modelList(Page<org.activiti.engine.repository.Model> page, String category) {
 

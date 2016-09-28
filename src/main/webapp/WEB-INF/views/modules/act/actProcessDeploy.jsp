@@ -69,7 +69,7 @@
 				<div class="form-group">
 					<div class="col-md-offset-2">
 						<shiro:hasAnyPermissions name="act:model:edit">
-							<input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;
+							<input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>
 						</shiro:hasAnyPermissions>
 					</div>
 				</div>

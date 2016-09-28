@@ -81,7 +81,7 @@
 							</c:if>
 						</td>
 						<td>
-							<a href="#" onclick="openDialogView('详细信息', '${ctx}/act/process/historic/view/${procIns.processInstanceId}','800px', '620px')" class="btn btn-primary btn-xs" ><i class="fa fa-search-plus"></i>查看</a>
+							<a href="#" onclick="openDialogView('详细信息', '${ctx}/act/process/view/${procIns.processInstanceId}','800px', '620px')" class="btn btn-primary btn-xs" ><i class="fa fa-search-plus"></i>查看</a>
 
 							<shiro:hasPermission name="act:process:edit">
 								<a href="${ctx}/act/process/deleteProcIns?procInsId=${procIns.processInstanceId}&reason=" onclick="return promptx('删除原因',this.href);" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i>删除</a>
