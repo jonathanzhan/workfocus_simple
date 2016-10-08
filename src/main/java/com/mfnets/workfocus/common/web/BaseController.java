@@ -19,7 +19,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -168,6 +170,57 @@ public abstract class BaseController {
 		} catch (IOException e) {
 			return null;
 		}
+	}
+
+	/**
+	 * 设置响应代码
+	 *
+	 * @param modelMap ModelMap
+	 * @return ResponseEntity
+	 */
+	protected ResponseEntity<ModelMap> setSuccessModelMap(ModelMap modelMap) {
+		return setSuccessModelMap(modelMap, null);
+	}
+
+	/**
+	 * 设置响应代码
+	 *
+	 * @param modelMap ModelMap
+	 * @param data     data
+	 * @return ResponseEntity
+	 */
+	protected ResponseEntity<ModelMap> setSuccessModelMap(ModelMap modelMap, Object data) {
+		return setModelMap(modelMap, null,data);
+	}
+
+	/**
+	 * 设置响应代码
+	 *
+	 * @param modelMap ModelMap
+	 * @param code     HttpCode
+	 * @return ResponseEntity
+	 */
+	protected ResponseEntity<ModelMap> setModelMap(ModelMap modelMap, HttpCode code) {
+		return setModelMap(modelMap, code, null);
+	}
+
+	/**
+	 * 设置响应代码
+	 *
+	 * @param modelMap ModelMap
+	 * @param code     HttpCode
+	 * @param data     data
+	 * @return ResponseEntity
+	 */
+	protected ResponseEntity<ModelMap> setModelMap(ModelMap modelMap, HttpCode code, Object data) {
+		modelMap.remove("void");
+		if (data != null) {
+			modelMap.put("data", data);
+		}
+		modelMap.put("httpCode", code.value());
+		modelMap.put("msg", code.msg());
+		modelMap.put("timestamp", System.currentTimeMillis());
+		return ResponseEntity.ok(modelMap);
 	}
 
 	/**
