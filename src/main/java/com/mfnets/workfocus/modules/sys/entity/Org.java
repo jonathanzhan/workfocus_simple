@@ -27,10 +27,13 @@ public class Org extends TreeEntity<Org> {
 
 	private String oldParentIds;
 
+	private boolean parentIdLike;//是否精确查找机构下的员工信息
+
 
 	public Org(){
 		super();
 		this.type = 2;
+		parentIdLike = false;
 	}
 
 	public Org(String id){
@@ -125,6 +128,15 @@ public class Org extends TreeEntity<Org> {
 
 	public void setRemarks(String remarks) {
 		this.remarks = remarks;
+	}
+
+	@JsonIgnore
+	public boolean isParentIdLike() {
+		return parentIdLike;
+	}
+
+	public void setParentIdLike(boolean parentIdLike) {
+		this.parentIdLike = parentIdLike;
 	}
 
 	@JsonIgnore

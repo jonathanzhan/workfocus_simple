@@ -239,20 +239,32 @@ public class UserController extends BaseController {
 	@RequiresPermissions("user")
 	@ResponseBody
 	@RequestMapping(value = "treeData")
-	public List<Map<String, Object>> treeData(@RequestParam(required=false) String orgId, HttpServletResponse response) {
+	public List<Map<String, Object>> treeData(@RequestParam String orgId, @RequestParam Integer type, HttpServletResponse response) {
 		List<Map<String, Object>> mapList = Lists.newArrayList();
 		Org org = new Org(orgId);
+		org.setParentIdLike(true);
 		List<User> list = systemService.findUser(new User(new Employee(org)));
 		for (int i=0; i<list.size(); i++){
 			User e = list.get(i);
 			Map<String, Object> map = Maps.newHashMap();
-			map.put("id", "e_"+e.getId());
 			map.put("pId", orgId);
-			map.put("name", StringUtils.replace(e.getEmployee().getName(), " ", "")+"("+StringUtils.replace(e.getEmployee().getCode(), " ", "")+")");
+			if(type.equals(6)){
+				map.put("id", "e_"+e.getId());
+				map.put("name", StringUtils.replace(e.getEmployee().getName(), " ", "")+"("+StringUtils.replace(e.getEmployee().getCode(), " ", "")+")");
+			}else{
+				map.put("id","e_"+e.getLoginName());
+				map.put("name", StringUtils.replace(e.getEmployee().getName(), " ", "")+"("+StringUtils.replace(e.getLoginName(), " ", "")+")");
+			}
+
 			mapList.add(map);
 		}
 		return mapList;
 	}
+
+
+
+
+
     
 //	@InitBinder
 //	public void initBinder(WebDataBinder b) {

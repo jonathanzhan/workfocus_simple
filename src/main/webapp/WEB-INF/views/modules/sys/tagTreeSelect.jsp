@@ -17,7 +17,10 @@
 			asyncUrl = "${ctx}/sys/employee/treeData";
 		}else if(type==6){
 			asyncEnabled = true;
-			asyncUrl = "${ctx}/sys/user/treeData";
+			asyncUrl = "${ctx}/sys/user/treeData?type=6";
+		}else if(type==7){
+			asyncEnabled = true;
+			asyncUrl = "${ctx}/sys/user/treeData?type=7";
 		}else{
 			asyncEnabled = false;
 		}

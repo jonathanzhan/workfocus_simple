@@ -68,9 +68,16 @@
 		</if>
 		<if test="employee != null">
 			<if test="employee.org !=null and employee.org.id != null and employee.org.id != ''">
-				AND (d.id = #{employee.org.id} OR d.parent_ids LIKE
-				<if test="dbName == 'oracle'">'%'||#{employee.org.id}||'%')</if>
-				<if test="dbName == 'mysql'">CONCAT('%', #{employee.org.id}, '%'))</if>
+				<choose>
+					<when test="employee.org.parentIdLike">
+						AND d.id = #{employee.org.id}
+					</when>
+					<otherwise>
+						AND (d.id = #{employee.org.id} OR d.parent_ids LIKE
+						<if test="dbName == 'oracle'">'%'||#{employee.org.id}||'%')</if>
+						<if test="dbName == 'mysql'">CONCAT('%', #{employee.org.id}, '%'))</if>
+					</otherwise>
+				</choose>
 			</if>
 			<if test="employee.name != null and employee.name != ''">
 				AND (b.name LIKE
