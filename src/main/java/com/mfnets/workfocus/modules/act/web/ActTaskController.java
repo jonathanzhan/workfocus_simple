@@ -15,29 +15,34 @@
  */
 package com.mfnets.workfocus.modules.act.web;
 
+import com.google.common.collect.Maps;
 import com.mfnets.workfocus.common.persistence.Page;
 import com.mfnets.workfocus.common.web.BaseController;
+import com.mfnets.workfocus.common.web.HttpCode;
 import com.mfnets.workfocus.modules.act.entity.Act;
 import com.mfnets.workfocus.modules.act.entity.ActBusiness;
 import com.mfnets.workfocus.modules.act.service.ActTaskService;
 import com.mfnets.workfocus.modules.act.utils.ActUtils;
 import com.mfnets.workfocus.modules.sys.utils.UserUtils;
 import org.activiti.engine.history.HistoricVariableInstance;
+import org.activiti.engine.task.Comment;
+import org.activiti.engine.task.Event;
 import org.activiti.engine.task.Task;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 
@@ -97,9 +102,51 @@ public class ActTaskController extends BaseController {
 		return "modules/act/actTaskHistoricList";
 	}
 
+	/**
+	 * 任务的备注的保存
+	 * @param taskId 任务ID
+	 * @param proInsId 流程实例ID
+	 * @param comment 备注
+	 * @return 操作成功
+	 */
+	@RequestMapping(value = "comment/save")
+	@ResponseBody
+	public String commentSave(@RequestParam(value = "taskId") String taskId,
+							  @RequestParam(value = "proInsId") String proInsId,
+							  @RequestParam(required=false,value = "comment") String comment){
+		actTaskService.commentSave(taskId,proInsId,comment);
+		return "true";
+	}
 
 
+	/**
+	 * 修改任务的属性信息
+	 * @param taskId 任务ID
+	 * @param propertyName 属性的name值
+ 	 * @param value 属性值
+	 * @return
+	 */
+	@RequestMapping(value = "changeTaskProperty/{taskId}")
+	@ResponseBody
+	public String changeTaskProperty(@PathVariable("taskId") String taskId,
+									 @RequestParam(value = "propertyName") String propertyName,
+									 @RequestParam(value = "value") String value){
+		String result = actTaskService.changeTaskProperty(taskId,propertyName,value);
+		return result;
+	}
 
+
+	/**
+	 * 查询任务的事件列表
+	 * @param taskId 任务ID
+	 * @return
+	 */
+	@RequestMapping(value = "taskEvents/{taskId}")
+	@ResponseBody
+	public List<Event> event(@PathVariable(value = "taskId") String taskId) {
+		return actTaskService.getTaskEvents(taskId);
+
+	}
 
 	@RequestMapping(value = "addSubTask/{parentTaskId}")
 	public String addSubTask(@PathVariable("parentTaskId") String parentTaskId,String taskName){

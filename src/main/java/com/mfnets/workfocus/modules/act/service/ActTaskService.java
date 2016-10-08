@@ -19,6 +19,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mfnets.workfocus.common.persistence.Page;
 import com.mfnets.workfocus.common.service.BaseService;
+import com.mfnets.workfocus.common.utils.DateUtils;
 import com.mfnets.workfocus.common.utils.StringUtils;
 import com.mfnets.workfocus.modules.act.dao.ActDao;
 import com.mfnets.workfocus.modules.act.entity.Act;
@@ -28,26 +29,13 @@ import com.mfnets.workfocus.modules.sys.entity.User;
 import com.mfnets.workfocus.modules.sys.utils.UserUtils;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.engine.*;
-import org.activiti.engine.delegate.Expression;
 import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.history.HistoricTaskInstanceQuery;
-import org.activiti.engine.impl.RepositoryServiceImpl;
-import org.activiti.engine.impl.bpmn.behavior.UserTaskActivityBehavior;
 import org.activiti.engine.impl.context.Context;
-import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
-import org.activiti.engine.impl.pvm.delegate.ActivityBehavior;
-import org.activiti.engine.impl.pvm.process.ActivityImpl;
-import org.activiti.engine.impl.task.TaskDefinition;
-import org.activiti.engine.repository.Deployment;
-import org.activiti.engine.repository.ProcessDefinition;
-import org.activiti.engine.repository.ProcessDefinitionQuery;
-import org.activiti.engine.runtime.Execution;
 import org.activiti.engine.runtime.ProcessInstance;
-import org.activiti.engine.task.Comment;
-import org.activiti.engine.task.Task;
-import org.activiti.engine.task.TaskQuery;
+import org.activiti.engine.task.*;
 import org.activiti.image.ProcessDiagramGenerator;
 import org.activiti.spring.ProcessEngineFactoryBean;
 import org.apache.commons.beanutils.PropertyUtils;
@@ -57,7 +45,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.InputStream;
-import java.util.*;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -551,5 +543,89 @@ public class ActTaskService extends BaseService {
 		subTask.setDescription("子任务");
 		subTask.setParentTaskId(parentTaskId);
 		taskService.saveTask(subTask);
+	}
+
+	/**
+	 * 流程备注的保存
+	 * @param taskId
+	 * @param proInsId
+	 * @param comment
+	 */
+	@Transactional(readOnly = false)
+	public void commentSave(String taskId, String proInsId, String comment) {
+		identityService.setAuthenticatedUserId(UserUtils.getUser().getLoginName());
+		taskService.addComment(taskId,proInsId,comment);
+	}
+
+	/**
+	 * 任务的事件列表
+	 * @param taskId
+	 * @return 整个任务的所有事件列表,按照事件倒序
+	 */
+	public List<Event> getTaskEvents(String taskId) {
+		List<Event> taskEvents = taskService.getTaskEvents(taskId);
+		return taskEvents;
+
+
+//		Map<String,Object> result = Maps.newHashMap();
+//		Map<String,Object> commentAndEventsMap = Maps.newHashMap();
+//		//todo 集合是无序的,因此页面显示未按照时间显示
+////		if(StringUtils.isNotBlank(processInstanceId)) {
+////			List<Comment> processInstanceComments = taskService.getProcessInstanceComments(processInstanceId);
+////			for (Comment comment : processInstanceComments) {
+////				String commentId = (String) PropertyUtils.getProperty(comment,"id");
+////				commentAndEventsMap.put(commentId,comment);
+////			}
+////			//提取任务名称
+////			List<HistoricTaskInstance> list = historyService.createHistoricTaskInstanceQuery().processInstanceId(processInstanceId).list();
+////
+////			Map<String,String> taskNames = Maps.newHashMap();
+////			for (HistoricTaskInstance historicTaskInstance : list) {
+////				taskNames.put(historicTaskInstance.getId(),historicTaskInstance.getName());
+////			}
+////			result.put("taskNames" , taskNames);
+////		}
+//
+//		//查询所有类型的事件
+//		if(StringUtils.isNotBlank(taskId)) {
+//			List<Event> taskEvents = taskService.getTaskEvents(taskId);
+//			for(Event event : taskEvents) {
+//				String eventId = (String) PropertyUtils.getProperty(event,"id");
+//				commentAndEventsMap.put(eventId,event);
+//			}
+//		}
+//		result.put("events",commentAndEventsMap.values());
+//		return result;
+	}
+
+	/**
+	 * 修改任务的参数属性
+	 * @param taskId
+	 * @param propertyName
+	 * @param value
+	 * @return
+	 */
+	@Transactional(readOnly = false)
+	public String changeTaskProperty(String taskId, String propertyName, String value) {
+		try{
+			identityService.setAuthenticatedUserId(UserUtils.getUser().getLoginName());
+			if(StringUtils.equals(propertyName,"dueDate")){
+				Date dueDate = DateUtils.parseDate(value);
+				taskService.setDueDate(taskId,dueDate);
+			}else if(StringUtils.equals(propertyName,"priority")) {
+				taskService.setPriority(taskId,Integer.parseInt(value));
+			}else if(StringUtils.equals(propertyName,"owner")) {
+				taskService.addUserIdentityLink(taskId,value,IdentityLinkType.OWNER);
+			}else if(StringUtils.equals(propertyName,"assignee")) {
+				taskService.setAssignee(taskId,value);
+			}else{
+				logger.warn("there is no propertyName:{} to set",propertyName);
+			}
+			return "true";
+		}catch (Exception e){
+			e.printStackTrace();
+			throw new RuntimeException("操作失败");
+		}
+
 	}
 }
