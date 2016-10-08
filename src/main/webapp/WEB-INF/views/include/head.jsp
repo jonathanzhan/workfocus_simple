@@ -58,6 +58,7 @@
 <script type="text/javascript" src="${ctxStatic}/plugins/dataTables/datatables.js"></script>
 
 <script src="${ctxStatic}/plugins/My97DatePicker/WdatePicker.js" type="text/javascript"></script>
+<%--<script src="${ctxStatic}/plugins/layer/laydate/laydate.js"></script>--%>
 
 
 
