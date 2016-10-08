@@ -15,54 +15,54 @@
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 	</context:component-scan>
 
-	<mvc:annotation-driven  />
+	<!--<mvc:annotation-driven  />-->
 	<!-- 默认的注解映射的支持，org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping -->
-	<!--<mvc:annotation-driven content-negotiation-manager="contentNegotiationManager">-->
-		<!--<mvc:message-converters register-defaults="true">-->
-			<!--&lt;!&ndash; 将StringHttpMessageConverter的默认编码设为UTF-8 &ndash;&gt;-->
-			<!--<bean class="org.springframework.http.converter.StringHttpMessageConverter">-->
-		    	<!--<constructor-arg value="UTF-8" />-->
+	<mvc:annotation-driven content-negotiation-manager="contentNegotiationManager">
+		<mvc:message-converters register-defaults="true">
+			<!-- 将StringHttpMessageConverter的默认编码设为UTF-8 -->
+			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+		    	<constructor-arg value="UTF-8" />
+			</bean>
+			<!-- 将Jackson2HttpMessageConverter的默认格式化输出为false -->
+			<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                <property name="supportedMediaTypes">
+                	<list><value>application/json;charset=UTF-8</value></list>
+                </property>
+                <property name="prettyPrint" value="false"/>
+                <property name="objectMapper">
+                    <bean class="com.mfnets.workfocus.common.mapper.JsonMapper"></bean>
+                </property>
+            </bean>
+            <!--&lt;!&ndash; 使用XML格式输出数据 &ndash;&gt;-->
+            <!--<bean class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">-->
+		        <!--<constructor-arg>-->
+		        	<!--<bean class="org.springframework.oxm.xstream.XStreamMarshaller">-->
+				        <!--<property name="streamDriver">-->
+				            <!--<bean class="com.thoughtworks.xstream.io.xml.StaxDriver"/>-->
+				        <!--</property>-->
+				        <!--<property name="annotatedClasses">-->
+				            <!--<list>-->
+				                <!--<value>com.mfnets.workfocus.common.persistence.BaseEntity</value>-->
+				            <!--</list>-->
+				        <!--</property>-->
+				    <!--</bean>-->
+		        <!--</constructor-arg>-->
+		        <!--<property name="supportedMediaTypes" value="application/xml"></property>-->
 			<!--</bean>-->
-			<!--&lt;!&ndash; 将Jackson2HttpMessageConverter的默认格式化输出为false &ndash;&gt;-->
-			<!--<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">-->
-                <!--<property name="supportedMediaTypes">-->
-                	<!--<list><value>application/json;charset=UTF-8</value></list>-->
-                <!--</property>-->
-                <!--<property name="prettyPrint" value="false"/>-->
-                <!--<property name="objectMapper">-->
-                    <!--<bean class="com.mfnets.workfocus.common.mapper.JsonMapper"></bean>-->
-                <!--</property>-->
-            <!--</bean>-->
-            <!--&lt;!&ndash;&lt;!&ndash; 使用XML格式输出数据 &ndash;&gt;&ndash;&gt;-->
-            <!--&lt;!&ndash;<bean class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">&ndash;&gt;-->
-		        <!--&lt;!&ndash;<constructor-arg>&ndash;&gt;-->
-		        	<!--&lt;!&ndash;<bean class="org.springframework.oxm.xstream.XStreamMarshaller">&ndash;&gt;-->
-				        <!--&lt;!&ndash;<property name="streamDriver">&ndash;&gt;-->
-				            <!--&lt;!&ndash;<bean class="com.thoughtworks.xstream.io.xml.StaxDriver"/>&ndash;&gt;-->
-				        <!--&lt;!&ndash;</property>&ndash;&gt;-->
-				        <!--&lt;!&ndash;<property name="annotatedClasses">&ndash;&gt;-->
-				            <!--&lt;!&ndash;<list>&ndash;&gt;-->
-				                <!--&lt;!&ndash;<value>com.mfnets.workfocus.common.persistence.BaseEntity</value>&ndash;&gt;-->
-				            <!--&lt;!&ndash;</list>&ndash;&gt;-->
-				        <!--&lt;!&ndash;</property>&ndash;&gt;-->
-				    <!--&lt;!&ndash;</bean>&ndash;&gt;-->
-		        <!--&lt;!&ndash;</constructor-arg>&ndash;&gt;-->
-		        <!--&lt;!&ndash;<property name="supportedMediaTypes" value="application/xml"></property>&ndash;&gt;-->
-			<!--&lt;!&ndash;</bean>&ndash;&gt;-->
-		<!--</mvc:message-converters>-->
-	<!--</mvc:annotation-driven>-->
+		</mvc:message-converters>
+	</mvc:annotation-driven>
 	
     <!-- REST中根据URL后缀自动判定Content-Type及相应的View -->
-	<!--<bean id="contentNegotiationManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">-->
-	    <!--<property name="mediaTypes" >-->
-	        <!--<map>-->
-                <!--<entry key="xml" value="application/xml"/>-->
-                <!--<entry key="json" value="application/json"/>-->
-            <!--</map>-->
-	    <!--</property>-->
-        <!--<property name="ignoreAcceptHeader" value="true"/>-->
-        <!--<property name="favorPathExtension" value="true"/>-->
-	<!--</bean>-->
+	<bean id="contentNegotiationManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+	    <property name="mediaTypes" >
+	        <map>
+                <entry key="xml" value="application/xml"/>
+                <entry key="json" value="application/json"/>
+            </map>
+	    </property>
+        <property name="ignoreAcceptHeader" value="true"/>
+        <property name="favorPathExtension" value="true"/>
+	</bean>
 	
 	<!-- 定义视图文件解析 -->
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
