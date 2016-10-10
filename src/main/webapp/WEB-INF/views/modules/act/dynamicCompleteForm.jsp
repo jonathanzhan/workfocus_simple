@@ -6,17 +6,14 @@
 	<title>动态表单-任务办理</title>
 	<%@include file="/WEB-INF/views/include/head.jsp" %>
 	<script src="${ctxStatic}/plugins/layer/laydate/laydate.js"></script>
-	<script>
-
-
-	</script>
-	<script src="${ctxStatic}/js/modules/act/task-events.js"></script>
-
-
 	<script type="text/javascript">
-
 		var taskId = '${task.id}';
 		var processInstanceId = '${task.processInstanceId}';
+	</script>
+
+	<script src="${ctxStatic}/js/modules/act/task-events.js"></script>
+
+	<script type="text/javascript">
 
 		var validateForm;
 		function doSubmit() {//回调函数，在编辑和保存动作时，供openDialog调用提交表单。
@@ -26,6 +23,46 @@
 			}
 			return false;
 		}
+
+
+		var addSubTask = function(text){
+			$.ajax({
+				type:"post",
+				url:ctx+'/act/task/'+taskId+'/addSubTask',
+				data:{
+					taskName:text
+				},
+				success:function(data, textStatus){
+					console.log("add subTask result is:"+data+"asdas"+textStatus);
+					loadSubTasks();
+				}
+			})
+		}
+
+		function loadSubTasks(){
+			$("#subTaskList ul").html('');
+			var url = '${pageContext.request.contextPath}/act/rest/runtime/tasks/'+taskId+'/subtasks';
+			$.getJSON(url,function (datas) {
+				console.log(datas);
+
+				$.each(datas, function(i, v) {
+					$('<li/>', {
+						html: function() {
+							var content = "";
+							content += "<span class='text-error'>" + v.name + "</span>";
+
+							content += "<span class='text-info'>[处理人:" + v.assignee + "]</span>";
+
+							content += "<span class='text-muted'>" + new Date(v.createTime).toLocaleString() + "</span>";
+							return content;
+						}
+					}).appendTo('#subTaskList ul');
+				});
+
+
+			})
+		}
+
 
 
 		/**
@@ -44,9 +81,7 @@
 
 
 		$(document).ready(function () {
-
-
-
+			loadSubTasks();
 			validateForm = $("#inputForm").validate({
 				submitHandler: function (form) {
 					layer.load();
@@ -112,6 +147,23 @@
 		</div>
 
 		<div class="ibox-content">
+			<div class="row">
+				<div class="col-sm-12">
+					<a href="#" onclick="return promptx('子流程名称',addSubTask);" class="btn btn-danger pull-right btn-xs"><i class="fa fa-trash">子任务</i></a>
+					<h4 class="text-navy">添加子任务</h4>
+				</div>
+			</div>
+			<div class="hr-line-dashed"></div>
+			<div class="row dashboard-header">
+				<div class="col-sm-12" style="margin-top: 10px" id="subTaskList">
+					<ul>
+
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<div class="ibox-content">
 			<h4 class="text-navy">流程属性</h4>
 			<div class="hr-line-dashed"></div>
 			<div class="row dashboard-header">
@@ -156,22 +208,11 @@
 			</div>
 		</div>
 
+
 		<div class="ibox-content">
 			<h4 class="text-navy">添加意见</h4>
 			<div class="hr-line-dashed"></div>
 			<div class="row dashboard-header">
-				<div class="col-sm-12">
-
-					<%--<label class="col-sm-2 control-label">拥有人</label>--%>
-					<%--<div class="col-sm-4">--%>
-						<%--<input type="text" class="form-control" value="${task.owner}">--%>
-					<%--</div>--%>
-					<%--<label class="col-sm-2 control-label">办理人</label>--%>
-					<%--<div class="col-sm-4">--%>
-						<%--<input type="text" class="form-control" value="${task.assignee}">--%>
-					<%--</div>--%>
-				</div>
-
 				<div class="col-sm-12">
 					<div class="input-group">
 						<input type="text" id="comment" placeholder="添加意见" class="input form-control" />
@@ -184,12 +225,8 @@
 
 						</ul>
 					</div>
-
 				</div>
-
-
 			</div>
-
 		</div>
 
 		<act:histoicFlow procInsId="${task.processInstanceId}" />

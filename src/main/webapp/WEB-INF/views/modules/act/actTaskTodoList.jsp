@@ -17,7 +17,7 @@
 	<!--查询表单开始-->
 	<div class="ibox m-b-sm border-bottom">
 		<div class="ibox-title">
-			<a href="${ctx}/act/task/todo/"><h5>待办任务</h5></a>
+			<a href="${ctx}/act/task/todo/list"><h5>待办任务</h5></a>
 		</div>
 
 		<div class="ibox-content">
@@ -68,27 +68,19 @@
 				</tr>
 				</thead>
 				<tbody>
-				<c:forEach items="${list}" var="act">
-					<c:set var="task" value="${act.task}" />
-					<c:set var="vars" value="${act.vars}" />
-					<c:set var="procDef" value="${act.procDef}" />
-					<c:set var="status" value="${act.status}" />
+				<c:forEach items="${list}" var="task">
 					<tr>
-						<td>
-							<a href="${ctx}/act/task/form?taskId=${task.id}&taskName=${fns:urlEncode(task.name)}&taskDefKey=${task.taskDefinitionKey}&procInsId=${task.processInstanceId}&procDefId=${task.processDefinitionId}&status=${status}">${fns:abbr(not empty vars.map.title ? vars.map.title : task.id, 60)}</a>
-						</td>
+						<td>${task.id}</td>
 						<td>
 							<a href="#" onclick="openDialogView('流程跟踪', '${ctx}/act/task/trace/photo/${task.processDefinitionId}/${task.executionId}','800px', '620px')" class="btn btn-info btn-xs" ><i class="fa fa-search-plus"></i>${task.name}</a>
 						</td>
 						<td>
-							<a href="#" onclick="openDialogView('流程跟踪', '${pageContext.request.contextPath}/activiti/diagram-viewer/index.html?processDefinitionId=${task.processDefinitionId}&processInstanceId=${task.processInstanceId}','900px', '650px')" class="btn btn-info btn-xs" ><i class="fa fa-search-plus"></i>${procDef.name}</a>
+							<a href="#" onclick="openDialogView('流程跟踪', '${pageContext.request.contextPath}/activiti/diagram-viewer/index.html?processDefinitionId=${task.processDefinitionId}&processInstanceId=${task.processInstanceId}','900px', '650px')" class="btn btn-info btn-xs" ><i class="fa fa-search-plus"></i>${task.name}</a>
 						</td>
 						<td><fmt:formatDate value="${task.createTime}" type="both"/></td>
 						<td><fmt:formatDate value="${task.dueDate}" type="both"/></td>
 						<td>${task.owner}</td>
 						<td>
-							<a href="${ctx}/act/task/addSubTask/${task.id}&taskName=" onclick="return promptx('子流程名称',this.href);" class="btn btn-danger btn-xs"><i class="fa fa-trash">子任务</i></a>
-
 							<c:if test="${not empty task.assignee}">
 								<a href="#" onclick="openDialog('任务办理', '${ctx}/act/task/form/${task.id}','800px', '620px')" class="btn btn-primary btn-xs" >任务办理</a>
 							</c:if>

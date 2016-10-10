@@ -17,6 +17,7 @@ package com.mfnets.workfocus.modules.act.service;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.mfnets.workfocus.common.mapper.JsonMapper;
 import com.mfnets.workfocus.common.persistence.Page;
 import com.mfnets.workfocus.common.service.BaseService;
 import com.mfnets.workfocus.common.utils.DateUtils;
@@ -45,7 +46,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -68,6 +68,8 @@ public class ActTaskService extends BaseService {
 	
 	@Autowired
 	private ProcessEngineFactoryBean processEngine;
+
+
 	@Autowired
 	private RuntimeService runtimeService;
 	@Autowired
@@ -123,7 +125,25 @@ public class ActTaskService extends BaseService {
 		return result;
 	}
 
+	public List<Task> todoList(){
+		String userId = UserUtils.getUser().getLoginName();
+		// 读取直接分配给当前人或者已经签收的任务
+		List<Task> doingTasks = taskService.createTaskQuery().taskAssignee(userId).list();
 
+		// 等待签收的任务--废弃，用taskInvolvedUser代替
+		// List<Task> waitingClaimTasks =
+		// taskService.createTaskQuery().taskCandidateUser(user.getId()).list();
+
+//		// 受邀任务
+//		List<Task> involvedTasks = taskService.createTaskQuery().taskInvolvedUser(userId).list();
+
+		// 合并两种任务
+		List<Task> allTasks = new ArrayList<Task>();
+		allTasks.addAll(doingTasks);
+		// allTasks.addAll(waitingClaimTasks);
+//		allTasks.addAll(involvedTasks);
+		return allTasks;
+	}
 
 	/**
 	 * 获取待办列表
@@ -539,7 +559,8 @@ public class ActTaskService extends BaseService {
 	public void addSubTask(String parentTaskId, String taskName) {
 		Task subTask = taskService.newTask();
 		subTask.setName(taskName);
-		subTask.setAssignee("admin");
+		subTask.setAssignee(UserUtils.getUser().getLoginName());
+		subTask.setOwner(UserUtils.getUser().getLoginName());
 		subTask.setDescription("子任务");
 		subTask.setParentTaskId(parentTaskId);
 		taskService.saveTask(subTask);
@@ -627,5 +648,14 @@ public class ActTaskService extends BaseService {
 			throw new RuntimeException("操作失败");
 		}
 
+	}
+
+	public List<HistoricTaskInstance> getSubTasks(String parentTaskId) {
+		List<HistoricTaskInstance> historicTaskInstanceList = historyService.createHistoricTaskInstanceQuery().taskParentTaskId(parentTaskId).orderByTaskPriority().desc().list();
+		List<Task> taskList = taskService.getSubTasks(parentTaskId);
+
+		String str = JsonMapper.toJsonString(taskList);
+		logger.debug(str);
+		return historicTaskInstanceList;
 	}
 }

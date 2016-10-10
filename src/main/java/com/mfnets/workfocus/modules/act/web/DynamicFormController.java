@@ -15,6 +15,7 @@
  */
 package com.mfnets.workfocus.modules.act.web;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mfnets.workfocus.common.web.BaseController;
 import com.mfnets.workfocus.modules.sys.entity.User;
@@ -107,31 +108,34 @@ public class DynamicFormController extends BaseController {
 	@RequestMapping(value = "completeForm/{taskId}")
 	public String completeForm(@PathVariable(value = "taskId") String taskId, Model model) {
 		Map<String, Map<String, String>> result = Maps.newHashMap();
-		Map<String,String> datePatterns = Maps.newHashMap();
 
 		TaskFormData formData = formService.getTaskFormData(taskId);
-		List<FormProperty> list = formData.getFormProperties();
+		if(formData!=null){
+			List<FormProperty> list = formData.getFormProperties();
+			Map<String,String> datePatterns = Maps.newHashMap();
 
-		for (FormProperty formProperty : list) {
-			if("enum".equals(formProperty.getType().getName())){
-				Map<String, String> values = (Map<String, String>) formProperty.getType().getInformation("values");
-				if (values != null) {
-					for (Map.Entry<String, String> enumEntry : values.entrySet())
-						logger.debug("enum, key: {}, value: {}", enumEntry.getKey(), enumEntry.getValue());
-					result.put("enum_" + formProperty.getId(), values);
+
+			for (FormProperty formProperty : list) {
+				if("enum".equals(formProperty.getType().getName())){
+					Map<String, String> values = (Map<String, String>) formProperty.getType().getInformation("values");
+					if (values != null) {
+						for (Map.Entry<String, String> enumEntry : values.entrySet())
+							logger.debug("enum, key: {}, value: {}", enumEntry.getKey(), enumEntry.getValue());
+						result.put("enum_" + formProperty.getId(), values);
+					}
+
+				}else if("date".equals(formProperty.getType().getName())){
+					datePatterns.put("pattern_"+formProperty.getId(), (String)formProperty.getType().getInformation("datePattern"));
+					logger.debug("date,key:{},pattern:{}",formProperty.getId(),formProperty.getType().getInformation("datePattern"));
 				}
 
-			}else if("date".equals(formProperty.getType().getName())){
-				datePatterns.put("pattern_"+formProperty.getId(), (String)formProperty.getType().getInformation("datePattern"));
-				logger.debug("date,key:{},pattern:{}",formProperty.getId(),formProperty.getType().getInformation("datePattern"));
 			}
-
+			model.addAttribute("datePatterns",datePatterns);
+			model.addAttribute("list", list);
+			model.addAttribute("result", result);
 		}
 
 		Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
-		model.addAttribute("datePatterns",datePatterns);
-		model.addAttribute("result", result);
-		model.addAttribute("list", list);
 		model.addAttribute("task", task);
 
 		return "modules/act/dynamicCompleteForm";

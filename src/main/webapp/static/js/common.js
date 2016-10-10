@@ -24,7 +24,7 @@ function promptx(title,  href){
 
     var index = top.layer.prompt({title: title, formType: 2}, function(text){
         if (typeof href == 'function') {
-            href();
+            href(text);
         }else{
             location = href + encodeURIComponent(text);
         }

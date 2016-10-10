@@ -24,10 +24,12 @@ import com.mfnets.workfocus.modules.act.entity.ActBusiness;
 import com.mfnets.workfocus.modules.act.service.ActTaskService;
 import com.mfnets.workfocus.modules.act.utils.ActUtils;
 import com.mfnets.workfocus.modules.sys.utils.UserUtils;
+import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.history.HistoricVariableInstance;
 import org.activiti.engine.task.Comment;
 import org.activiti.engine.task.Event;
 import org.activiti.engine.task.Task;
+import org.activiti.engine.task.TaskInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,7 +85,7 @@ public class ActTaskController extends BaseController {
 	 */
 	@RequestMapping(value = "todo/list")
 	public String todoList(Act act, HttpServletResponse response, Model model) throws Exception {
-		List<Act> list = actTaskService.todoList(act);
+		List<Task> list = actTaskService.todoList();
 		model.addAttribute("list", list);
 		return "modules/act/actTaskTodoList";
 	}
@@ -143,17 +145,25 @@ public class ActTaskController extends BaseController {
 	 */
 	@RequestMapping(value = "taskEvents/{taskId}")
 	@ResponseBody
-	public List<Event> event(@PathVariable(value = "taskId") String taskId) {
+	public List<Event> getTaskEvents(@PathVariable(value = "taskId") String taskId) {
 		return actTaskService.getTaskEvents(taskId);
 
 	}
 
-	@RequestMapping(value = "addSubTask/{parentTaskId}")
-	public String addSubTask(@PathVariable("parentTaskId") String parentTaskId,String taskName){
+
+	@RequestMapping(value = "{parentTaskId}/addSubTask",method = RequestMethod.POST)
+	@ResponseBody
+	public void addSubTask(@PathVariable("parentTaskId") String parentTaskId,@RequestParam("taskName") String taskName){
 		actTaskService.addSubTask(parentTaskId,taskName);
-		return "redirect:" + adminPath + "/act/task/todo/list";
 	}
 
+
+	@RequestMapping(value = "subTasks/{taskId}")
+	@ResponseBody
+	public List<HistoricTaskInstance> getSubTasks(@PathVariable("taskId") String taskId) {
+		List<HistoricTaskInstance> tasks = actTaskService.getSubTasks(taskId);
+		return tasks;
+	}
 	/**
 	 * 获取流转历史列表
 	 * @param act 流程实例
