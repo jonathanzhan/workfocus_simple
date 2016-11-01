@@ -5,7 +5,6 @@
 package com.mfnets.workfocus.activiti;
 
 import org.activiti.engine.ProcessEngine;
-import org.activiti.engine.ProcessEngineConfiguration;
 import org.activiti.engine.RuntimeService;
 import org.activiti.spring.ProcessEngineFactoryBean;
 import org.junit.Test;
