@@ -43,6 +43,10 @@ public class UsersFormType extends AbstractFormType {
 		return modelValue.toString();
 	}
 
+	/**
+	 * 定义表单类型的标识符
+	 * @return
+	 */
 	@Override
 	public String getName() {
 		return "users";

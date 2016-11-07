@@ -33,22 +33,22 @@
                     <bean class="com.mfnets.workfocus.common.mapper.JsonMapper"></bean>
                 </property>
             </bean>
-            <!--&lt;!&ndash; 使用XML格式输出数据 &ndash;&gt;-->
-            <!--<bean class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">-->
-		        <!--<constructor-arg>-->
-		        	<!--<bean class="org.springframework.oxm.xstream.XStreamMarshaller">-->
-				        <!--<property name="streamDriver">-->
-				            <!--<bean class="com.thoughtworks.xstream.io.xml.StaxDriver"/>-->
-				        <!--</property>-->
-				        <!--<property name="annotatedClasses">-->
-				            <!--<list>-->
-				                <!--<value>com.mfnets.workfocus.common.persistence.BaseEntity</value>-->
-				            <!--</list>-->
-				        <!--</property>-->
-				    <!--</bean>-->
-		        <!--</constructor-arg>-->
-		        <!--<property name="supportedMediaTypes" value="application/xml"></property>-->
-			<!--</bean>-->
+			<!-- 使用XML格式输出数据 -->
+            <bean class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">
+		        <constructor-arg>
+		        	<bean class="org.springframework.oxm.xstream.XStreamMarshaller">
+				        <property name="streamDriver">
+				            <bean class="com.thoughtworks.xstream.io.xml.StaxDriver"/>
+				        </property>
+				        <property name="annotatedClasses">
+				            <list>
+				                <value>com.mfnets.workfocus.common.persistence.BaseEntity</value>
+				            </list>
+				        </property>
+				    </bean>
+		        </constructor-arg>
+		        <property name="supportedMediaTypes" value="application/xml"></property>
+			</bean>
 		</mvc:message-converters>
 	</mvc:annotation-driven>
 	
@@ -113,8 +113,9 @@
 	<!-- 支持Shiro对Controller的方法级AOP安全控制 end -->
 	
 	<!-- 上传文件拦截，设置最大上传文件大小   10M=10*1024*1024(B)=10485760 bytes -->  
-	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">  
-		<property name="maxUploadSize" value="${web.maxUploadSize}" />  
+	<bean id="multipartResolver" class="com.mfnets.workfocus.common.web.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="${web.maxUploadSize}" />
+		<property name="excludeUrls" value="ueditor,sys/upload"/>
 	</bean>
 	
 </beans>
