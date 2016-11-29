@@ -18,6 +18,7 @@
 				/userfiles/** = anon
 				/service/** = anon
 				${adminPath}/cas = cas
+				${adminPath}/demo/** = anon
 				${adminPath}/login = authc
 				${adminPath}/logout = logout
 				${adminPath}/** = user
