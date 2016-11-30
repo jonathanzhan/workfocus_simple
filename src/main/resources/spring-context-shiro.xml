@@ -17,7 +17,6 @@
 				/static/** = anon
 				/userfiles/** = anon
 				/service/** = anon
-				${adminPath}/cas = cas
 				${adminPath}/demo/** = anon
 				${adminPath}/login = authc
 				${adminPath}/logout = logout
@@ -25,74 +24,94 @@
 				<!--/act/rest/editor/** = perms[act:model:edit]-->
 				<!--/act/rest/model/** = perms[act:model:edit]-->
 				/act/rest/** = user
+				/api/** = statelessAuthc
 			</value>
 		</constructor-arg>
 	</bean>
 	
 	<!-- 安全认证过滤器 -->
 	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
-		<property name="securityManager" ref="securityManager" /><!-- 
-		<property name="loginUrl" value="${cas.server.url}?service=${cas.project.url}${adminPath}/cas" /> -->
+		<property name="securityManager" ref="securityManager" />
 		<property name="loginUrl" value="${adminPath}/login" />
 		<property name="successUrl" value="${adminPath}?login" />
 		<property name="filters">
             <map>
-                <entry key="cas" value-ref="casFilter"/>
-                <entry key="authc" value-ref="formAuthenticationFilter"/>
+				<!-- Web Application 过滤器 -->
+				<entry key="authc" value-ref="formAuthenticationFilter"/>
+				<!-- Web Service 过滤器 -->
+				<entry key="statelessAuthc" value-ref="statelessAuthcFilter"/>
             </map>
         </property>
 		<property name="filterChainDefinitions">
 			<ref bean="shiroFilterChainDefinitions"/>
 		</property>
 	</bean>
-	
-	<!--&lt;!&ndash; CAS认证过滤器 &ndash;&gt;  -->
-	<bean id="casFilter" class="org.apache.shiro.cas.CasFilter">
-		<property name="failureUrl" value="${adminPath}/login"/>
+
+	<!-- 一种token只使用一个realm策略bean -->
+	<bean id="firstExceptionStrategy"
+		  class="com.mfnets.workfocus.modules.sys.security.FirstExceptionStrategy"/>
+
+	<bean id="multiSessionStorageEvaluator"
+		  class="com.mfnets.workfocus.modules.sys.security.MultiSessionStorageEvaluator"/>
+
+	<bean id="statelessRealm"
+		  class="com.mfnets.workfocus.modules.sys.security.StatelessRealm">
+		<property name="cachingEnabled" value="false"/>
 	</bean>
-	
+
+	<!-- stateless Filter -->
+	<bean id="statelessAuthcFilter"
+		  class="com.mfnets.workfocus.modules.sys.security.StatelessAuthcFilter"/>
+
 	<!-- 定义Shiro安全管理配置 -->
 	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
-		<property name="realm" ref="systemAuthorizingRealm" />
-		<property name="sessionManager" ref="sessionManager" />
+		<property name="realms">
+			<list>
+				<ref bean="systemAuthorizingRealm"/>
+				<ref bean="statelessRealm"/>
+			</list>
+		</property>
+		<property name="subjectDAO.sessionStorageEvaluator" ref="multiSessionStorageEvaluator"/>
 		<property name="cacheManager" ref="shiroCacheManager" />
+		<!-- 一种token只使用一个realm -->
+		<property name="authenticator.authenticationStrategy" ref="firstExceptionStrategy"/>
+		<property name="sessionManager" ref="sessionManager"/>
 	</bean>
-	
-	<!-- 自定义会话管理配置 -->
-	<bean id="sessionManager" class="com.mfnets.workfocus.common.security.shiro.session.SessionManager"> 
+
+	<bean id="sessionManager" class="com.mfnets.workfocus.common.security.shiro.session.SessionManager">
 		<property name="sessionDAO" ref="sessionDAO"/>
-		
+
 		<!-- 会话超时时间，单位：毫秒  -->
 		<property name="globalSessionTimeout" value="${session.sessionTimeout}"/>
-		
+
 		<!-- 定时清理失效会话, 清理用户直接关闭浏览器造成的孤立会话   -->
 		<property name="sessionValidationInterval" value="${session.sessionTimeoutClean}"/>
-<!--  		<property name="sessionValidationSchedulerEnabled" value="false"/> -->
- 		<property name="sessionValidationSchedulerEnabled" value="true"/>
- 		
+		<!--  		<property name="sessionValidationSchedulerEnabled" value="false"/> -->
+		<property name="sessionValidationSchedulerEnabled" value="true"/>
+
 		<property name="sessionIdCookie" ref="sessionIdCookie"/>
 		<property name="sessionIdCookieEnabled" value="true"/>
 	</bean>
-	
+
 	<!-- 指定本系统SESSIONID, 默认为: JSESSIONID 问题: 与SERVLET容器名冲突, 如JETTY, TOMCAT 等默认JSESSIONID,
 		当跳出SHIRO SERVLET时如ERROR-PAGE容器会为JSESSIONID重新分配值导致登录会话丢失! -->
 	<bean id="sessionIdCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
-	    <constructor-arg name="name" value="workfocus.session.id"/>
+		<constructor-arg name="name" value="workfocus.session.id"/>
 	</bean>
 
 	<!-- 自定义Session存储容器 -->
-<!-- 	<bean id="sessionDAO" class="com.mfnets.workfocus.common.security.shiro.session.JedisSessionDAO"> -->
-<!-- 		<property name="sessionIdGenerator" ref="idGen" /> -->
-<!-- 		<property name="sessionKeyPrefix" value="${redis.keyPrefix}_session_" /> -->
-<!-- 	</bean> -->
+	<!-- 	<bean id="sessionDAO" class="com.mfnets.workfocus.common.security.shiro.session.JedisSessionDAO"> -->
+	<!-- 		<property name="sessionIdGenerator" ref="idGen" /> -->
+	<!-- 		<property name="sessionKeyPrefix" value="${redis.keyPrefix}_session_" /> -->
+	<!-- 	</bean> -->
 	<bean id="sessionDAO" class="com.mfnets.workfocus.common.security.shiro.session.CacheSessionDAO">
 		<property name="sessionIdGenerator" ref="idGen" />
 		<property name="activeSessionsCacheName" value="activeSessionsCache" />
 		<property name="cacheManager" ref="shiroCacheManager" />
 	</bean>
+
 	
 	<!-- 定义授权缓存管理器 -->
-<!-- 	<bean id="shiroCacheManager" class="com.mfnets.workfocus.common.security.shiro.cache.SessionCacheManager" /> -->
 	<bean id="shiroCacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
 		<property name="cacheManager" ref="cacheManager"/>
 	</bean>

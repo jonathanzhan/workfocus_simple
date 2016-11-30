@@ -39,8 +39,8 @@ import com.mfnets.workfocus.modules.sys.utils.UserUtils;
 @Controller
 public class LoginController extends BaseController{
 	
-	@Autowired
-	private SessionDAO sessionDAO;
+//	@Autowired
+//	private SessionDAO sessionDAO;
 	
 	/**
 	 * 管理登录
@@ -49,9 +49,9 @@ public class LoginController extends BaseController{
 	public String login(HttpServletRequest request, HttpServletResponse response, Model model) {
 		Principal principal = UserUtils.getPrincipal();
 		
-		if (logger.isDebugEnabled()){
-			logger.debug("login, active session size: {}", sessionDAO.getActiveSessions(false).size());
-		}
+//		if (logger.isDebugEnabled()){
+//			logger.debug("login, active session size: {}", sessionDAO.getActiveSessions(false).size());
+//		}
 		// 如果已登录，再次访问主页，则退出原账号。
 		if (Global.TRUE.equals(Global.getConfig("notAllowRefreshIndex"))){
 			CookieUtils.setCookie(response, "LOGINED", "false");
@@ -90,10 +90,10 @@ public class LoginController extends BaseController{
 		model.addAttribute(FormAuthenticationFilter.DEFAULT_ERROR_KEY_ATTRIBUTE_NAME, exception);
 		model.addAttribute(FormAuthenticationFilter.DEFAULT_MESSAGE_PARAM, message);
 		
-		if (logger.isDebugEnabled()){
-			logger.debug("login fail, active session size: {}, message: {}, exception: {}", 
-					sessionDAO.getActiveSessions(false).size(), message, exception);
-		}
+//		if (logger.isDebugEnabled()){
+//			logger.debug("login fail, active session size: {}, message: {}, exception: {}",
+//					sessionDAO.getActiveSessions(false).size(), message, exception);
+//		}
 		
 		// 非授权异常，登录失败，验证码加1。
 		if (!UnauthorizedException.class.getName().equals(exception)){
@@ -118,9 +118,9 @@ public class LoginController extends BaseController{
 		// 登录成功后，验证码计算器清零
 		isValidateCodeLogin(principal.getLoginName(), false, true);
 		
-		if (logger.isDebugEnabled()){
-			logger.debug("show index, active session size: {}", sessionDAO.getActiveSessions(false).size());
-		}
+//		if (logger.isDebugEnabled()){
+//			logger.debug("show index, active session size: {}", sessionDAO.getActiveSessions(false).size());
+//		}
 		
 		// 如果已登录，再次访问主页，则退出原账号。
 		if (Global.TRUE.equals(Global.getConfig("notAllowRefreshIndex"))){

@@ -9,6 +9,7 @@ import com.mfnets.workfocus.common.web.BaseController;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,6 +35,7 @@ public class RestfulController extends BaseController{
 
 
 
+	@RequiresPermissions("user")
 	@RequestMapping(value = "get/{id}",method = RequestMethod.GET)
 	public Map<String,String> getById(@PathVariable("id")String id){
 		Map<String,String> result = Maps.newHashMap();

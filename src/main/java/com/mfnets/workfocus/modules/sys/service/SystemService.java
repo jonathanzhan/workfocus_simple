@@ -50,16 +50,16 @@ public class SystemService extends BaseService {
     private RoleDao roleDao;
     @Autowired
     private MenuDao menuDao;
-    @Autowired
-    private SessionDAO sessionDao;
+//    @Autowired
+//    private SessionDAO sessionDao;
     @Autowired
     private EmployeeDao employeeDao;
     @Autowired
     private SystemAuthorizingRealm systemRealm;
 
-    public SessionDAO getSessionDao() {
-        return sessionDao;
-    }
+//    public SessionDAO getSessionDao() {
+//        return sessionDao;
+//    }
 
 
     /**
