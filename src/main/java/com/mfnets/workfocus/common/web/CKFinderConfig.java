@@ -5,10 +5,9 @@ package com.mfnets.workfocus.common.web;
 import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServletRequest;
 
-import com.ckfinder.connector.ServletContextFactory;
 import com.mfnets.workfocus.common.config.Global;
 import com.mfnets.workfocus.common.utils.FileUtils;
-import com.mfnets.workfocus.modules.sys.security.SystemAuthorizingRealm.Principal;
+import com.mfnets.workfocus.modules.sys.security.Principal;
 import com.mfnets.workfocus.modules.sys.utils.UserUtils;
 
 import com.ckfinder.connector.configuration.Configuration;

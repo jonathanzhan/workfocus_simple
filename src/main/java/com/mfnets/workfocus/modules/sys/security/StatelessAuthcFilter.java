@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
@@ -37,22 +38,17 @@ public class StatelessAuthcFilter extends AccessControlFilter {
 
 	@Override
 	protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
-		//1、客户端生成的消息摘要
-		String clientDigest = request.getParameter("digest");
-		//2、客户端传入的用户身份
-		String username = request.getParameter("username");
-		//3、客户端请求的参数列表
-		Map<String, String[]> params = new HashMap<String, String[]>(request.getParameterMap());
-		params.remove("digest");
-		//4、生成无状态Token
-
-		StatelessToken token = new StatelessToken(username, params, clientDigest);
+		HttpServletRequest httpRequest = (HttpServletRequest) request;
+		//1、客户端的消息摘要
+		String token = httpRequest.getHeader("token");
+		//2、生成无状态Token
+		StatelessToken statelessToken = new StatelessToken(token);
 		logger.debug("before login");
 		try {
 			//5、委托给Realm进行登录
 			Subject subject = getSubject(request, response);
 			logger.debug("subject getted");
-			subject.login(token);
+			subject.login(statelessToken);
 
 		} catch ( UnknownAccountException uae ) {
 			onLoginFail(response,"No Account");

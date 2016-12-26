@@ -4,7 +4,7 @@
 
 package com.mfnets.workfocus.modules.sys.security;
 
-import com.mfnets.workfocus.common.utils.Encodes;
+import com.mfnets.workfocus.common.utils.JwtUtils;
 import com.mfnets.workfocus.common.utils.SpringContextHolder;
 import com.mfnets.workfocus.common.web.Servlets;
 import com.mfnets.workfocus.modules.sys.entity.Menu;
@@ -13,6 +13,7 @@ import com.mfnets.workfocus.modules.sys.entity.User;
 import com.mfnets.workfocus.modules.sys.service.SystemService;
 import com.mfnets.workfocus.modules.sys.utils.LogUtils;
 import com.mfnets.workfocus.modules.sys.utils.UserUtils;
+import io.jsonwebtoken.Claims;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -22,7 +23,6 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
-import org.apache.shiro.util.ByteSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -53,17 +53,12 @@ public class StatelessRealm extends AuthorizingRealm {
 	@Override
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
 		StatelessToken statelessToken = (StatelessToken) token;
-		String username = statelessToken.getUsername();
+		Claims claims = JwtUtils.parseToken(statelessToken.getToken());
+		String username = claims.getSubject();
 		User user = getSystemService().getUserByLoginName(username);
-		logger.debug(username);
-
-		if (user != null) {
-//			if (Global.NO.equals(user.getLoginFlag())){
-//				throw new AuthenticationException("msg:该已帐号禁止登录.");
-//			}
-			byte[] salt = Encodes.decodeHex(user.getPassword().substring(0,16));
-			return new SimpleAuthenticationInfo(token.getPrincipal(),
-					user.getPassword().substring(16), ByteSource.Util.bytes(salt), getName());
+		Principal principal = new Principal(user);
+		if (user != null && user.getId().equals(claims.getId())) {
+			return new SimpleAuthenticationInfo(principal, statelessToken.getToken(), getName());
 		} else {
 			return null;
 		}
@@ -75,8 +70,8 @@ public class StatelessRealm extends AuthorizingRealm {
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 		//根据用户名查找角色，请根据需求实现
-		String username = (String) getAvailablePrincipal(principals);
-		User user = getSystemService().getUserByLoginName(username);
+		Principal principal = (Principal) getAvailablePrincipal(principals);
+		User user = getSystemService().getUserByLoginName(principal.getLoginName());
 		if (user != null) {
 			SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 			List<Menu> list = UserUtils.getMenuList();
@@ -102,12 +97,6 @@ public class StatelessRealm extends AuthorizingRealm {
 		} else {
 			return null;
 		}
-	}
-
-	private String getKey(String username) {//得到密钥，此处硬编码一个
-		SystemService systemService = getSystemService();
-		User user = systemService.getUserByLoginName(username);
-		return user.getPassword();
 	}
 
 	/**

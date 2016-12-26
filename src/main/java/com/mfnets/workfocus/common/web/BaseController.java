@@ -6,19 +6,26 @@ import java.beans.PropertyEditorSupport;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
 import javax.validation.Validator;
 
+import com.google.common.collect.Maps;
 import com.mfnets.workfocus.common.utils.StringUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authz.AuthorizationException;
+import org.apache.shiro.authz.UnauthenticatedException;
+import org.apache.shiro.authz.UnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -26,6 +33,9 @@ import org.springframework.validation.BindException;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.multiaction.NoSuchRequestHandlingMethodException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.mfnets.workfocus.common.beanvalidator.BeanValidators;
@@ -223,23 +233,9 @@ public abstract class BaseController {
 		return ResponseEntity.ok(modelMap);
 	}
 
-	/**
-	 * 参数绑定异常
-	 * @return 400页面
-     */
-	@ExceptionHandler({BindException.class, ConstraintViolationException.class, ValidationException.class})
-    public String bindException() {  
-        return "error/400";
-    }
 
-	/**
-	 * 授权登录异常
-	 * @return 403页面
-     */
-	@ExceptionHandler({AuthenticationException.class})
-    public String authenticationException() {  
-        return "error/403";
-    }
+
+
 
 	/**
 	 * 初始化数据绑定

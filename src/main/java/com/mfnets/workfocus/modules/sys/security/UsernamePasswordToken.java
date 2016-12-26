@@ -13,15 +13,22 @@ public class UsernamePasswordToken extends org.apache.shiro.authc.UsernamePasswo
 	private static final long serialVersionUID = 1L;
 
 	private String captcha;
-	
+
+	private boolean needValidateCode = true;
 	public UsernamePasswordToken() {
 		super();
 	}
 
+	public UsernamePasswordToken(String username, String password, boolean needValidateCode) {
+		super(username, password);
+		this.needValidateCode = needValidateCode;
+	}
+
 	public UsernamePasswordToken(String username, char[] password,
-			boolean rememberMe, String host, String captcha) {
+								 boolean rememberMe, String host, String captcha) {
 		super(username, password, rememberMe, host);
 		this.captcha = captcha;
+		this.needValidateCode = true;
 	}
 
 	public String getCaptcha() {
@@ -32,5 +39,11 @@ public class UsernamePasswordToken extends org.apache.shiro.authc.UsernamePasswo
 		this.captcha = captcha;
 	}
 
-	
+	public boolean isNeedValidateCode() {
+		return needValidateCode;
+	}
+
+	public void setNeedValidateCode(boolean needValidateCode) {
+		this.needValidateCode = needValidateCode;
+	}
 }

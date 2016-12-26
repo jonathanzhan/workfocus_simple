@@ -56,6 +56,7 @@ public class DictController extends BaseController {
 		model.addAttribute("typeList", typeList);
         Page<Dict> page = dictService.findPage(new Page<Dict>(request, response), dict); 
         model.addAttribute("page", page);
+		int i = Integer.parseInt("asdas");
 		return "modules/sys/dictList";
 	}
 

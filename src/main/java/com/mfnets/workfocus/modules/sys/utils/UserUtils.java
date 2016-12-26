@@ -9,6 +9,7 @@ import java.util.List;
 import com.google.common.collect.Lists;
 import com.mfnets.workfocus.modules.sys.dao.*;
 import com.mfnets.workfocus.modules.sys.entity.*;
+import com.mfnets.workfocus.modules.sys.security.Principal;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.UnavailableSecurityManagerException;
 import org.apache.shiro.session.InvalidSessionException;
@@ -17,7 +18,6 @@ import org.apache.shiro.subject.Subject;
 
 import com.mfnets.workfocus.common.utils.CacheUtils;
 import com.mfnets.workfocus.common.utils.SpringContextHolder;
-import com.mfnets.workfocus.modules.sys.security.SystemAuthorizingRealm.Principal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

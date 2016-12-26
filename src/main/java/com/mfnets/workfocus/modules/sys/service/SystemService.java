@@ -192,8 +192,7 @@ public class SystemService extends BaseService {
      * @param password 密码
      * @return boolean
      */
-    @SuppressWarnings("unused")
-    public static boolean checkLogin(String userName, String password) {
+    public boolean checkLogin(String userName, String password) {
         User user = UserUtils.getByLoginName(userName);
         return (user != null) &&
                 (StringUtils.isNotBlank(userName) && StringUtils.isNotBlank(password)) &&

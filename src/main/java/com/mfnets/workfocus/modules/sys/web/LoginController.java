@@ -3,33 +3,33 @@
  */
 package com.mfnets.workfocus.modules.sys.web;
 
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.shiro.authz.UnauthorizedException;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.apache.shiro.web.util.WebUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-
 import com.google.common.collect.Maps;
 import com.mfnets.workfocus.common.config.Global;
-import com.mfnets.workfocus.common.security.shiro.session.SessionDAO;
+import com.mfnets.workfocus.common.mapper.JsonMapper;
 import com.mfnets.workfocus.common.servlet.ValidateCodeServlet;
 import com.mfnets.workfocus.common.utils.CacheUtils;
 import com.mfnets.workfocus.common.utils.CookieUtils;
 import com.mfnets.workfocus.common.utils.IdGen;
 import com.mfnets.workfocus.common.utils.StringUtils;
 import com.mfnets.workfocus.common.web.BaseController;
+import com.mfnets.workfocus.common.web.Servlets;
 import com.mfnets.workfocus.modules.sys.security.FormAuthenticationFilter;
-import com.mfnets.workfocus.modules.sys.security.SystemAuthorizingRealm.Principal;
+import com.mfnets.workfocus.modules.sys.security.Principal;
 import com.mfnets.workfocus.modules.sys.utils.UserUtils;
+import org.apache.shiro.authz.UnauthorizedException;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.web.util.WebUtils;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Map;
 
 /**
  * 登录的Controller
@@ -134,7 +134,54 @@ public class LoginController extends BaseController{
 		}
 		return "modules/sys/sysIndex";
 	}
-	
+
+
+//	@RequestMapping(value = "**")
+//	public String pageNotFound(HttpServletRequest request,HttpServletResponse response) throws IOException {
+//		Map<String,Object> map = Maps.newHashMap();
+//		map.put("status",404);
+//		map.put("msg","page not found");
+//		map.put("timestamp", System.currentTimeMillis());
+//		response.setStatus(404);
+//		if(Servlets.isAjaxRequest(request)){
+//			response.setContentType("application/json");
+//			response.setCharacterEncoding("utf-8");
+//			response.getWriter().print(JsonMapper.toJsonString(map));
+//			return null;
+//		}else {
+//			return "error/404";
+//		}
+//	}
+
+//	@RequestMapping(value = "*/*")
+//	public String pageNotFound1(HttpServletRequest request,HttpServletResponse response){
+//		Map<String,Object> map = Maps.newHashMap();
+//		map.put("status",404);
+//		map.put("msg","page not found");
+//		map.put("timestamp", System.currentTimeMillis());
+//		if(Servlets.isAjaxRequest(request)){
+//			return renderString(response,map);
+//		}else {
+//			return "error/404";
+//		}
+//	}
+//
+//	@RequestMapping(value = "*/*/*")
+//	public String pageNotFound2(HttpServletRequest request,HttpServletResponse response){
+//		Map<String,Object> map = Maps.newHashMap();
+//		map.put("status",404);
+//		map.put("msg","page not found");
+//		map.put("timestamp", System.currentTimeMillis());
+//		if(Servlets.isAjaxRequest(request)){
+//			return renderString(response,map);
+//		}else {
+//			return "error/404";
+//		}
+//	}
+
+
+
+
 	/**
 	 * 获取主题方案
 	 */
@@ -150,28 +197,28 @@ public class LoginController extends BaseController{
 	
 	/**
 	 * 是否是验证码登录
-	 * @param useruame 用户名
+	 * @param username 用户名
 	 * @param isFail 计数加1
 	 * @param clean 计数清零
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static boolean isValidateCodeLogin(String useruame, boolean isFail, boolean clean){
+	public static boolean isValidateCodeLogin(String username, boolean isFail, boolean clean){
 		Map<String, Integer> loginFailMap = (Map<String, Integer>)CacheUtils.get("loginFailMap");
 		if (loginFailMap==null){
 			loginFailMap = Maps.newHashMap();
 			CacheUtils.put("loginFailMap", loginFailMap);
 		}
-		Integer loginFailNum = loginFailMap.get(useruame);
+		Integer loginFailNum = loginFailMap.get(username);
 		if (loginFailNum==null){
 			loginFailNum = 0;
 		}
 		if (isFail){
 			loginFailNum++;
-			loginFailMap.put(useruame, loginFailNum);
+			loginFailMap.put(username, loginFailNum);
 		}
 		if (clean){
-			loginFailMap.remove(useruame);
+			loginFailMap.remove(username);
 		}
 		return loginFailNum >= 3;
 	}

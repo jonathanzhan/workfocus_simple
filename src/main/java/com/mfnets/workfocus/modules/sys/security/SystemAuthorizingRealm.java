@@ -3,7 +3,6 @@
  */
 package com.mfnets.workfocus.modules.sys.security;
 
-import java.io.Serializable;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -68,7 +67,7 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 //		}
 		
 		// 校验登录验证码
-		if (LoginController.isValidateCodeLogin(token.getUsername(), false, false)){
+		if (LoginController.isValidateCodeLogin(token.getUsername(), false, false) && token.isNeedValidateCode()){
 			Session session = UserUtils.getSession();
 			String code = (String)session.getAttribute(ValidateCodeServlet.VALIDATE_CODE);
 			if (token.getCaptcha() == null || !token.getCaptcha().toUpperCase().equals(code)){
@@ -147,7 +146,6 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 	
 	@Override
 	public boolean isPermitted(PrincipalCollection principals, Permission permission) {
-		System.out.println(principals.fromRealm(getName()));
 		if (principals.fromRealm(getName()).isEmpty()) {
 			return false;
 		}else{
@@ -206,58 +204,58 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 	/**
 	 * 授权用户信息
 	 */
-	public static class Principal implements Serializable {
-
-		private static final long serialVersionUID = 1L;
-		
-		private String id; // 编号
-		private String loginName; // 登录名
-		private String name; // 姓名
-		
-//		private Map<String, Object> cacheMap;
-
-		public Principal(User user) {
-			this.id = user.getId();
-			this.loginName = user.getLoginName();
-			this.name = user.getName();
-		}
-
-		public String getId() {
-			return id;
-		}
-
-		public String getLoginName() {
-			return loginName;
-		}
-
-		public String getName() {
-			return name;
-		}
-
-
-//		@JsonIgnore
-//		public Map<String, Object> getCacheMap() {
-//			if (cacheMap==null){
-//				cacheMap = new HashMap<String, Object>();
-//			}
-//			return cacheMap;
+//	public static class Principal implements Serializable {
+//
+//		private static final long serialVersionUID = 1L;
+//
+//		private String id; // 编号
+//		private String loginName; // 登录名
+//		private String name; // 姓名
+//
+////		private Map<String, Object> cacheMap;
+//
+//		public Principal(User user) {
+//			this.id = user.getId();
+//			this.loginName = user.getLoginName();
+//			this.name = user.getName();
 //		}
-
-		/**
-		 * 获取SESSIONID
-		 */
-		public String getSessionid() {
-			try{
-				return (String) UserUtils.getSession().getId();
-			}catch (Exception e) {
-				return "";
-			}
-		}
-		
-		@Override
-		public String toString() {
-			return id;
-		}
-
-	}
+//
+//		public String getId() {
+//			return id;
+//		}
+//
+//		public String getLoginName() {
+//			return loginName;
+//		}
+//
+//		public String getName() {
+//			return name;
+//		}
+//
+//
+////		@JsonIgnore
+////		public Map<String, Object> getCacheMap() {
+////			if (cacheMap==null){
+////				cacheMap = new HashMap<String, Object>();
+////			}
+////			return cacheMap;
+////		}
+//
+//		/**
+//		 * 获取SESSIONID
+//		 */
+//		public String getSessionid() {
+//			try{
+//				return (String) UserUtils.getSession().getId();
+//			}catch (Exception e) {
+//				return "";
+//			}
+//		}
+//
+//		@Override
+//		public String toString() {
+//			return id;
+//		}
+//
+//	}
 }

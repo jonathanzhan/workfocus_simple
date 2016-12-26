@@ -19,16 +19,19 @@ public class StatelessToken implements AuthenticationToken {
 
 	private static final long serialVersionUID = 1L;
 	private String username;  //用户名
-	private Map<String, ?> params;  //请求参数
-	private String clientDigest;  //摘要
+	private String token;  //摘要
+
+	public StatelessToken(String token) {
+		super();
+		this.token = token;
+	}
 
 	//省略部分代码
-	public StatelessToken(String username, Map<String, ?> params,
-						  String clientDigest) {
+	public StatelessToken(String username,
+						  String token) {
 		super();
 		this.username = username;
-		this.params = params;
-		this.clientDigest = clientDigest;
+		this.token = token;
 	}
 
 	public Object getPrincipal() {
@@ -36,7 +39,7 @@ public class StatelessToken implements AuthenticationToken {
 	}
 
 	public Object getCredentials() {
-		return clientDigest;
+		return token;
 	}
 
 	public String getUsername() {
@@ -47,19 +50,11 @@ public class StatelessToken implements AuthenticationToken {
 		this.username = username;
 	}
 
-	public Map<String, ?> getParams() {
-		return params;
+	public String getToken() {
+		return token;
 	}
 
-	public void setParams(Map<String, ?> params) {
-		this.params = params;
-	}
-
-	public String getClientDigest() {
-		return clientDigest;
-	}
-
-	public void setClientDigest(String clientDigest) {
-		this.clientDigest = clientDigest;
+	public void setToken(String token) {
+		this.token = token;
 	}
 }

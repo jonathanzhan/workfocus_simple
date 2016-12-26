@@ -6,15 +6,14 @@ package com.mfnets.workfocus.modules.demo.controller;
 
 import com.google.common.collect.Maps;
 import com.mfnets.workfocus.common.web.BaseController;
+import com.mfnets.workfocus.modules.sys.entity.User;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,7 +22,7 @@ import java.util.Map;
 
 
 /**
- * TODO
+ * restful的请求demo,context-type accept=application/json
  *
  * @author Jonathan
  * @version 2016/11/24 15:23
@@ -42,6 +41,31 @@ public class RestfulController extends BaseController{
 		result.put("id",id);
 		result.put("name","Jonathan");
 		return result;
+	}
+
+
+
+
+	@RequiresPermissions("ussda")
+	@RequestMapping(value = "error/403",method = RequestMethod.GET)
+	public String getError403(){
+		return "12312";
+	}
+
+
+	@RequestMapping(value = "error/500",method = RequestMethod.GET)
+	public Map<String,String> getError500(){
+		int i = Integer.parseInt("sfsd");
+		Map<String,String> result = Maps.newHashMap();
+		result.put("2312","1231");
+		result.put("value",i+"");
+		return result;
+	}
+
+
+	@RequestMapping(value = "error/400",method = RequestMethod.GET)
+	public User getError400(User user){
+		return user;
 	}
 
 

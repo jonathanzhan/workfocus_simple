@@ -5,28 +5,20 @@
  */
 package com.mfnets.workfocus.common.web;
 
-import java.io.UnsupportedEncodingException;
-import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.StringTokenizer;
-import java.util.TreeMap;
-
-import javax.servlet.ServletRequest;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.lang3.Validate;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-
 import com.google.common.net.HttpHeaders;
 import com.mfnets.workfocus.common.config.Global;
 import com.mfnets.workfocus.common.utils.Encodes;
 import com.mfnets.workfocus.common.utils.StringUtils;
-import com.mfnets.workfocus.modules.sys.security.SystemAuthorizingRealm.Principal;
-import com.mfnets.workfocus.modules.sys.utils.UserUtils;
+import org.apache.commons.lang3.Validate;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
+import java.util.*;
+import java.util.Map.Entry;
 
 /**
  * Http与Servlet工具类.
@@ -214,7 +206,6 @@ public class Servlets {
 		
 		String accept = request.getHeader("accept");
 		String xRequestedWith = request.getHeader("X-Requested-With");
-		Principal principal = UserUtils.getPrincipal();
 
 		// 如果是异步请求或是手机端，则直接返回信息
 		return ((accept != null && accept.indexOf("application/json") != -1 
