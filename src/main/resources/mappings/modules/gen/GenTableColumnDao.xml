@@ -29,7 +29,7 @@
 			<include refid="genTableColumnColumns"/>
 		FROM gen_table_column a
 		<include refid="genTableColumnJoins"/>
-		WHERE a.is_enabled = #{DEL_FLAG_NORMAL}
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
 		<if test="name != null and name != ''">
 			AND a.name LIKE 
 				<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
@@ -47,7 +47,7 @@
 			<include refid="genTableColumnColumns"/>
 		FROM gen_table_column a
 		<include refid="genTableColumnJoins"/>
-		WHERE a.is_enabled = #{DEL_FLAG_NORMAL}
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
 		ORDER BY a.sort ASC
 	</select>
 	
@@ -70,12 +70,12 @@
 			show_type, 
 			dict_type, 
 			sort, 
-			creator,
+			create_by,
 			create_at,
-			modifier,
-			modify_at,
+			update_by,
+			update_at,
 			remarks, 
-			is_enabled
+			del_flag
 		) VALUES (
 			#{id}, 
 			#{genTable.id}, 
@@ -94,12 +94,12 @@
 			#{showType}, 
 			#{dictType}, 
 			#{sort}, 
-			#{creator.id},
+			#{createBy.id},
 			#{createAt},
-			#{modifier.id},
-			#{modifyAt},
+			#{updateBy.id},
+			#{updateAt},
 			#{remarks},
-			#{isEnabled}
+			#{delFlag}
 		)
 	</insert>
 	
@@ -119,22 +119,22 @@
 			show_type = #{showType}, 
 			dict_type = #{dictType}, 
 			sort = #{sort}, 
-			modifier = #{modifier.id},
-			modify_at = #{modifyAt},
+			update_by = #{updateBy.id},
+			update_at = #{updateAt},
 			remarks = #{remarks},
-			is_enabled = #{isEnabled}
+			del_flag = #{delFlag}
 		WHERE id = #{id}
 	</update>
 	
 	<update id="delete">
 		UPDATE gen_table_column SET 
-			is_enabled = #{DEL_FLAG_DELETE}
+			del_flag = #{DEL_FLAG_DELETE}
 		WHERE id = #{id}
 	</update>
 	
 	<update id="deleteByGenTableId">
 		UPDATE gen_table_column SET 
-			is_enabled = #{DEL_FLAG_DELETE}
+			del_flag = #{DEL_FLAG_DELETE}
 		WHERE gen_table_id = #{id}
 	</update>
 	

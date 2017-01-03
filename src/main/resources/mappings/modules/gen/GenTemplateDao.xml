@@ -23,7 +23,7 @@
 			<include refid="genTemplateColumns"/>
 		FROM gen_template a
 		<include refid="genTemplateJoins"/>
-		WHERE a.is_enabled = #{DEL_FLAG_NORMAL}
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
 		<if test="name != null and name != ''">
 			AND a.name LIKE 
 				<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
@@ -36,7 +36,7 @@
 				<if test="dbName == 'mssql'">'%'+#{category}+'%'</if>
 				<if test="dbName == 'mysql'">concat('%',#{category},'%')</if>
 		</if>
-		ORDER BY a.name, a.modify_at DESC
+		ORDER BY a.name, a.update_at DESC
 	</select>
 	
 	<select id="findAllList" resultType="GenTemplate">
@@ -44,8 +44,8 @@
 			<include refid="genTemplateColumns"/>
 		FROM gen_template a
 		<include refid="genTemplateJoins"/>
-		WHERE a.is_enabled = #{DEL_FLAG_NORMAL}
-		ORDER BY a.name, a.modify_at DESC
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
+		ORDER BY a.name, a.update_at DESC
 	</select>
 	
 	<insert id="insert">
@@ -56,12 +56,12 @@
 			file_path, 
 			file_name, 
 			content, 
-			creator,
+			create_by,
 			create_at,
-			modifier,
-			modify_at,
+			update_by,
+			update_at,
 			remarks, 
-			is_enabled
+			del_flag
 		) VALUES (
 			#{id}, 
 			#{name}, 
@@ -69,12 +69,12 @@
 			#{filePath},  
 			#{fileName},  
 			#{content},  
-			#{creator.id},
+			#{createBy.id},
 			#{createAt},
-			#{modifier.id},
-			#{modifyAt},
+			#{updateBy.id},
+			#{updateAt},
 			#{remarks}, 
-			#{isEnabled}
+			#{delFlag}
 		)
 	</insert>
 	
@@ -85,15 +85,15 @@
 			file_path = #{filePath},  
 			file_name = #{fileName},  
 			content = #{content},  
-			modifier = #{modifier.id},
-			modify_at = #{modifyAt},
+			update_by = #{updateBy.id},
+			update_at = #{updateAt},
 			remarks = #{remarks}
 		WHERE id = #{id}
 	</update>
 	
 	<update id="delete">
 		UPDATE gen_template SET 
-			is_enabled = #{DEL_FLAG_DELETE}
+			del_flag = #{DEL_FLAG_DELETE}
 		WHERE id = #{id}
 	</update>
 	

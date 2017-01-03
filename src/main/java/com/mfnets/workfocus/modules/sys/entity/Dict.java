@@ -8,6 +8,8 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlAttribute;
+
 /**
  * ç
  *
@@ -29,9 +31,16 @@ public class Dict extends DataEntity<Dict> {
         super();
     }
 
+    public Dict(String id){
+        super(id);
+    }
 
+    public Dict(String value, String label){
+        this.value = value;
+        this.label = label;
+    }
 
-
+    @XmlAttribute
     @Length(min = 1, max = 20)
     public String getValue() {
         return value;
@@ -41,6 +50,7 @@ public class Dict extends DataEntity<Dict> {
         this.value = value;
     }
 
+    @XmlAttribute
     @Length(min = 1, max = 50)
     public String getLabel() {
         return label;
@@ -59,6 +69,7 @@ public class Dict extends DataEntity<Dict> {
         this.type = type;
     }
 
+    @XmlAttribute
     @Length(min = 1, max = 50)
     public String getDescription() {
         return description;

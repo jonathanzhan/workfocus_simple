@@ -23,7 +23,7 @@
 			<include refid="genTableColumns"/>
 		FROM gen_table a
 		<include refid="genTableJoins"/>
-		WHERE a.is_enabled = #{DEL_FLAG_NORMAL}
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
 		<if test="name != null and name != ''">
 			AND a.name = #{name}
 		</if>
@@ -56,7 +56,7 @@
 			<include refid="genTableColumns"/>
 		FROM gen_table a
 		<include refid="genTableJoins"/>
-		WHERE a.is_enabled = #{DEL_FLAG_NORMAL}
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
 				ORDER BY ${page.orderBy}
@@ -75,12 +75,12 @@
 			class_name, 
 			parent_table, 
 			parent_table_fk, 
-			creator,
+			create_by,
 			create_at,
-			modifier,
-			modify_at,
+			update_by,
+			update_at,
 			remarks, 
-			is_enabled
+			del_flag
 		) VALUES (
 			#{id}, 
 			#{name}, 
@@ -88,12 +88,12 @@
 			#{className}, 
 			#{parentTable}, 
 			#{parentTableFk}, 
-			#{creator.id},
+			#{createBy.id},
 			#{createAt},
-			#{modifier.id},
-			#{modifyAt},
+			#{updateBy.id},
+			#{updateAt},
 			#{remarks}, 
-			#{isEnabled}
+			#{delFlag}
 		)
 	</insert>
 	
@@ -104,15 +104,15 @@
 			class_name = #{className}, 
 			parent_table = #{parentTable}, 
 			parent_table_fk = #{parentTableFk},
-			modifier = #{modifier.id},
-			modify_at = #{modifyAt},
+			update_by = #{updateBy.id},
+			update_at = #{updateAt},
 			remarks = #{remarks}
 		WHERE id = #{id}
 	</update>
 	
 	<update id="delete">
 		UPDATE gen_table SET 
-			is_enabled = #{DEL_FLAG_DELETE}
+			del_flag = #{DEL_FLAG_DELETE}
 		WHERE id = #{id}
 	</update>
 	

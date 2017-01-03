@@ -117,9 +117,9 @@ public class GenUtils {
 			
 			// 编辑字段
 			if (!StringUtils.equalsIgnoreCase(column.getName(), "id")
-					&& !StringUtils.equalsIgnoreCase(column.getName(), "creator")
+					&& !StringUtils.equalsIgnoreCase(column.getName(), "create_by")
 					&& !StringUtils.equalsIgnoreCase(column.getName(), "create_at")
-					&& !StringUtils.equalsIgnoreCase(column.getName(), "is_enabled")){
+					&& !StringUtils.equalsIgnoreCase(column.getName(), "del_flag")){
 				column.setIsEdit("1");
 			}
 
