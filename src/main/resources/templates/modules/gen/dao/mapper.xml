@@ -71,7 +71,7 @@ ${columnField?substring(0, columnField?last_index_of(","))}
 		FROM ${table.name} a
 		<include refid="${className}Joins"/>
 		<where>
-			<#if table.delFlagExists>a.is_enabled = ${"#"}{DEL_FLAG_NORMAL}</#if>
+			<#if table.delFlagExists>a.del_flag = ${"#"}{DEL_FLAG_NORMAL}</#if>
 			<#list table.columnList as c>
 				<#if (c.isQuery?? && c.isQuery == "1") || (table.parentExists && table.parentTableFk == c.name)>
 					<#if c.queryType ?? && c.queryType == 'between'>
@@ -114,7 +114,7 @@ ${columnField?substring(0, columnField?last_index_of(","))}
 					</#if>
 				<#else>
 					<#if table.updateDateExists>
-				ORDER BY a.modify_at DESC
+				ORDER BY a.update_at DESC
 					</#if>
 				</#if>
 			</otherwise>
@@ -127,7 +127,7 @@ ${columnField?substring(0, columnField?last_index_of(","))}
 		FROM ${table.name} a
 		<include refid="${className}Joins"/>
 		<where>
-			<#if table.delFlagExists>a.is_enabled = ${"#"}{DEL_FLAG_NORMAL}</#if>
+			<#if table.delFlagExists>a.del_flag = ${"#"}{DEL_FLAG_NORMAL}</#if>
 		</where>		
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
@@ -140,7 +140,7 @@ ${columnField?substring(0, columnField?last_index_of(","))}
 					</#if>
 				<#else>
 					<#if table.updateDateExists>
-				ORDER BY a.modify_at DESC
+				ORDER BY a.update_at DESC
 					</#if>
 				</#if>
 			</otherwise>

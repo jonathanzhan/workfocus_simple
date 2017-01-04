@@ -124,16 +124,16 @@ public class GenUtils {
 			}
 
 			// 列表字段
-			if (StringUtils.equalsIgnoreCase(column.getName(), "name")
-					|| StringUtils.equalsIgnoreCase(column.getName(), "title")
-					|| StringUtils.equalsIgnoreCase(column.getName(), "remarks")
-					|| StringUtils.equalsIgnoreCase(column.getName(), "modify_at")){
+			if (StringUtils.containsIgnoreCase(column.getName(), "name")
+					|| StringUtils.containsIgnoreCase(column.getName(), "title")
+					|| StringUtils.containsIgnoreCase(column.getName(), "remarks")
+					|| StringUtils.equalsIgnoreCase(column.getName(), "update_at")){
 				column.setIsList("1");
 			}
 			
 			// 查询字段
-			if (StringUtils.equalsIgnoreCase(column.getName(), "name")
-					|| StringUtils.equalsIgnoreCase(column.getName(), "title")){
+			if (StringUtils.containsIgnoreCase(column.getName(), "name")
+					|| StringUtils.containsIgnoreCase(column.getName(), "title")){
 				column.setIsQuery("1");
 			}
 			
@@ -164,19 +164,19 @@ public class GenUtils {
 				column.setShowType("areaselect");
 			}
 			// 创建者、更新者
-			else if (StringUtils.startsWithIgnoreCase(column.getName(), "creator")
-					|| StringUtils.startsWithIgnoreCase(column.getName(), "modifier")){
+			else if (StringUtils.startsWithIgnoreCase(column.getName(), "create_by")
+					|| StringUtils.startsWithIgnoreCase(column.getName(), "update_by")){
 				column.setJavaType(User.class.getName());
 				column.setJavaField(column.getJavaField() + ".id");
 			}
 			// 创建时间、更新时间
 			else if (StringUtils.startsWithIgnoreCase(column.getName(), "create_at")
-					|| StringUtils.startsWithIgnoreCase(column.getName(), "modify_at")){
+					|| StringUtils.startsWithIgnoreCase(column.getName(), "update_at")){
 				column.setShowType("dateselect");
 			}
 			// 备注、内容
-			else if (StringUtils.equalsIgnoreCase(column.getName(), "remarks")
-					|| StringUtils.equalsIgnoreCase(column.getName(), "content")){
+			else if (StringUtils.containsIgnoreCase(column.getName(), "remarks")
+					|| StringUtils.containsIgnoreCase(column.getName(), "content")){
 				column.setShowType("textarea");
 			}
 			// 父级ID
@@ -190,7 +190,7 @@ public class GenUtils {
 				column.setQueryType("like");
 			}
 			// 删除标记
-			else if (StringUtils.equalsIgnoreCase(column.getName(), "is_enabled")){
+			else if (StringUtils.equalsIgnoreCase(column.getName(), "del_flag")){
 				column.setShowType("radiobox");
 				column.setDictType("del_flag");
 			}

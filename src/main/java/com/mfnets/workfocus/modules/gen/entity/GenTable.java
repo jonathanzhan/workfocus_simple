@@ -149,7 +149,7 @@ public class GenTable extends DataEntity<GenTable> {
 		List<String> importList = Lists.newArrayList(); // 引用列表
 		for (GenTableColumn column : getColumnList()){
 			if (column.getIsNotBaseField() || ("1".equals(column.getIsQuery()) && "between".equals(column.getQueryType())
-							&& ("createDate".equals(column.getSimpleJavaField()) || "updateDate".equals(column.getSimpleJavaField())))){
+							&& ("createAt".equals(column.getSimpleJavaField()) || "updateBy".equals(column.getSimpleJavaField())))){
 				// 导入类型依赖包， 如果类型中包含“.”，则需要导入引用。
 				if (StringUtils.indexOf(column.getJavaType(), ".") != -1 && !importList.contains(column.getJavaType())){
 					importList.add(column.getJavaType());
@@ -203,7 +203,7 @@ public class GenTable extends DataEntity<GenTable> {
 	 */
 	public Boolean getUpdateDateExists(){
 		for (GenTableColumn c : columnList){
-			if ("modify_at".equals(c.getName())){
+			if ("update_at".equals(c.getName())){
 				return true;
 			}
 		}
@@ -216,7 +216,7 @@ public class GenTable extends DataEntity<GenTable> {
 	 */
 	public Boolean getDelFlagExists(){
 		for (GenTableColumn c : columnList){
-			if ("is_enabled".equals(c.getName())){
+			if ("del_flag".equals(c.getName())){
 				return true;
 			}
 		}

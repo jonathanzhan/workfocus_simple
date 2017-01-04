@@ -215,8 +215,8 @@ public class GenTableColumn extends DataEntity<GenTableColumn> {
 		if ("This".equals(getJavaType())){
 			return StringUtils.capitalize(genTable.getClassName());
 		}
-		return StringUtils.indexOf(getJavaType(), ".") != -1 
-				? StringUtils.substringAfterLast(getJavaType(), ".")
+		return StringUtils.indexOf(getJavaField(), ".") != -1
+				? StringUtils.toCapitalizeCamelCase(StringUtils.substringBefore(getJavaField(), "."))
 						: getJavaType();
 	}
 	
@@ -307,11 +307,11 @@ public class GenTableColumn extends DataEntity<GenTableColumn> {
 	 */
 	public Boolean getIsNotBaseField(){
 		return !StringUtils.equals(getSimpleJavaField(), "id")
-				&& !StringUtils.equals(getSimpleJavaField(), "creator")
+				&& !StringUtils.equals(getSimpleJavaField(), "createBy")
 				&& !StringUtils.equals(getSimpleJavaField(), "createAt")
-				&& !StringUtils.equals(getSimpleJavaField(), "modifier")
-				&& !StringUtils.equals(getSimpleJavaField(), "modifyAt")
-				&& !StringUtils.equals(getSimpleJavaField(), "isEnabled");
+				&& !StringUtils.equals(getSimpleJavaField(), "updateBy")
+				&& !StringUtils.equals(getSimpleJavaField(), "updateAt")
+				&& !StringUtils.equals(getSimpleJavaField(), "delFlag");
 	}
 	
 }
