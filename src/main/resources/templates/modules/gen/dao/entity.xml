@@ -52,7 +52,7 @@ public class ${ClassName} extends DataEntity<${ClassName}> {
 			<#else>
 	<#if c.comments??>
 	/**
-	 * ${c.comments} 父类
+	 * ${c.comments}
 	 */
 	 </#if>
 	private ${c.simpleJavaType} ${c.simpleJavaField};

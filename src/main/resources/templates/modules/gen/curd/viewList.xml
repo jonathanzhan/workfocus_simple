@@ -27,6 +27,7 @@
                 <input id="pageSize" name="pageSize" type="hidden" value="${r"${page.pageSize}"}"/>
 
                 <div class="row">
+                <div class="form-group">
                     <div class="col-sm-12">
                         <#list table.columnList as c>
 						<#if c.isQuery?? && c.isQuery == "1">
@@ -36,7 +37,7 @@
 							<form:input path="${c.javaFieldId}" class="form-control"/>
 						<#elseif c.showType == "select">
 							 <form:select path="${c.javaFieldId}"  cssClass="form-control">
-								<select:option value="" label="请选择"/>
+								<form:option value="" label="请选择"/>
 								<form:options items="${"$"}{fns:getDictList('${c.dictType}')}" itemLabel="label" itemValue="value" />
 							</form:select>
 						<#elseif c.showType == "checkbox">
@@ -61,20 +62,21 @@
 							<sys:treeselect id="${c.simpleJavaField}" name="${c.javaFieldId}" value="${"$"}{${className}.${c.javaFieldId}}" labelName="${c.javaFieldName}" labelValue="${"$"}{${className}.${c.javaFieldName}}"
 								title="区域" url="/sys/area/treeData" cssClass="form-control" allowClear="true" dataMsgRequired="请选择区域" notAllowSelectParent="true"/>
 						</#if>
-						</li>
+						</div>
 						</#if>
                         </#list>
                     </div>
+                </div>
                 </div>
 
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="pull-left">
-                            <shiro:hasPermission name="${permissionPrefix}:add">
+                            <shiro:hasPermission name="${permissionPrefix}:edit">
                                 <common:addBtn url="${r"${ctx}"}/${urlPrefix}/form" title="${functionNameSimple}" width="800px" height="620px" btnClass="btn-primary btn-rounded btn-outline btn-sm"></common:addBtn>
                             </shiro:hasPermission>
-                            <button  class="btn btn-primary btn-rounded btn-outline btn-sm " type="submit" onclick="searchForm()"><i class="fa fa-search"></i> 查询</button>
-                            <button  class="btn btn-primary btn-rounded btn-outline btn-sm " type="button" onclick="resetFrom()" ><i class="fa fa-refresh"></i> 重置</button>
+                            <button  class="btn btn-primary btn-rounded btn-outline btn-sm" type="submit" onclick="searchForm()"><i class="fa fa-search"></i> 查询</button>
+                            <button  class="btn btn-primary btn-rounded btn-outline btn-sm" type="button" onclick="resetFrom()" ><i class="fa fa-refresh"></i> 重置</button>
                         </div>
                     </div>
                 </div>
@@ -119,7 +121,7 @@
                                 <shiro:hasPermission name="${permissionPrefix}:edit">
                                     <a href="#" onclick="openDialog('修改${functionNameSimple}', '${r"${ctx}"}/${urlPrefix}/form?id=${"${"+className+".id}"}','800px', '620px')" class="btn btn-success btn-xs" ><i class="fa fa-edit"></i> 修改</a>
                                 </shiro:hasPermission>
-                                <shiro:hasPermission name="${permissionPrefix}:del">
+                                <shiro:hasPermission name="${permissionPrefix}:edit">
                                     <a href="${r"${ctx}"}/${urlPrefix}/delete?id=${"${"+className+".id}"}" onclick="return confirmx('要删除该${functionNameSimple}吗？', this.href)" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> 删除</a>
                                 </shiro:hasPermission>
                             </td>

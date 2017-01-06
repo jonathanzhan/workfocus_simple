@@ -176,6 +176,7 @@ public class GenUtils {
 			}
 			// 备注、内容
 			else if (StringUtils.containsIgnoreCase(column.getName(), "remarks")
+					|| StringUtils.containsIgnoreCase(column.getName(), "remark")
 					|| StringUtils.containsIgnoreCase(column.getName(), "content")){
 				column.setShowType("textarea");
 			}
