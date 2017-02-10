@@ -92,7 +92,8 @@
 	
 	<!-- 静态资源映射 -->
     <mvc:resources mapping="/static/**" location="/static/" cache-period="31536000"/>
-	
+	<mvc:resources mapping="/activiti/**" location="/activiti/" cache-period="31536000"/>
+
 	<!-- 定义无Controller的path<->view直接映射 -->
 	<mvc:view-controller path="/" view-name="redirect:${web.view.index}"/>
 	
@@ -128,7 +129,7 @@
 	<!-- 上传文件拦截，设置最大上传文件大小   10M=10*1024*1024(B)=10485760 bytes -->  
 	<bean id="multipartResolver" class="com.mfnets.workfocus.common.web.CommonsMultipartResolver">
 		<property name="maxUploadSize" value="${web.maxUploadSize}" />
-		<property name="excludeUrls" value="ueditor,sys/upload"/>
+		<property name="excludeUrls" value="ueditor,sys/upload,api/**"/>
 	</bean>
 	
 </beans>
