@@ -7,12 +7,12 @@ package com.mfnets.workfocus.modules.demo.controller;
 import com.google.common.collect.Maps;
 import com.mfnets.workfocus.common.web.BaseController;
 import com.mfnets.workfocus.modules.sys.entity.User;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Controller;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -53,7 +53,7 @@ public class RestfulController extends BaseController{
 	 * 文件上传
 	 * @return
 	 */
-	@RequestMapping(value = "upload",consumes = "multipart/form-data",method = RequestMethod.POST)
+	@RequestMapping(value = "upload1",consumes = "multipart/form-data",method = RequestMethod.POST)
 	public Map<String,String> upload(@RequestParam("fileUpload") CommonsMultipartFile file){
 
 		Map<String,String> result = Maps.newHashMap();
@@ -67,9 +67,17 @@ public class RestfulController extends BaseController{
 		return result;
 	}
 
-	@RequestMapping(value = "/upload1", consumes = "multipart/form-data", method = RequestMethod.POST)
-	public void picture(HttpServletRequest request) {
+	@ApiOperation(value = "拍照上传",notes = "微信拍照签到",consumes = "multipart/form-data",produces = "application/json")
+	@ApiImplicitParams({
+			@ApiImplicitParam(paramType = "query",name = "file1", value = "文件1", required = true, dataType = "file"),
+			@ApiImplicitParam(paramType = "query",name = "file2", value = "文件2", dataType = "file"),
+			@ApiImplicitParam(paramType = "query",name = "id", value = "id", required = true, dataType = "string")
 
+	})
+	@ResponseBody
+	@RequestMapping(value = "/upload", consumes = "multipart/form-data", method = RequestMethod.POST)
+	public Map<String,String> upload(HttpServletRequest request) {
+		System.out.println(request.getParameter("id"));
 		String uploadPicturePath = "/Users/whatlookingfor/Pictures";
 		String pathname = uploadPicturePath + "/";
 		File file = new File(pathname);
@@ -94,6 +102,10 @@ public class RestfulController extends BaseController{
 
 			}
 		}
+		Map<String,String> result = Maps.newHashMap();
+		result.put("id","123");
+		result.put("name","123");
+		return result;
 	}
 
 

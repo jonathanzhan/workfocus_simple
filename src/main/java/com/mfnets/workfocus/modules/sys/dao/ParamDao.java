@@ -5,8 +5,7 @@ package com.mfnets.workfocus.modules.sys.dao;
 
 import com.mfnets.workfocus.common.persistence.CrudDao;
 import com.mfnets.workfocus.common.persistence.annotation.MyBatisDao;
-import com.mfnets.workfocus.modules.sys.entity.Params;
-import org.apache.ibatis.annotations.Param;
+import com.mfnets.workfocus.modules.sys.entity.Param;
 
 import java.util.List;
 
@@ -18,13 +17,12 @@ import java.util.List;
  * @since JDK 7.0+
  */
 @MyBatisDao
-public interface ParamsDao extends CrudDao<Params> {
+public interface ParamDao extends CrudDao<Param> {
 
-    public void save(Params params);
+    void save(Param param);
 
-    public Params getParamById(@Param(value = "paramName")String paramName);
+    Param getParamByName(@org.apache.ibatis.annotations.Param(value = "name")String name);
 
-    public List<String> findParamNameList(Params params);
+    List<String> findParamNameList();
 
-    void updateValueByName(Params params);
 }

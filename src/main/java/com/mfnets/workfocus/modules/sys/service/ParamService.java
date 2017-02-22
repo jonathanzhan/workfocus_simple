@@ -7,8 +7,8 @@ package com.mfnets.workfocus.modules.sys.service;
 import com.mfnets.workfocus.common.persistence.Page;
 import com.mfnets.workfocus.common.service.CrudService;
 import com.mfnets.workfocus.common.utils.CacheUtils;
-import com.mfnets.workfocus.modules.sys.dao.ParamsDao;
-import com.mfnets.workfocus.modules.sys.entity.Params;
+import com.mfnets.workfocus.modules.sys.dao.ParamDao;
+import com.mfnets.workfocus.modules.sys.entity.Param;
 import com.mfnets.workfocus.modules.sys.utils.DictUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,48 +23,48 @@ import java.util.List;
  */
 @Service
 @Transactional(readOnly = true)
-public class ParamsService extends CrudService<ParamsDao, Params> {
+public class ParamService extends CrudService<ParamDao, Param> {
 
     /**
      * 根据参数名查询系统参数信息
-     * @param paramName
+     * @param name
      * @return
      */
-    public Params getParamById(String paramName) {
-        return dao.getParamById(paramName);
+    public Param getParamByName(String name) {
+        return dao.getParamByName(name);
     }
 
-    public List<Params> findList(Params params) {
-        return super.findList(params);
+    public List<Param> findList(Param param) {
+        return super.findList(param);
     }
 
-    public Page<Params> findPage(Page<Params> page, Params params) {
-        return super.findPage(page, params);
+    public Page<Param> findPage(Page<Param> page, Param param) {
+        return super.findPage(page, param);
     }
 
     public List<String> findParamNameList(){
-        return dao.findParamNameList(new Params());
+        return dao.findParamNameList();
     }
 
 
     @Transactional(readOnly = false)
-    public void save(Params params) {
-        params.preInsert();
-        super.dao.save(params);
+    public void save(Param param) {
+        param.preInsert();
+        super.dao.save(param);
         CacheUtils.remove(DictUtils.CACHE_PARAM_MAP);
     }
 
 
     @Transactional(readOnly = false)
-    public void update(Params params) {
-        params.preUpdate();
-        super.dao.update(params);
+    public void update(Param param) {
+        param.preUpdate();
+        super.dao.update(param);
         CacheUtils.remove(DictUtils.CACHE_PARAM_MAP);
     }
 
     @Transactional(readOnly = false)
-    public void delete(Params params) {
-        super.delete(params);
+    public void delete(Param param) {
+        super.delete(param);
         CacheUtils.remove(DictUtils.CACHE_PARAM_MAP);
     }
 

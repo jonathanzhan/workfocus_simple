@@ -9,9 +9,9 @@ import com.mfnets.workfocus.common.mapper.JsonMapper;
 import com.mfnets.workfocus.common.utils.CacheUtils;
 import com.mfnets.workfocus.common.utils.SpringContextHolder;
 import com.mfnets.workfocus.modules.sys.dao.DictDao;
-import com.mfnets.workfocus.modules.sys.dao.ParamsDao;
+import com.mfnets.workfocus.modules.sys.dao.ParamDao;
 import com.mfnets.workfocus.modules.sys.entity.Dict;
-import com.mfnets.workfocus.modules.sys.entity.Params;
+import com.mfnets.workfocus.modules.sys.entity.Param;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
@@ -26,7 +26,7 @@ public class DictUtils {
 	
 	private static DictDao dictDao = SpringContextHolder.getBean(DictDao.class);
 
-	private static ParamsDao paramsDao = SpringContextHolder.getBean(ParamsDao.class);
+	private static ParamDao paramsDao = SpringContextHolder.getBean(ParamDao.class);
 
 	public static final String CACHE_DICT_MAP = "dictMap";
 
@@ -36,14 +36,14 @@ public class DictUtils {
 	 * 获取系统中所有的参数信息
 	 * @return
 	 */
-	public static Map<String,Params> getParams(){
-		Map<String,Params> result = (Map<String,Params>)CacheUtils.get(CACHE_PARAM_MAP);
+	public static Map<String,Param> getParams(){
+		Map<String,Param> result = (Map<String,Param>)CacheUtils.get(CACHE_PARAM_MAP);
 		if(result == null){
-			List<Params> list = paramsDao.findList(new Params());
+			List<Param> list = paramsDao.findList(new Param());
 			if(list !=null && list.size()>0 ){
 				result = Maps.newHashMap();
-				for (Params params :list){
-					result.put(params.getParamName(),params);
+				for (Param param :list){
+					result.put(param.getName(),param);
 				}
 				CacheUtils.put(CACHE_PARAM_MAP,result);
 			}
@@ -57,13 +57,13 @@ public class DictUtils {
 	 * @param name
 	 * @return
 	 */
-	public static String getParamsByName(String name){
-		Map<String,Params> paramsResult = getParams();
+	public static String getParamByName(String name){
+		Map<String,Param> paramsResult = getParams();
 		if(paramsResult ==null){
 			return null;
 		}else{
-			Params params = paramsResult.get(name);
-			return params!=null ?params.getParamValue():"";
+			Param param = paramsResult.get(name);
+			return param!=null ?param.getName():"";
 		}
 	}
 

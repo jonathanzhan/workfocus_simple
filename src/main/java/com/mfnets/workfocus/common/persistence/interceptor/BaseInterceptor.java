@@ -2,6 +2,7 @@
  * Copyright &copy; 2012-2014 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
  */
 package com.mfnets.workfocus.common.persistence.interceptor;
+import com.mfnets.workfocus.common.persistence.dialect.db.*;
 import org.apache.ibatis.logging.Log;
 import org.apache.ibatis.logging.LogFactory;
 import org.apache.ibatis.plugin.Interceptor;
@@ -9,15 +10,6 @@ import org.apache.ibatis.plugin.Interceptor;
 import com.mfnets.workfocus.common.config.Global;
 import com.mfnets.workfocus.common.persistence.Page;
 import com.mfnets.workfocus.common.persistence.dialect.Dialect;
-import com.mfnets.workfocus.common.persistence.dialect.db.DB2Dialect;
-import com.mfnets.workfocus.common.persistence.dialect.db.DerbyDialect;
-import com.mfnets.workfocus.common.persistence.dialect.db.H2Dialect;
-import com.mfnets.workfocus.common.persistence.dialect.db.HSQLDialect;
-import com.mfnets.workfocus.common.persistence.dialect.db.MySQLDialect;
-import com.mfnets.workfocus.common.persistence.dialect.db.OracleDialect;
-import com.mfnets.workfocus.common.persistence.dialect.db.PostgreSQLDialect;
-import com.mfnets.workfocus.common.persistence.dialect.db.SQLServer2005Dialect;
-import com.mfnets.workfocus.common.persistence.dialect.db.SybaseDialect;
 import com.mfnets.workfocus.common.utils.Reflections;
 
 import java.io.Serializable;

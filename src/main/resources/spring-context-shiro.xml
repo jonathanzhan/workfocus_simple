@@ -16,6 +16,10 @@
 			<value>
 				/static/** = anon
 				/activiti/** = anon
+				/api/** = anon
+				/swagger** = anon
+				/swagger-resources/** = anon
+				/webjars/** = anon
 				/userfiles/** = anon
 				/service/** = anon
 				${adminPath}/demo/** = anon
@@ -25,7 +29,8 @@
 				<!--/act/rest/editor/** = perms[act:model:edit]-->
 				<!--/act/rest/model/** = perms[act:model:edit]-->
 				/act/rest/** = user
-				/api/** = statelessAuthc
+				<!--/api/** = statelessAuthc-->
+
 			</value>
 		</constructor-arg>
 	</bean>
