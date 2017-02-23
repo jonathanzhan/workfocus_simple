@@ -7,9 +7,6 @@
 	<version>1.0-SNAPSHOT</version>
 	<packaging>war</packaging>
 
-
-
-
 	<!-- 项目属性 -->
 	<properties>
 
