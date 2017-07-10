@@ -105,6 +105,7 @@
 		<constructor-arg name="name" value="workfocus.session.id"/>
 	</bean>
 
+
 	<!-- 自定义Session存储容器 -->
 	<!-- 	<bean id="sessionDAO" class="com.mfnets.workfocus.common.security.shiro.session.JedisSessionDAO"> -->
 	<!-- 		<property name="sessionIdGenerator" ref="idGen" /> -->
